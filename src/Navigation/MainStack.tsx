@@ -22,6 +22,7 @@ export type RootStackParamList = {
   Home: undefined;
   SignUp: undefined;
   ForgotPassword: undefined;
+  MultiStepForm: undefined;
   // Profile: { userId: string };
   // Feed: { sort: 'latest' | 'top' } | undefined;
 };
@@ -72,6 +73,10 @@ const MainStack = () => {
             name="SignUp"
             component={SignUp}
           />
+          {/* <stack.Screen
+            name="MultiStepForm"
+            component={MultiStepForm}
+          /> */}
           <stack.Screen
             name="ForgotPassword"
             component={ForgotPassword}
