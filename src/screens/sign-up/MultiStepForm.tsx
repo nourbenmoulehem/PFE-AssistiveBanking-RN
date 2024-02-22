@@ -1,59 +1,108 @@
-import { StyleSheet, Text, View, TextInput as NativeTextInput, Button, TouchableOpacity } from 'react-native';
+import {StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
 import {TextInput} from 'react-native-paper';
-import React, { useState } from 'react'
-import {tokens} from '../../assets/palette'
+import {tokens} from '../../assets/palette';
+
+// redux
+import {UseSelector, useSelector} from 'react-redux';
+import {RootState} from '../../context/store';
 
 // form
-import { Formik } from 'formik';
+import {Formik} from 'formik';
 import * as yup from 'yup';
 
-//redux
-import { useSelector } from 'react-redux';
-import { RootState } from '../../context/store';
+/* TODO 
+  Choix de l'offre : weStart & weTrust 
+
+  identifications : 
+    madame monsieur
+    Nom & prénom
+    tel & confirm tel
+    email & confirm email
+    date de naissance
+
+  Mieux vous connaitre:
+    Nationalite
+    status civil
+    nombre d'enfants
+  
+  informations financieres
+    categorie socio professionelle
+    revenu net mensuel
+    nature de l'activite
+    secteur d'activite
+  
+  Mes documents
+    num cin
+    date de delivration cin
+    scanner cin recto & verso
+    selfie
+    confirmation
+
+  creation de mot de passe & confirmation
+
+  signature numerique: email verification / phone verification / entretien visio
+  
+
+
+*/
 
 const steps = [
-  { label: "offre", inputs: ["field1", "field2"] },
-  { label: "sexe", inputs: ["field3", "field4"] },
+  {
+    title: "Choix de l'offre",
+    inputs: ['weStart', 'weTrust'],
+  },
+  {
+    title: 'Identifications',
+    inputs: [
+      'Madame/Monsieur',
+      'Nom & prénom',
+      'Tel & confirm tel',
+      'Email & confirm email',
+      'Date de naissance',
+    ],
+  },
   // Add more steps as needed
 ];
 
-const MultiStepForm = () => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState({});
-  const [errors, setErrors] = useState({});
+const SignUp = () => {
+  const {mode} = useSelector((state: RootState) => state.global);
 
-  const { mode } = useSelector((state: RootState) => state.global);
   const colors = tokens(mode);
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.main.backgroundColor,
-      justifyContent: 'space-around'
-      // alignItems: 'center',
-      // justifyContent: 'center',
-    },
-    nextPrevButtonContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-  });
+  const [currentStep, setCurrentStep] = useState(0);
+  const [currentInputIndex, setCurrentInputIndex] = useState(0);
+  const [formData, setFormData] = useState({});
 
-  const handleInputChange = (fieldName: string, value: string) => {
-    setFormData((prevData) => ({ ...prevData, [fieldName]: value }));
+  const handleInputChange = (inputName: string, text: string) => {
+    setFormData(prevData => ({...prevData, [inputName]: text}));
+    console.log('🚀 ~ handleInputChange ~ formData:', formData);
   };
 
   const handleNextStep = () => {
-    setCurrentStep((prevStep) => prevStep + 1);
-  }
+    const currentStepInfo = steps[currentStep];
+    const nextInputIndex = currentInputIndex + 1;
 
-  const handlePrevStep = () => {
-    setCurrentStep((prevStep) => prevStep - 1);
+    if (nextInputIndex < currentStepInfo.inputs.length) {
+      setCurrentInputIndex(nextInputIndex);
+    } else {
+      setCurrentInputIndex(0);
+      setCurrentStep((prevStep) => prevStep + 1);
+    }
   };
 
   const renderInputsForCurrentStep = () => {
-    const step = steps[currentStep];
-    if(step.label === "offre"){
+    const styles = StyleSheet.create({
+      titleStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 20,
+      },
+    });
+    const currentStepInfo = steps[currentStep];
+
+    // if current step is "Choix de l'offre" then render two buttons for weStart and weTrust
+    if (currentStepInfo.title === "Choix de l'offre") {
       return (
         <View
           style={{
@@ -76,40 +125,62 @@ const MultiStepForm = () => {
             <Text>WeTrust</Text>
           </TouchableOpacity>
         </View>
-      )
+      );
+    } else {
+      const inputs = steps[currentStep].inputs;
+      console.log('🚀 ~ renderInputs ~ inputs:', inputs);
+
+      inputs.forEach(input => {
+        console.log("🚀 ~ renderInputsForCurrentStep ~ input:", input)
+        return (
+          <TextInput
+            key={input}
+            placeholder={input}
+            onChangeText={text => handleInputChange(input, text)}
+          />
+        );
+      });
+      
     }
-    if(step.label === "Step 2"){
-    return step.inputs.map((inputName) => (
-      <View key={inputName}>
-        <Text style={{color:"white", fontWeight:"bold"}}>{inputName}</Text>
-        <TextInput
-          onChangeText={(text) => handleInputChange(inputName, text)}
-        />
-      </View>
-    ));
+
+    // array.forEach(element => {
+
+    // });
   };
-  
+
+  const styles = StyleSheet.create({
+    container: {
+      padding: 16,
+      backgroundColor: colors.main.backgroundColor,
+      flex: 1,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+
+    inputTitle: {
+      color: 'white',
+      fontWeight: 'bold',
+      fontSize: 20,
+    },
+
+    prevNextButtonsContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      width: '100%',
+    },
+  });
+
   return (
     <View style={styles.container}>
-      <Text>{steps[currentStep].label}</Text>
+      <Text style={styles.inputTitle}>{steps[currentStep].title}</Text>
       {renderInputsForCurrentStep()}
-      <View style={styles.nextPrevButtonContainer}>
-        <Button title="Back" disabled={currentStep === 0} onPress={handlePrevStep} />
+      <View style={styles.prevNextButtonsContainer}>
+        <Button title="Previous"></Button>
         <Button title="Next" onPress={handleNextStep} />
       </View>
     </View>
-  )
-}
-
-
-}
-
-
-
-export default MultiStepForm
-
-
-
+  );
+};
 
 const phoneRegExp =
   /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
@@ -136,3 +207,5 @@ const checkoutSchema = yup.object().shape({
     .required('required'),
   agency: yup.string().required('required'),
 });
+
+export default SignUp;
