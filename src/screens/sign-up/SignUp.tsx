@@ -8,9 +8,10 @@ import {
   Touchable,
   TouchableOpacity,
 } from 'react-native';
-import {TextInput} from 'react-native-paper';
+import {TextInput, Switch} from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import RNPickerSelect from 'react-native-picker-select';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 // form
 import {Formik} from 'formik';
@@ -30,6 +31,7 @@ const SignUp = () => {
   const [checked, setChecked] = useState(''); // for offer (WeStart, WeTrust)
   const [checkedGender, setCheckedGender] = useState(''); // for gender
   const [isEtudiant, setIsEtudiant] = useState(false); // if the user is a student there is some options need to skip
+  const [selectedImage, setSelectedImage] = useState<string | undefined>('');
 
   const initialValues = {
     firstName: '',
@@ -41,43 +43,92 @@ const SignUp = () => {
     phoneNumber: '',
     phoneNumberConfirm: '',
     birthday: '',
+    adresse: '', // 👍
     nationality: '',
-    status_civil: '',
+    statusCivil: '',
     nombre_enfant: '',
     socio_professional: '',
     revenu: '',
     natureActivite: '',
     secteurActivite: '',
+
+    codePostal: '', // 👍
+    gouvernorat: '', // 👍
+    //pays: '',  !!!
+
+    cin: '', // 👍
+    dateDelivrationCin: '', // 👍
+    cinRecto: '', // 👍
+    cinVerso: '', // 👍
+    selfie: '', // 👍
+
+    password: '', // !!!
+    passwordConfirm: '', // !!!
+
+    hasAmericanityIndex: false,
+    hasOtherBank: false,
+    hasConfirmedForPersonalData: false,
   };
 
-  const getFieldName = () => {
+  type Steps = {
+    offer: string;
+    gender: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    birthday: string;
+    nationality: string;
+    statusCivil: string;
+    nombre_enfant: string;
+    socio_professional: string;
+    revenu: string;
+    natureActivite: string;
+    secteurActivite: string;
+  };
 
-  }
-
-  
-
-  function getStep(stepNumber: number): string {
-    switch(stepNumber) {
-        case 1: return 'offer';
-        case 2: return 'gender';
-        case 3: return 'firstName';
-        case 4: return 'lastName';
-        case 5: return 'email';
-        case 6: return 'phoneNumber';
-        case 7: return 'birthday';
-        case 8: return 'nationality';
-        case 9: return 'status_civil';
-        case 10: return 'nombre_enfant';
-        case 11: return 'socio_professional';
-        case 12: return 'revenu';
-        case 13: return 'natureActivite';
-        case 14: return 'secteurActivite';
-        default: return 'Invalid step';
+  const getStep = <T extends keyof Steps>(stepNumber: number): T => {
+    switch (stepNumber) {
+      case 1:
+        return 'offer' as T;
+      case 2:
+        return 'gender' as T;
+      case 3:
+        return 'firstName' as T;
+      case 4:
+        return 'lastName' as T;
+      case 5:
+        return 'email' as T;
+      case 6:
+        return 'phoneNumber' as T;
+      case 7:
+        return 'birthday' as T;
+      case 8:
+        return 'nationality' as T;
+      case 9:
+        return 'statusCivil' as T;
+      case 10:
+        return 'nombre_enfant' as T;
+      case 11:
+        return 'socio_professional' as T;
+      case 12:
+        return 'revenu' as T;
+      case 13:
+        return 'natureActivite' as T;
+      case 14:
+        return 'secteurActivite' as T;
+      default:
+        return 'Invalid step' as T;
     }
-}
+  };
 
   const handleNext = () => {
     setStep(step + 1);
+  };
+
+  const getFieldName = (step: number): keyof typeof initialValues => {
+    const stepFieldName = getStep(step);
+    return stepFieldName;
   };
 
   const handlePrevious = () => {
@@ -234,6 +285,82 @@ const SignUp = () => {
     {label: 'Autres', value: 'Autres'},
   ];
 
+  const gouvernoratsTunisiens = [
+    'Ariana',
+    'Béja',
+    'Ben Arous',
+    'Bizerte',
+    'Gabès',
+    'Gafsa',
+    'Jendouba',
+    'Kairouan',
+    'Kasserine',
+    'Kébili',
+    'Le Kef',
+    'Mahdia',
+    'Manouba',
+    'Médenine',
+    'Monastir',
+    'Nabeul',
+    'Sfax',
+    'Sidi Bouzid',
+    'Siliana',
+    'Sousse',
+    'Tataouine',
+    'Tozeur',
+    'Tunis',
+    'Zaghouan',
+  ];
+
+  const gouvernoratsOptions = gouvernoratsTunisiens.map(gouvernorat => ({
+    label: gouvernorat,
+    value: gouvernorat,
+  }));
+
+  // type safety
+  type Options = {
+    mediaType: 'photo' | 'video' | 'mixed';
+    includeBase64: boolean;
+    maxHeight: number;
+    maxWidth: number;
+  };
+
+  const options: Options = {
+    mediaType: 'photo',
+    includeBase64: false,
+    maxHeight: 2000,
+    maxWidth: 2000,
+  };
+
+  // open galerie
+  const openImagePicker = () => {
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.errorMessage) {
+        console.log('Image picker errorMessage: ', response.errorMessage);
+      } else {
+        let imageUri = response.assets ? response.assets[0].uri : '';
+        setSelectedImage(imageUri);
+      }
+    });
+  };
+
+  // open camera
+  const handleCameraLaunch = () => {
+    launchCamera(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled camera');
+      } else if (response.errorMessage) {
+        console.log('Camera errorMessage: ', response.errorMessage);
+      } else {
+        let imageUri = response.assets ? response.assets[0].uri : '';
+        setSelectedImage(imageUri);
+        console.log(imageUri);
+      }
+    });
+  };
+
   return (
     <Formik
       initialValues={initialValues}
@@ -253,6 +380,7 @@ const SignUp = () => {
         handleSubmit,
         handleReset,
         isSubmitting,
+        setFieldValue,
         /* and other goodies */
       }) => (
         <>
@@ -265,6 +393,7 @@ const SignUp = () => {
                   onPress={() => {
                     handleChange('offer')('WeStart');
                     setChecked('WeStart');
+                    console.log('hani houni', touched.offer, errors.offer);
 
                     console.log('TouchableOPcity WeStart', values.offer);
                   }}
@@ -504,7 +633,7 @@ const SignUp = () => {
                 </View>
               </>
             )}
-            {step === 7 && (
+            {step === 7 && ( // birthday
               <View style={styles.dateContainer}>
                 <Button title="Show Date Picker" onPress={showDatePicker} />
                 <DateTimePickerModal
@@ -522,90 +651,156 @@ const SignUp = () => {
                 />
               </View>
             )}
-            {step === 8 && ( // nationalite
-              <>
-                <Text>Nationalité</Text>
-                <RNPickerSelect
-                  onValueChange={value =>
-                    handleChange(values.nationality)(value)
-                  }
-                  items={[{label: 'Tunisienne', value: 'Tunisienne'}]}
-                  value={values.nationality}
-                  touchableWrapperProps={{
-                    // <- Use touchableWrapperProps to pass accessibility properties
-                    accessible: true,
-                    accessibilityLabel: 'Favorite sport',
-                    accessibilityHint: 'Double tap to select an option.',
-                    accessibilityRole: 'combobox',
-                  }}
+            {step === 8 && ( // adresse
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  value={values.adresse}
+                  mode="outlined"
+                  label="adresse"
+                  onChangeText={handleChange('adresse')}
+                  onBlur={handleBlur('adresse')}
+                  placeholder="Adresse"
+                  contentStyle={styles.contentStyle}
+                  outlineStyle={styles.outlineStyle}
                 />
-              </>
+                {touched.adresse && errors.adresse && (
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: 'red',
+                      marginTop: 10,
+                      marginRight: 30,
+                    }}>
+                    {errors.adresse}
+                  </Text>
+                )}
+              </View>
             )}
-            {step === 9 && ( // status civil
+            {step === 8 && ( // gouvernourat
               <>
                 <Text>Status Civil</Text>
                 <RNPickerSelect
-                  onValueChange={value =>
-                    handleChange(values.status_civil)(value)
-                  }
-                  items={status_civil}
-                  touchableWrapperProps={{
-                    // <- Use touchableWrapperProps to pass accessibility properties
-                    accessible: true,
-                    accessibilityLabel: 'status civil',
-                    accessibilityHint: 'Double tap to select an option.',
-                    accessibilityRole: 'combobox',
-                  }}
+                  onValueChange={value => handleChange('gouvernorat')(value)}
+                  items={gouvernoratsOptions}
+                  value={values.gouvernorat}
+                  // touchableWrapperProps={{
+                  //   // <- Use touchableWrapperProps to pass accessibility properties
+                  //   accessible: true,
+                  //   accessibilityLabel: 'status civil',
+                  //   accessibilityHint: 'Double tap to select an option.',
+                  //   accessibilityRole: 'combobox',
+                  // }}
                 />
               </>
             )}
-            {step === 10 && ( // nombre d'enfant
+            {step === 9 && ( // code postal
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  value={values.codePostal}
+                  mode="outlined"
+                  label="Code Postal"
+                  onChangeText={handleChange('codePostal')}
+                  onBlur={handleBlur('codePostal')}
+                  placeholder="code postal"
+                  contentStyle={styles.contentStyle}
+                  outlineStyle={styles.outlineStyle}
+                />
+                {touched.codePostal && errors.codePostal && (
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: 'red',
+                      marginTop: 10,
+                      marginRight: 30,
+                    }}>
+                    {errors.codePostal}
+                  </Text>
+                )}
+              </View>
+            )}
+            {step === 10 && ( // nationalite
+              <>
+                <Text>Nationalité</Text>
+                <RNPickerSelect
+                  onValueChange={value => handleChange('nationality')(value)}
+                  items={[
+                    {label: 'Tunisienne', value: 'Tunisienne'},
+                    {label: 'Française', value: 'Française'},
+                  ]}
+                  value={values.nationality}
+                  // touchableWrapperProps={{
+                  //   // <- Use touchableWrapperProps to pass accessibility properties
+                  //   accessible: true,
+                  //   accessibilityLabel: 'Favorite sport',
+                  //   accessibilityHint: 'Double tap to select an option.',
+                  //   accessibilityRole: 'combobox',
+                  // }}
+                />
+              </>
+            )}
+            {step === 11 && ( // status civil
+              <>
+                <Text>Status Civil</Text>
+                <RNPickerSelect
+                  onValueChange={value => handleChange('statusCivil')(value)}
+                  items={status_civil}
+                  value={values.statusCivil}
+                  // touchableWrapperProps={{
+                  //   // <- Use touchableWrapperProps to pass accessibility properties
+                  //   accessible: true,
+                  //   accessibilityLabel: 'status civil',
+                  //   accessibilityHint: 'Double tap to select an option.',
+                  //   accessibilityRole: 'combobox',
+                  // }}
+                />
+              </>
+            )}
+            {step === 12 && ( // nombre d'enfant
               <>
                 <Text>Nombre d'enfant</Text>
                 <RNPickerSelect
-                  onValueChange={value =>
-                    handleChange(values.nombre_enfant)(value)
-                  }
+                  onValueChange={value => handleChange('nombre_enfant')(value)}
+                  value={values.nombre_enfant}
                   items={nombre_enfant}
-                  touchableWrapperProps={{
-                    // <- Use touchableWrapperProps to pass accessibility properties
-                    accessible: true,
-                    accessibilityLabel: 'Favorite sport',
-                    accessibilityHint: 'Double tap to select an option.',
-                    accessibilityRole: 'combobox',
-                  }}
+                  // touchableWrapperProps={{
+                  //   // <- Use touchableWrapperProps to pass accessibility properties
+                  //   accessible: true,
+                  //   accessibilityLabel: 'Favorite sport',
+                  //   accessibilityHint: 'Double tap to select an option.',
+                  //   accessibilityRole: 'combobox',
+                  // }}
                 />
               </>
             )}
-            {step === 11 && ( // socio_professional
+            {step === 13 && ( // socio_professional
               <>
                 <Text>Socio professionel</Text>
                 <RNPickerSelect
                   onValueChange={value => {
-                    handleChange(values.socio_professional)(value);
+                    handleChange('socio_professional')(value);
                     if (value === 'Etudiant') {
                       setIsEtudiant(true);
                     }
                   }}
                   value={values.socio_professional}
                   items={socio_professional}
-                  touchableWrapperProps={{
-                    // <- Use touchableWrapperProps to pass accessibility properties
-                    accessible: true,
-                    accessibilityLabel: 'Favorite sport',
-                    accessibilityHint: 'Double tap to select an option.',
-                    accessibilityRole: 'combobox',
-                  }}
+                  // touchableWrapperProps={{
+                  //   // <- Use touchableWrapperProps to pass accessibility properties
+                  //   accessible: true,
+                  //   accessibilityLabel: 'Favorite sport',
+                  //   accessibilityHint: 'Double tap to select an option.',
+                  //   accessibilityRole: 'combobox',
+                  // }}
                 />
               </>
             )}
-            {step === 12 &&
+            {step === 14 &&
               !isEtudiant && ( // revenu_mensuel
                 <>
                   <Text>Revenu</Text>
                   <RNPickerSelect
                     onValueChange={value => {
-                      handleChange(values.revenu)(value);
+                      handleChange('revenu')(value);
                       console.log('isEtudiant', isEtudiant);
                     }}
                     value={values.revenu}
@@ -620,14 +815,15 @@ const SignUp = () => {
                   />
                 </>
               )}
-            {step === 13 &&
+            {step === 15 &&
               !isEtudiant && ( // natureActivite
                 <>
                   <Text>Nature Activite</Text>
                   <RNPickerSelect
                     onValueChange={value =>
-                      handleChange(values.natureActivite)(value)
+                      handleChange('natureActivite')(value)
                     }
+                    value={values.natureActivite}
                     items={[
                       {label: 'Public', value: 'Public'},
                       {label: 'Privé', value: 'Privé'},
@@ -642,25 +838,315 @@ const SignUp = () => {
                   />
                 </>
               )}
-            {step === 14 &&
+            {step === 16 &&
               !isEtudiant && ( // secteurActivite
                 <>
                   <Text>Secteur Activite</Text>
                   <RNPickerSelect
                     onValueChange={value =>
-                      handleChange(values.secteurActivite)(value)
+                      handleChange('secteurActivite')(value)
                     }
+                    value={values.secteurActivite}
                     items={secteur_activite}
-                    touchableWrapperProps={{
-                      // <- Use touchableWrapperProps to pass accessibility properties
-                      accessible: true,
-                      accessibilityLabel: 'Favorite sport',
-                      accessibilityHint: 'Double tap to select an option.',
-                      accessibilityRole: 'combobox',
-                    }}
+                    // touchableWrapperProps={{
+                    //   // <- Use touchableWrapperProps to pass accessibility properties
+                    //   accessible: true,
+                    //   accessibilityLabel: 'Favorite sport',
+                    //   accessibilityHint: 'Double tap to select an option.',
+                    //   accessibilityRole: 'combobox',
+                    // }}
                   />
                 </>
               )}
+            {step === 17 && ( // num cin
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  value={values.cin}
+                  mode="outlined"
+                  label="cin"
+                  onChangeText={handleChange('cin')}
+                  onBlur={handleBlur('cin')}
+                  placeholder="numero cin"
+                  contentStyle={styles.contentStyle}
+                  outlineStyle={styles.outlineStyle}
+                />
+                {touched.cin && errors.cin && (
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: 'red',
+                      marginTop: 10,
+                      marginRight: 30,
+                    }}>
+                    {errors.cin}
+                  </Text>
+                )}
+              </View>
+            )}
+            {step === 18 && ( // date de delivration
+              <View style={styles.dateContainer}>
+                <Text>date de delivration</Text>
+                <Button title="Show Date Picker" onPress={showDatePicker} />
+                <DateTimePickerModal
+                  isVisible={isDatePickerVisible}
+                  mode="date"
+                  onConfirm={(date: Date) => {
+                    console.log('🚀 ~ SignUp ~ date:', date);
+
+                    const extractedDate = date.toISOString().split('T')[0];
+                    console.log('🚀 ~ SignUp ~ extractedDate:', extractedDate);
+                    handleChange('dateDelivrationCin')(extractedDate);
+                    console.log(
+                      'values.dateDelivrationCin : ',
+                      values.dateDelivrationCin,
+                    );
+                  }}
+                  onCancel={hideDatePicker}
+                />
+              </View>
+            )}
+            {step === 19 && ( // cin recto
+              <>
+                <Text>Cin recto</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    launchImageLibrary(options, response => {
+                      if (response.didCancel) {
+                        console.log('User cancelled image picker');
+                      } else if (response.errorMessage) {
+                        console.log(
+                          'Image picker errorMessage: ',
+                          response.errorMessage,
+                        );
+                      } else {
+                        let imageUri = response.assets
+                          ? response.assets[0].uri
+                          : '';
+                        handleChange('cinRecto')(imageUri ? imageUri : '');
+                        setSelectedImage(imageUri);
+                      }
+                    });
+                  }}>
+                  <Text>Open Galery</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    launchCamera(options, response => {
+                      if (response.didCancel) {
+                        console.log('User cancelled camera');
+                      } else if (response.errorMessage) {
+                        console.log(
+                          'Camera errorMessage: ',
+                          response.errorMessage,
+                        );
+                      } else {
+                        let imageUri = response.assets
+                          ? response.assets[0].uri
+                          : '';
+                        setSelectedImage(imageUri);
+                        handleChange('cinRecto')(imageUri ? imageUri : '');
+                        console.log(imageUri);
+                      }
+                    });
+                  }}>
+                  <Text>Open Camera</Text>
+                </TouchableOpacity>
+              </>
+            )}
+            {step === 20 && ( // cin verso
+              <>
+                <Text>Cin verso</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    launchImageLibrary(options, response => {
+                      if (response.didCancel) {
+                        console.log('User cancelled image picker');
+                      } else if (response.errorMessage) {
+                        console.log(
+                          'Image picker errorMessage: ',
+                          response.errorMessage,
+                        );
+                      } else {
+                        let imageUri = response.assets
+                          ? response.assets[0].uri
+                          : '';
+                        handleChange('cinVerso')(imageUri ? imageUri : '');
+                        setSelectedImage(imageUri);
+                      }
+                    });
+                  }}>
+                  <Text>Open Galery</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    launchCamera(options, response => {
+                      if (response.didCancel) {
+                        console.log('User cancelled camera');
+                      } else if (response.errorMessage) {
+                        console.log(
+                          'Camera errorMessage: ',
+                          response.errorMessage,
+                        );
+                      } else {
+                        let imageUri = response.assets
+                          ? response.assets[0].uri
+                          : '';
+                        handleChange('cinVerso')(imageUri ? imageUri : '');
+                        setSelectedImage(imageUri);
+                        console.log(imageUri);
+                      }
+                    });
+                  }}>
+                  <Text>Open Camera</Text>
+                </TouchableOpacity>
+              </>
+            )}
+            {step === 21 && ( // selfie
+              <>
+                <Text>selfie</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    launchImageLibrary(options, response => {
+                      if (response.didCancel) {
+                        console.log('User cancelled image picker');
+                      } else if (response.errorMessage) {
+                        console.log(
+                          'Image picker errorMessage: ',
+                          response.errorMessage,
+                        );
+                      } else {
+                        let imageUri = response.assets
+                          ? response.assets[0].uri
+                          : '';
+                        handleChange('selfie')(imageUri ? imageUri : '');
+                        setSelectedImage(imageUri);
+                      }
+                    });
+                  }}>
+                  <Text>Open Galery</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    launchCamera(options, response => {
+                      if (response.didCancel) {
+                        console.log('User cancelled camera');
+                      } else if (response.errorMessage) {
+                        console.log(
+                          'Camera errorMessage: ',
+                          response.errorMessage,
+                        );
+                      } else {
+                        let imageUri = response.assets
+                          ? response.assets[0].uri
+                          : '';
+                        handleChange('selfie')(imageUri ? imageUri : '');
+                        setSelectedImage(imageUri);
+                        console.log(imageUri);
+                      }
+                    });
+                  }}>
+                  <Text>Open Camera</Text>
+                </TouchableOpacity>
+              </>
+            )}
+            {step === 22 && ( // selfie
+              <>
+                <View style={styles.inputWrapper}>
+                  <TextInput
+                    mode="outlined"
+                    label="password"
+                    onChangeText={handleChange('password')}
+                    onBlur={handleBlur('password')}
+                    placeholder="password"
+                    value={values.password}
+                    contentStyle={styles.contentStyle}
+                    outlineStyle={styles.outlineStyle}
+                  />
+                  {touched.password && errors.password && (
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: 'red',
+                        marginTop: 10,
+                        marginRight: 30,
+                      }}>
+                      {errors.email}
+                    </Text>
+                  )}
+                </View>
+
+                <View style={styles.inputWrapper}>
+                  <TextInput
+                    mode="outlined"
+                    label="Confirm password"
+                    onChangeText={handleChange('passwordConfirm')}
+                    onBlur={handleBlur('passwordConfirm')}
+                    placeholder="passwordConfirm"
+                    value={values.passwordConfirm}
+                    contentStyle={styles.contentStyle}
+                    outlineStyle={styles.outlineStyle}
+                  />
+                  {touched.passwordConfirm && errors.passwordConfirm && (
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: 'red',
+                        marginTop: 10,
+                        marginRight: 30,
+                      }}>
+                      {errors.passwordConfirm}
+                    </Text>
+                  )}
+                </View>
+              </>
+            )}
+            {step === 23 && ( // selfie
+              <>
+                <View style={styles.inputWrapper}>
+                  <Switch
+                    value={values.hasAmericanityIndex}
+                    onValueChange={value => {
+                      setFieldValue('hasAmericanityIndex', value);
+                    }}
+                  />
+                  <Text>Americani</Text>
+
+                  <Switch
+                    value={values.hasOtherBank}
+                    onValueChange={value => {
+                      setFieldValue('hasOtherBank', value);
+                    }}
+                  />
+                  <Text>Banka o5ra</Text>
+                  <Switch
+                    value={values.hasConfirmedForPersonalData}
+                    onValueChange={value => {
+                      setFieldValue('hasConfirmedForPersonalData', value);
+                    }}
+                  />
+                  <Text>confirmi</Text>
+
+                  {touched.hasAmericanityIndex &&
+                    errors.hasAmericanityIndex &&
+                    touched.hasOtherBank &&
+                    errors.hasOtherBank &&
+                    touched.hasConfirmedForPersonalData &&
+                    errors.hasConfirmedForPersonalData && (
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          color: 'red',
+                          marginTop: 10,
+                          marginRight: 30,
+                        }}>
+                        <Text>{errors.hasAmericanityIndex}</Text>
+                        <Text>{errors.hasOtherBank}</Text>
+                        <Text>{errors.hasConfirmedForPersonalData}</Text>
+                      </Text>
+                    )}
+                </View>
+              </>
+            )}
 
             <View style={styles.prevNextButtonsContainer}>
               {step > 1 && (
@@ -670,13 +1156,18 @@ const SignUp = () => {
                   <Text style={{color: 'white'}}>Previous</Text>
                 </TouchableOpacity>
               )}
-              {step < 14 ? (
+              {step < 23 ? (
                 <TouchableOpacity
                   style={styles.nextButton}
-                  disabled={touched['email'] && !!errors[getStep(step) as keyof typeof errors]}
+                  // disabled={
+                  //   values[getFieldName(step)] === '' ||
+                  //   !!errors[getFieldName(step)]
+                  // }
                   onPress={() => {
-                    console.log(getStep(step));
-                    
+                    console.log('Next is pressed');
+
+                    console.log(values[getFieldName(step)] === '');
+
                     handleNext();
                   }}>
                   <Text style={{color: 'white'}}>Next</Text>
@@ -707,6 +1198,8 @@ const phoneRegExp =
   /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
 const passwordRegExp =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
+const cinRegExp = /^[0-9]{8}$/;
+const codePostalRegExp = /^\d{4}$/;
 
 const checkoutSchema = yup.object().shape({
   offer: yup
@@ -734,14 +1227,54 @@ const checkoutSchema = yup.object().shape({
     .oneOf([yup.ref('phoneNumber')], 'Phone numbers must match')
     .matches(phoneRegExp, 'Phone number is not valid')
     .required('required'),
-  birthDate: yup.date().required('required'),
+  birthday: yup.date().required('required'),
+  location: yup.string().required('required'),
+  gouvernorat: yup.string().required('required'),
+  codePostal: yup
+    .string()
+    .matches(codePostalRegExp, 'Invalid postal code. Must be 4 digits.')
+    .required('required'),
   nationality: yup.string().required('required'),
-  status_civil: yup.string().required('required'),
+  statusCivil: yup.string().required('required'),
   nombre_enfant: yup.string().required('required'),
   socio_professional: yup.string().required('required'),
   revenu: yup.string().required('required'),
   natureActivite: yup.string().required('required'),
   secteurActivite: yup.string().required('required'),
+  cin: yup
+    .string()
+    .matches(cinRegExp, 'Invalid CIN format. Must be 8 digits.')
+    .required('required'),
+  dateDelivrationCin: yup.date().required('required'),
+  password: yup
+    .string()
+    .matches(
+      passwordRegExp,
+      'Password must contain at least 5 characters, one uppercase letter, one lowercase letter, one number, and one special character',
+    )
+    .min(5, 'Password must be exactly 5 characters long')
+    .required('required'),
+  passwordConfirm: yup
+    .string()
+    .oneOf([yup.ref('password')], 'Passwords must match')
+    .matches(
+      passwordRegExp,
+      'Password must contain at least 5 characters, one uppercase letter, one lowercase letter, one number, and one special character',
+    )
+    .min(5, 'Password must be exactly 5 characters long')
+    .required('required'),
+  hasAmericanityIndex: yup
+    .boolean()
+    .oneOf([true], 'hasAmericanityIndex must be true')
+    .required('required'),
+  hasOtherBank: yup
+    .boolean()
+    .oneOf([true], 'hasOtherBank must be true')
+    .required('required'),
+  hasConfirmedForPersonalData: yup
+    .boolean()
+    .oneOf([true], 'hasConfirmedForPersonalData must be true')
+    .required('required'),
 
   // .transform((value, originalValue) =>{
   //   if (isType(value)) {
@@ -754,7 +1287,7 @@ const checkoutSchema = yup.object().shape({
   // .min("1969-11-13", "Date is too early")
 
   // occupation: yup.string().required('required'),
-  // location: yup.string().required('required'),
+  //
   // password: yup
   //   .string()
   //   .matches(
