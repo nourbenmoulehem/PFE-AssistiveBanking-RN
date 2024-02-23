@@ -25,6 +25,10 @@ import * as yup from 'yup';
     Nationalite
     status civil
     nombre d'enfants
+
+    codePostal
+    Pays
+    gouvernorat
   
   informations financieres
     categorie socio professionelle
