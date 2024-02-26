@@ -128,7 +128,7 @@ const SignIn = ({navigation}: HomeProps) => {
               <View style={styles.inputWrapper}>
               <KeyboardAvoidingView behavior='padding'>
                 <TextInput
-                  mode="outlined"
+                  mode="flat"
                   label='email'
                   onChangeText={handleChange('email')}
                   onBlur={handleBlur('email')}
@@ -151,8 +151,8 @@ const SignIn = ({navigation}: HomeProps) => {
               <View style={styles.inputWrapper}>
               <KeyboardAvoidingView behavior='position'> 
                 <TextInput
-                  mode="outlined"
-                  label={'Password'}
+                  mode="flat"
+                  label='Password'
                   onChangeText={handleChange('password')} // to tell that we're changing the value of password
                   secureTextEntry
                   onChange={() => handleChange('password')}
