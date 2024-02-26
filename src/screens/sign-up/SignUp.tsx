@@ -8,6 +8,7 @@ import {
   Touchable,
   TouchableOpacity,
   Image,
+  Linking,
 } from 'react-native';
 import {TextInput, Switch, HelperText} from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -338,6 +339,11 @@ const SignUp = () => {
       fontWeight: 'bold',
       color: mode === 'dark' ? colors.secondary[900] : colors.secondary[100],
     },
+    linkText: {
+      color: colors.main.buttonColor,
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
   });
 
   const customPickerStyles = StyleSheet.create({
@@ -346,7 +352,8 @@ const SignUp = () => {
       color: colors.secondary[900],
       fontSize: 16,
       fontWeight: 'bold',
-      backgroundColor: mode === 'dark' ? colors.secondary[400] : colors.secondary[100],
+      backgroundColor:
+        mode === 'dark' ? colors.secondary[400] : colors.secondary[100],
       paddingRight: 30,
     },
     placeholderColor: {
@@ -638,7 +645,7 @@ const SignUp = () => {
                     value={values.firstName}
                     onChangeText={handleChange('firstName')}
                     onBlur={handleBlur('firstName')}
-                    placeholder="prenom"
+                    placeholder="Votre prénom"
                     contentStyle={styles.contentStyle}
                     outlineStyle={styles.outlineStyle}
                   />
@@ -662,10 +669,10 @@ const SignUp = () => {
                 <View style={styles.inputWrapper}>
                   <TextInput
                     value={values.lastName}
-                    mode="outlined"
+                    mode="flat"
                     onChangeText={handleChange('lastName')}
                     onBlur={handleBlur('lastName')}
-                    placeholder="nom"
+                    placeholder="Votre nom"
                     contentStyle={styles.contentStyle}
                     outlineStyle={styles.outlineStyle}
                   />
@@ -688,11 +695,10 @@ const SignUp = () => {
                 <InputTitle title="Sélectionnez votre adresse e-mail et confirmez-la, s'il vous plaît." />
                 <View style={styles.inputWrapper}>
                   <TextInput
-                    mode="outlined"
-                    label="email"
+                    mode="flat"
                     onChangeText={handleChange('email')}
                     onBlur={handleBlur('email')}
-                    placeholder="email"
+                    placeholder="Votre adresse e-mail"
                     value={values.email}
                     keyboardType="email-address"
                     contentStyle={styles.contentStyle}
@@ -713,11 +719,10 @@ const SignUp = () => {
 
                 <View style={styles.inputWrapper}>
                   <TextInput
-                    mode="outlined"
-                    label="Confirm email"
+                    mode="flat"
                     onChangeText={handleChange('emailConfirm')}
                     onBlur={handleBlur('emailConfirm')}
-                    placeholder="emailConfirm"
+                    placeholder="Confirmez votre adresse email"
                     value={values.emailConfirm}
                     keyboardType="email-address"
                     contentStyle={styles.contentStyle}
@@ -742,11 +747,10 @@ const SignUp = () => {
                 <InputTitle title="Sélectionnez votre numéro de téléphone et confirmez-le, s'il vous plaît." />
                 <View style={styles.inputWrapper}>
                   <TextInput
-                    mode="outlined"
-                    label="Téléphone"
+                    mode="flat"
                     onChangeText={handleChange('phoneNumber')}
                     onBlur={handleBlur('phoneNumber')}
-                    placeholder="phoneNumber"
+                    placeholder="Votre numéro de téléphone"
                     value={values.phoneNumber}
                     keyboardType="phone-pad"
                     contentStyle={styles.contentStyle}
@@ -767,11 +771,10 @@ const SignUp = () => {
 
                 <View style={styles.inputWrapper}>
                   <TextInput
-                    mode="outlined"
-                    label="Confirm Tel number"
+                    mode="flat"
                     onChangeText={handleChange('phoneNumberConfirm')}
                     onBlur={handleBlur('phoneNumberConfirm')}
-                    placeholder="phoneNumberConfirm"
+                    placeholder="Confirmez votre numéro de téléphone"
                     value={values.phoneNumberConfirm}
                     keyboardType="phone-pad"
                     contentStyle={styles.contentStyle}
@@ -798,7 +801,7 @@ const SignUp = () => {
                   <View style={styles.inputWrapper}>
                     <TextInput
                       mode="outlined"
-                      label="date de naissance"
+                      placeholder='Date de naissance'
                       value={values.birthday}
                       disabled={true}
                     />
@@ -834,8 +837,7 @@ const SignUp = () => {
                 <View style={styles.inputWrapper}>
                   <TextInput
                     value={values.adresse}
-                    mode="outlined"
-                    label="adresse"
+                    mode="flat"
                     onChangeText={handleChange('adresse')}
                     onBlur={handleBlur('adresse')}
                     placeholder="Adresse"
@@ -882,8 +884,7 @@ const SignUp = () => {
                 <View style={styles.inputWrapper}>
                   <TextInput
                     value={values.codePostal}
-                    mode="outlined"
-                    label="Code Postal"
+                    mode="flat"
                     onChangeText={handleChange('codePostal')}
                     onBlur={handleBlur('codePostal')}
                     placeholder="code postal"
@@ -1067,11 +1068,10 @@ const SignUp = () => {
                 <View style={styles.inputWrapper}>
                   <TextInput
                     value={values.cin}
-                    mode="outlined"
-                    label="cin"
+                    mode="flat"
                     onChangeText={handleChange('cin')}
                     onBlur={handleBlur('cin')}
-                    placeholder="numero cin"
+                    placeholder="Votre numéro Carte d'Identité Nationale"
                     contentStyle={styles.contentStyle}
                     outlineStyle={styles.outlineStyle}
                   />
@@ -1096,7 +1096,7 @@ const SignUp = () => {
                   <View style={styles.inputWrapper}>
                     <TextInput
                       mode="outlined"
-                      label="date de naissance"
+                      placeholder="date de délivrance de votre CIN"
                       value={values.dateDelivrationCin}
                       disabled={true}
                     />
@@ -1202,7 +1202,7 @@ const SignUp = () => {
                       alt="votre cin recto"
                     />
                   ) : (
-                    <Text> no image</Text>
+                    <Text style={styles.linkText}> aucune image </Text>
                   )}
                 </View>
                 {touched.cinRecto && errors.cinRecto && (
@@ -1290,7 +1290,7 @@ const SignUp = () => {
                       alt="votre cin verso"
                     />
                   ) : (
-                    <Text> no image</Text>
+                    <Text style={styles.linkText}> aucune image </Text>
                   )}
                 </View>
                 {touched.cinVerso && errors.cinVerso && (
@@ -1377,7 +1377,7 @@ const SignUp = () => {
                       alt="votre selfie"
                     />
                   ) : (
-                    <Text> no image</Text>
+                    <Text style={styles.linkText}> aucune image </Text>
                   )}
                 </View>
                 {touched.selfie && errors.selfie && (
@@ -1398,8 +1398,7 @@ const SignUp = () => {
                 <InputTitle title="Choisissez un mot de passe et confirmez-le, s'il vous plaît." />
                 <View style={styles.inputWrapper}>
                   <TextInput
-                    mode="outlined"
-                    label="password"
+                    mode="flat"
                     onChangeText={handleChange('password')}
                     onBlur={handleBlur('password')}
                     placeholder="password"
@@ -1423,8 +1422,7 @@ const SignUp = () => {
 
                 <View style={styles.inputWrapper}>
                   <TextInput
-                    mode="outlined"
-                    label="Confirm password"
+                    mode="flat"
                     onChangeText={handleChange('passwordConfirm')}
                     onBlur={handleBlur('passwordConfirm')}
                     placeholder="passwordConfirm"
@@ -1457,7 +1455,7 @@ const SignUp = () => {
                     }}
                   />
                   <Text style={styles.confirmationText}>
-                    Je confirme que je n'ai pas des indice d'Americanite
+                    Je confirme que je n'ai pas d'indice d'américanité.
                   </Text>
                 </View>
 
@@ -1481,8 +1479,19 @@ const SignUp = () => {
                     }}
                   />
                   <Text style={styles.confirmationText}>
-                    J'accepte les mentions legales relatives à la protection des
-                    donnees personelles
+                    J'accepte les{' '}
+                    <TouchableOpacity
+                      onPress={() =>
+                        Linking.openURL(
+                          'https://www.webank.com.tn/fr/mentions-legales',
+                        )
+                      }>
+                      <Text
+                        style={styles.linkText}>
+                        mentions légales relatives à la protection des données personnelles.
+                      </Text>
+                    </TouchableOpacity>{' '}
+                    
                   </Text>
                 </View>
                 {touched.hasAmericanityIndex && errors.hasAmericanityIndex && (
@@ -1497,7 +1506,7 @@ const SignUp = () => {
                   </Text>
                 )}
 
-                {touched.hasOtherBank && errors.hasOtherBank && (
+                {/* {touched.hasOtherBank && errors.hasOtherBank && (
                   <Text
                     style={{
                       fontSize: 15,
@@ -1507,7 +1516,7 @@ const SignUp = () => {
                     }}>
                     {errors.hasOtherBank}
                   </Text>
-                )}
+                )} */}
 
                 {touched.hasConfirmedForPersonalData &&
                   errors.hasConfirmedForPersonalData && (
@@ -1515,8 +1524,7 @@ const SignUp = () => {
                       style={{
                         fontSize: 15,
                         color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
+                        margin: 30
                       }}>
                       {errors.hasConfirmedForPersonalData}
                     </Text>
@@ -1585,92 +1593,101 @@ const checkoutSchema = yup.object().shape({
   offer: yup
     .string()
     .oneOf(['WeStart', 'WeTrust'], 'Offer Invalide')
-    .required('required'),
+    .required('Ce champ est obligatoire'),
   gender: yup
     .string()
     .oneOf(['female', 'male'], 'Invalid gender')
-    .required('required'),
-  firstName: yup.string().required('required'),
-  lastName: yup.string().required('required'),
-  email: yup.string().email('invalid email').required('required'),
+    .required('Ce champ est obligatoire'),
+  firstName: yup.string().required('Ce champ est obligatoire'),
+  lastName: yup.string().required('Ce champ est obligatoire'),
+  email: yup
+    .string()
+    .email('Adresse e-mail invalide')
+    .required('Ce champ est obligatoire'),
   emailConfirm: yup
     .string()
-    .oneOf([yup.ref('email')], 'emails must match')
-    .email('invalid email')
-    .required('required'),
+    .oneOf([yup.ref('email')], 'Les adresses e-mail doivent correspondre')
+    .email('Adresse e-mail invalide')
+    .required('Ce champ est obligatoire'),
   phoneNumber: yup
     .string()
-    .matches(phoneRegExp, 'Phone number is not valid')
-    .required('required'),
+    .matches(phoneRegExp, 'Numéro de téléphone invalide')
+    .required('Ce champ est obligatoire'),
   phoneNumberConfirm: yup
     .string()
-    .oneOf([yup.ref('phoneNumber')], 'Phone numbers must match')
-    .matches(phoneRegExp, 'Phone number is not valid')
-    .required('required'),
-  birthday: yup.date().required('required'),
-  adresse: yup.string().required('required'),
-  gouvernorat: yup.string().required('required'),
+    .oneOf(
+      [yup.ref('phoneNumber')],
+      'Les numéros de téléphone doivent correspondre',
+    )
+    .matches(phoneRegExp, 'Numéro de téléphone invalide')
+    .required('Ce champ est obligatoire'),
+  birthday: yup.date().required('Ce champ est obligatoire'),
+  adresse: yup.string().required('Ce champ est obligatoire'),
+  gouvernorat: yup.string().required('Ce champ est obligatoire'),
   codePostal: yup
     .string()
-    .matches(codePostalRegExp, 'Invalid postal code. Must be 4 digits.')
-    .required('required'),
-  nationality: yup.string().required('required'),
-  statusCivil: yup.string().required('required'),
-  nombre_enfant: yup.string().required('required'),
-  socio_professional: yup.string().required('required'),
-  revenu: yup.string().required('required'),
-  natureActivite: yup.string().required('required'),
-  secteurActivite: yup.string().required('required'),
+    .matches(
+      codePostalRegExp,
+      'Code postal invalide. Doit contenir 4 chiffres.',
+    )
+    .required('Ce champ est obligatoire'),
+  nationality: yup.string().required('Ce champ est obligatoire'),
+  statusCivil: yup.string().required('Ce champ est obligatoire'),
+  nombre_enfant: yup.string().required('Ce champ est obligatoire'),
+  socio_professional: yup.string().required('Ce champ est obligatoire'),
+  revenu: yup.string().required('Ce champ est obligatoire'),
+  natureActivite: yup.string().required('Ce champ est obligatoire'),
+  secteurActivite: yup.string().required('Ce champ est obligatoire'),
   cin: yup
     .string()
-    .matches(cinRegExp, 'Invalid CIN format. Must be 8 digits.')
-    .required('required'),
-  dateDelivrationCin: yup.date().required('required'),
+    .matches(cinRegExp, 'Format CIN invalide. Doit contenir 8 chiffres.')
+    .required('Ce champ est obligatoire'),
+  dateDelivrationCin: yup.date().required('Ce champ est obligatoire'),
   password: yup
     .string()
     .matches(
       passwordRegExp,
-      'Password must contain at least 5 characters, one uppercase letter, one lowercase letter, one number, and one special character',
+      'Le mot de passe doit contenir au moins 5 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial',
     )
-    .min(5, 'Password must be exactly 5 characters long')
-    .required('required'),
+    .min(5, 'Le mot de passe doit avoir exactement 5 caractères')
+    .required('Ce champ est obligatoire'),
   passwordConfirm: yup
     .string()
-    .oneOf([yup.ref('password')], 'Passwords must match')
+    .oneOf([yup.ref('password')], 'Les mots de passe doivent correspondre')
     .matches(
       passwordRegExp,
-      'Password must contain at least 5 characters, one uppercase letter, one lowercase letter, one number, and one special character',
+      'Le mot de passe doit contenir au moins 5 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial',
     )
-    .min(5, 'Password must be exactly 5 characters long')
-    .required('required'),
+    .min(5, 'Le mot de passe doit avoir exactement 5 caractères')
+    .required('Ce champ est obligatoire'),
   hasAmericanityIndex: yup
     .boolean()
-    .oneOf([true], 'hasAmericanityIndex must be true')
-    .required('required'),
+    .oneOf([true], "Aucun indice d'américanité requis.")
+    .required('Ce champ est obligatoire'),
   hasOtherBank: yup
     .boolean()
-    .oneOf([true], 'hasOtherBank must be true')
-    .required('required'),
+    .oneOf([true], ' ?? ')
+    .required('Ce champ est obligatoire'),
   hasConfirmedForPersonalData: yup
     .boolean()
-    .oneOf([true], 'hasConfirmedForPersonalData must be true')
-    .required('required'),
-  cinRecto: yup.string().required('required'),
-  cinVerso: yup.string().required('required'),
-  selfie: yup.string().required('required'),
+    .oneOf([true], 'La confirmation des données personnelles doit être vraie')
+    .required('Ce champ est obligatoire'),
+  cinRecto: yup.string().required('Ce champ est obligatoire'),
+  cinVerso: yup.string().required('Ce champ est obligatoire'),
+  selfie: yup.string().required('Ce champ est obligatoire'),
 });
 
 export default SignUp;
-
 
 /*
   TO-DO
   - add voice guidance for each step
   - add accessibility for each input, button, and text
   - fix the date picker (or look for another one)
-  - fix placeholer color for the select inputs
+  - fix placeholer color for the select inputs 👍
   - add where the user can pick for entretien visio
   - add where the user can pick for the bank agency ???
-  - turn english to french
+  - turn english to french 👍
+  - fix inputs placeholders 
 
 */
