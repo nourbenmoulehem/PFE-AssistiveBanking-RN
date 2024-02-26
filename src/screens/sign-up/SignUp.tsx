@@ -19,6 +19,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 // custom components
 import InputTitle from '../../components/InputTitle';
 import HelperTextInfo from '../../components/HelperTextInfo';
+import HelperTextError from '../../components/HelperTextError';
 
 // form
 import {Formik} from 'formik';
@@ -177,7 +178,6 @@ const SignUp = () => {
       setStep(step + 1);
     }
   };
-    
 
   const getFieldName = (step: number): (keyof typeof initialValues)[] => {
     const stepFieldName = getStep(step);
@@ -247,12 +247,18 @@ const SignUp = () => {
       shadowRadius: 3.84,
     },
     submitButton: {
-      backgroundColor: colors.main.buttonColor,
+      backgroundColor: colors.yellow[300],
       padding: 10,
-      width: 80,
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: 12,
+      width: 120,
+      height: 70,
+      borderRadius: 30,
+      elevation: 3,
+      shadowColor: '#000',
+      shadowOffset: {width: 0, height: 2},
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
     },
     TextButtonNextPrev: {
       color: 'white',
@@ -306,7 +312,7 @@ const SignUp = () => {
       gap: 20,
     },
     pickDateButton: {
-      flexDirection: 'row', 
+      flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-around',
       gap: 10,
@@ -319,25 +325,33 @@ const SignUp = () => {
       shadowOffset: {width: 0, height: 2},
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
-
     },
-    
+    switchContainer: {
+      flexDirection: 'row',
+      // justifyContent: 'space-around',
+      width: '100%',
+      padding: 30,
+      alignItems: 'center',
+    },
+    confirmationText: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: mode === 'dark' ? colors.secondary[900] : colors.secondary[100],
+    },
   });
 
   const customPickerStyles = StyleSheet.create({
-    
-      inputIOS: {color: 'pink'},
-      inputAndroid: {
-          color: colors.secondary[900],
-          fontSize: 16,
-          fontWeight: 'bold', 
-          backgroundColor: colors.secondary[400],
-          paddingRight: 30
-        },
-      placeholderColor: {
-        color: 'pink',
-      },
-    
+    inputIOS: {color: 'pink'},
+    inputAndroid: {
+      color: colors.secondary[900],
+      fontSize: 16,
+      fontWeight: 'bold',
+      backgroundColor: mode === 'dark' ? colors.secondary[400] : colors.secondary[100],
+      paddingRight: 30,
+    },
+    placeholderColor: {
+      color: 'pink',
+    },
   });
 
   // date picker related
@@ -505,12 +519,10 @@ const SignUp = () => {
       }) => (
         <>
           <View style={styles.container}>
-          
-          {/* <ProgressBar progress={(step / 24)} width={300} color={colors.orange[200]} /> */}
+            {/* <ProgressBar progress={(step / 24)} width={300} color={colors.orange[200]} /> */}
 
             {step === 1 && ( // offre
               <>
-                
                 <InputTitle title="Choisissez l'offre qui vous convient " />
                 <View style={styles.inputWrapper}>
                   <TouchableOpacity
@@ -518,10 +530,8 @@ const SignUp = () => {
                       handleChange('offer')('WeStart');
                       setChecked('WeStart');
                       setOffreChanged(true);
-
                     }}
                     style={
-                      
                       checked === 'WeStart'
                         ? styles.checkedButton
                         : styles.uncheckedButton
@@ -555,7 +565,11 @@ const SignUp = () => {
                     </Text>
                   )}
 
-                  { offreChanged && <HelperTextInfo info={`Vous avez choisit l'offre ${checked}`} /> }
+                  {offreChanged && (
+                    <HelperTextInfo
+                      info={`Vous avez choisi l'offre ${checked}`}
+                    />
+                  )}
                 </View>
               </>
             )}
@@ -606,7 +620,11 @@ const SignUp = () => {
                       {errors.gender}
                     </Text>
                   )}
-                 {genderChanged && <HelperTextInfo info={`Vous avez choisit ${checkedGender}`} />}
+                  {genderChanged && (
+                    <HelperTextInfo
+                      info={`Vous avez choisi ${checkedGender}`}
+                    />
+                  )}
                 </View>
               </>
             )}
@@ -667,8 +685,7 @@ const SignUp = () => {
             )}
             {step === 5 && ( // email & confirm
               <>
-              
-              <InputTitle title="Sélectionnez votre adresse e-mail et confirmez-la, s'il vous plaît." />
+                <InputTitle title="Sélectionnez votre adresse e-mail et confirmez-la, s'il vous plaît." />
                 <View style={styles.inputWrapper}>
                   <TextInput
                     mode="outlined"
@@ -776,7 +793,7 @@ const SignUp = () => {
             )}
             {step === 7 && ( // birthday
               <>
-              <InputTitle title="Sélectionnez votre date de naissance" />
+                <InputTitle title="Sélectionnez votre date de naissance" />
                 <View style={styles.dateContainer}>
                   <View style={styles.inputWrapper}>
                     <TextInput
@@ -791,7 +808,9 @@ const SignUp = () => {
                     style={styles.pickDateButton}
                     onPress={showDatePicker}>
                     <Icon name="calendar-month-outline" size={40} />
-                    <Text style={styles.TextButtonNextPrev}>Choisir une date</Text>
+                    <Text style={styles.TextButtonNextPrev}>
+                      Choisir une date
+                    </Text>
                   </TouchableOpacity>
                 </View>
                 <DateTimePickerModal
@@ -855,7 +874,6 @@ const SignUp = () => {
                     style={customPickerStyles}
                   />
                 </View>
-                
               </>
             )}
             {step === 10 && ( // code postal
@@ -889,17 +907,17 @@ const SignUp = () => {
             )}
             {step === 11 && ( // nationalite
               <>
-              <InputTitle title="Sélectionnez votre nationalité" />
+                <InputTitle title="Sélectionnez votre nationalité" />
                 <View style={styles.inputWrapper}>
-                <RNPickerSelect
-                  onValueChange={value => handleChange('nationality')(value)}
-                  items={[
-                    {label: 'Tunisienne', value: 'Tunisienne'},
-                    {label: 'Française', value: 'Française'},
-                  ]}
-                  value={values.nationality}
-                  style={customPickerStyles}
-                />
+                  <RNPickerSelect
+                    onValueChange={value => handleChange('nationality')(value)}
+                    items={[
+                      {label: 'Tunisienne', value: 'Tunisienne'},
+                      {label: 'Française', value: 'Française'},
+                    ]}
+                    value={values.nationality}
+                    style={customPickerStyles}
+                  />
                 </View>
               </>
             )}
@@ -907,129 +925,32 @@ const SignUp = () => {
               <>
                 <InputTitle title="Sélectionnez votre status civil" />
                 <View style={styles.inputWrapper}>
-                <RNPickerSelect
-                  onValueChange={value => handleChange('statusCivil')(value)}
-                  items={status_civil}
-                  value={values.statusCivil}
-                  // touchableWrapperProps={{
-                  //   // <- Use touchableWrapperProps to pass accessibility properties
-                  //   accessible: true,
-                  //   accessibilityLabel: 'status civil',
-                  //   accessibilityHint: 'Double tap to select an option.',
-                  //   accessibilityRole: 'combobox',
-                  // }}
-                  style={customPickerStyles}
-                />
+                  <RNPickerSelect
+                    onValueChange={value => handleChange('statusCivil')(value)}
+                    items={status_civil}
+                    value={values.statusCivil}
+                    // touchableWrapperProps={{
+                    //   // <- Use touchableWrapperProps to pass accessibility properties
+                    //   accessible: true,
+                    //   accessibilityLabel: 'status civil',
+                    //   accessibilityHint: 'Double tap to select an option.',
+                    //   accessibilityRole: 'combobox',
+                    // }}
+                    style={customPickerStyles}
+                  />
                 </View>
               </>
             )}
             {step === 13 && ( // nombre d'enfant
               <>
-              <InputTitle title="Sélectionnez le nombre d'enfants que vous avez" />
+                <InputTitle title="Sélectionnez le nombre d'enfants que vous avez" />
                 <View style={styles.inputWrapper}>
-                <RNPickerSelect
-                  onValueChange={value => handleChange('nombre_enfant')(value)}
-                  value={values.nombre_enfant}
-                  items={nombre_enfant}
-                  // touchableWrapperProps={{
-                  //   // <- Use touchableWrapperProps to pass accessibility properties
-                  //   accessible: true,
-                  //   accessibilityLabel: 'Favorite sport',
-                  //   accessibilityHint: 'Double tap to select an option.',
-                  //   accessibilityRole: 'combobox',
-                  // }}
-                  style={customPickerStyles}
-                />
-                </View>
-                
-              </>
-            )}
-            {step === 14 && ( // socio_professional
-              <>
-              <InputTitle title="Sélectionnez votre statut socio-professionnel" />
-                <View style={styles.inputWrapper}>
-                <RNPickerSelect
-                  onValueChange={value => {
-                    handleChange('socio_professional')(value);
-                    if (value === 'Etudiant') {
-                      setIsEtudiant(true);
-                    }
-                  }}
-                  value={values.socio_professional}
-                  items={socio_professional}
-                  // touchableWrapperProps={{
-                  //   // <- Use touchableWrapperProps to pass accessibility properties
-                  //   accessible: true,
-                  //   accessibilityLabel: 'Favorite sport',
-                  //   accessibilityHint: 'Double tap to select an option.',
-                  //   accessibilityRole: 'combobox',
-                  // }}
-                  style={customPickerStyles}
-                />
-                </View>
-              </>
-            )}
-            {step === 15 &&
-              !isEtudiant && ( // revenu_mensuel
-                <>
-                <InputTitle title="Sélectionnez votre revenu net mensuel" />
-                  <View style={styles.inputWrapper}>
-                  <RNPickerSelect
-                    onValueChange={value => {
-                      handleChange('revenu')(value);
-                      console.log('isEtudiant', isEtudiant);
-                    }}
-                    value={values.revenu}
-                    items={revenu_mensuel}
-                    touchableWrapperProps={{
-                      // <- Use touchableWrapperProps to pass accessibility properties
-                      accessible: true,
-                      accessibilityLabel: 'Favorite sport',
-                      accessibilityHint: 'Double tap to select an option.',
-                      accessibilityRole: 'combobox',
-                    }}
-                    style={customPickerStyles}
-                  />
-                  </View>
-                </>
-              )}
-            {step === 16 &&
-              !isEtudiant && ( // natureActivite
-                <>
-                <InputTitle title="Sélectionnez la nature de votre activité" />
-                  <View style={styles.inputWrapper}>
                   <RNPickerSelect
                     onValueChange={value =>
-                      handleChange('natureActivite')(value)
+                      handleChange('nombre_enfant')(value)
                     }
-                    value={values.natureActivite}
-                    items={[
-                      {label: 'Public', value: 'Public'},
-                      {label: 'Privé', value: 'Privé'},
-                    ]}
-                    touchableWrapperProps={{
-                      // <- Use touchableWrapperProps to pass accessibility properties
-                      accessible: true,
-                      accessibilityLabel: 'Favorite sport',
-                      accessibilityHint: 'Double tap to select an option.',
-                      accessibilityRole: 'combobox',
-                    }}
-                    style={customPickerStyles}
-                  />
-                  </View>
-                </>
-              )}
-            {step === 17 &&
-              !isEtudiant && ( // secteurActivite
-                <>
-                <InputTitle title="Sélectionnez votre secteur d'activité" />
-                  <View style={styles.inputWrapper}>
-                  <RNPickerSelect
-                    onValueChange={value =>
-                      handleChange('secteurActivite')(value)
-                    }
-                    value={values.secteurActivite}
-                    items={secteur_activite}
+                    value={values.nombre_enfant}
+                    items={nombre_enfant}
                     // touchableWrapperProps={{
                     //   // <- Use touchableWrapperProps to pass accessibility properties
                     //   accessible: true,
@@ -1039,12 +960,110 @@ const SignUp = () => {
                     // }}
                     style={customPickerStyles}
                   />
+                </View>
+              </>
+            )}
+            {step === 14 && ( // socio_professional
+              <>
+                <InputTitle title="Sélectionnez votre statut socio-professionnel" />
+                <View style={styles.inputWrapper}>
+                  <RNPickerSelect
+                    onValueChange={value => {
+                      handleChange('socio_professional')(value);
+                      if (value === 'Etudiant') {
+                        setIsEtudiant(true);
+                      }
+                    }}
+                    value={values.socio_professional}
+                    items={socio_professional}
+                    // touchableWrapperProps={{
+                    //   // <- Use touchableWrapperProps to pass accessibility properties
+                    //   accessible: true,
+                    //   accessibilityLabel: 'Favorite sport',
+                    //   accessibilityHint: 'Double tap to select an option.',
+                    //   accessibilityRole: 'combobox',
+                    // }}
+                    style={customPickerStyles}
+                  />
+                </View>
+              </>
+            )}
+            {step === 15 &&
+              !isEtudiant && ( // revenu_mensuel
+                <>
+                  <InputTitle title="Sélectionnez votre revenu net mensuel" />
+                  <View style={styles.inputWrapper}>
+                    <RNPickerSelect
+                      onValueChange={value => {
+                        handleChange('revenu')(value);
+                        console.log('isEtudiant', isEtudiant);
+                      }}
+                      value={values.revenu}
+                      items={revenu_mensuel}
+                      touchableWrapperProps={{
+                        // <- Use touchableWrapperProps to pass accessibility properties
+                        accessible: true,
+                        accessibilityLabel: 'Favorite sport',
+                        accessibilityHint: 'Double tap to select an option.',
+                        accessibilityRole: 'combobox',
+                      }}
+                      style={customPickerStyles}
+                    />
+                  </View>
+                </>
+              )}
+            {step === 16 &&
+              !isEtudiant && ( // natureActivite
+                <>
+                  <InputTitle title="Sélectionnez la nature de votre activité" />
+                  <View style={styles.inputWrapper}>
+                    <RNPickerSelect
+                      onValueChange={value =>
+                        handleChange('natureActivite')(value)
+                      }
+                      value={values.natureActivite}
+                      items={[
+                        {label: 'Public', value: 'Public'},
+                        {label: 'Privé', value: 'Privé'},
+                      ]}
+                      touchableWrapperProps={{
+                        // <- Use touchableWrapperProps to pass accessibility properties
+                        accessible: true,
+                        accessibilityLabel: 'Favorite sport',
+                        accessibilityHint: 'Double tap to select an option.',
+                        accessibilityRole: 'combobox',
+                      }}
+                      style={customPickerStyles}
+                    />
+                  </View>
+                </>
+              )}
+            {step === 17 &&
+              !isEtudiant && ( // secteurActivite
+                <>
+                  <InputTitle title="Sélectionnez votre secteur d'activité" />
+                  <View style={styles.inputWrapper}>
+                    <RNPickerSelect
+                      onValueChange={value =>
+                        handleChange('secteurActivite')(value)
+                      }
+                      value={values.secteurActivite}
+                      items={secteur_activite}
+                      // touchableWrapperProps={{
+                      //   // <- Use touchableWrapperProps to pass accessibility properties
+                      //   accessible: true,
+                      //   accessibilityLabel: 'Favorite sport',
+                      //   accessibilityHint: 'Double tap to select an option.',
+                      //   accessibilityRole: 'combobox',
+                      // }}
+                      style={customPickerStyles}
+                    />
                   </View>
                 </>
               )}
             {step === 18 && ( // num cin
               <>
-              <InputTitle title="Saisissez votre numéro Carte d'Identité Nationale" />
+                <InputTitle title="Saisissez votre numéro Carte d'Identité Nationale" />
                 <View style={styles.inputWrapper}>
                   <TextInput
                     value={values.cin}
@@ -1072,7 +1091,7 @@ const SignUp = () => {
             )}
             {step === 19 && ( // date de delivration
               <>
-              <InputTitle title="Sélectionnez la date de délivrance de votre CIN" />
+                <InputTitle title="Sélectionnez la date de délivrance de votre CIN" />
                 <View style={styles.dateContainer}>
                   <View style={styles.inputWrapper}>
                     <TextInput
@@ -1087,7 +1106,9 @@ const SignUp = () => {
                     style={styles.pickDateButton}
                     onPress={showDatePicker}>
                     <Icon name="calendar-month-outline" size={24} />
-                    <Text style={styles.TextButtonNextPrev} >Choisir une date</Text>
+                    <Text style={styles.TextButtonNextPrev}>
+                      Choisir une date
+                    </Text>
                   </TouchableOpacity>
                 </View>
                 <DateTimePickerModal
@@ -1110,7 +1131,7 @@ const SignUp = () => {
             )}
             {step === 20 && ( // cin recto
               <>
-              <InputTitle title="Veuillez prendre en photo le recto de votre CIN ou l'importer" />
+                <InputTitle title="Veuillez prendre en photo le recto de votre CIN ou l'importer" />
                 <View
                   style={{
                     flexDirection: 'row',
@@ -1266,7 +1287,7 @@ const SignUp = () => {
                     <Image
                       source={{uri: selectedCinVersoImage}}
                       style={{width: 250, height: 250}}
-                      alt='votre cin verso'
+                      alt="votre cin verso"
                     />
                   ) : (
                     <Text> no image</Text>
@@ -1287,7 +1308,7 @@ const SignUp = () => {
             )}
             {step === 22 && ( // selfie
               <>
-              <InputTitle title="Prenez ou importez votre photo" />
+                <InputTitle title="Prenez ou importez votre photo" />
                 <View
                   style={{
                     flexDirection: 'row',
@@ -1353,7 +1374,7 @@ const SignUp = () => {
                     <Image
                       source={{uri: selectedSelfieImage}}
                       style={{width: 250, height: 250}}
-                      alt='votre selfie'
+                      alt="votre selfie"
                     />
                   ) : (
                     <Text> no image</Text>
@@ -1374,7 +1395,7 @@ const SignUp = () => {
             )}
             {step === 23 && ( // password
               <>
-              <InputTitle title="Choisissez un mot de passe et confirmez-le, s'il vous plaît." />
+                <InputTitle title="Choisissez un mot de passe et confirmez-le, s'il vous plaît." />
                 <View style={styles.inputWrapper}>
                   <TextInput
                     mode="outlined"
@@ -1428,40 +1449,67 @@ const SignUp = () => {
             )}
             {step === 24 && ( // confirmation
               <>
-                <View>
+                <View style={styles.switchContainer}>
                   <Switch
                     value={values.hasAmericanityIndex}
                     onValueChange={value => {
                       setFieldValue('hasAmericanityIndex', value);
                     }}
                   />
-                  <Text>Americani</Text>
+                  <Text style={styles.confirmationText}>
+                    Je confirme que je n'ai pas des indice d'Americanite
+                  </Text>
                 </View>
 
-                <View>
+                <View style={styles.switchContainer}>
                   <Switch
                     value={values.hasOtherBank}
                     onValueChange={value => {
                       setFieldValue('hasOtherBank', value);
                     }}
                   />
-                  <Text>Banka o5ra</Text>
+                  <Text style={styles.confirmationText}>
+                    Je suis client dans une autre banque
+                  </Text>
                 </View>
 
-                <View>
+                <View style={styles.switchContainer}>
                   <Switch
                     value={values.hasConfirmedForPersonalData}
                     onValueChange={value => {
                       setFieldValue('hasConfirmedForPersonalData', value);
                     }}
                   />
-                  <Text>confirmi</Text>
+                  <Text style={styles.confirmationText}>
+                    J'accepte les mentions legales relatives à la protection des
+                    donnees personelles
+                  </Text>
                 </View>
-                {touched.hasAmericanityIndex &&
-                  errors.hasAmericanityIndex &&
-                  touched.hasOtherBank &&
-                  errors.hasOtherBank &&
-                  touched.hasConfirmedForPersonalData &&
+                {touched.hasAmericanityIndex && errors.hasAmericanityIndex && (
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: 'red',
+                      marginTop: 10,
+                      marginRight: 30,
+                    }}>
+                    <Text>{errors.hasAmericanityIndex}</Text>
+                  </Text>
+                )}
+
+                {touched.hasOtherBank && errors.hasOtherBank && (
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: 'red',
+                      marginTop: 10,
+                      marginRight: 30,
+                    }}>
+                    {errors.hasOtherBank}
+                  </Text>
+                )}
+
+                {touched.hasConfirmedForPersonalData &&
                   errors.hasConfirmedForPersonalData && (
                     <Text
                       style={{
@@ -1470,9 +1518,7 @@ const SignUp = () => {
                         marginTop: 10,
                         marginRight: 30,
                       }}>
-                      <Text>{errors.hasAmericanityIndex}</Text>
-                      <Text>{errors.hasOtherBank}</Text>
-                      <Text>{errors.hasConfirmedForPersonalData}</Text>
+                      {errors.hasConfirmedForPersonalData}
                     </Text>
                   )}
               </>
@@ -1502,18 +1548,7 @@ const SignUp = () => {
                   // }
                   onPress={() => {
                     console.log('onPress Next button');
-
                     const fieldNames = getFieldName(step);
-                    console.log('Field Names:', fieldNames);
-                    console.log(
-                      'Values:',
-                      fieldNames.map(fieldName => values[fieldName]),
-                    );
-                    console.log(
-                      'Errors:',
-                      fieldNames.map(fieldName => errors[fieldName]),
-                    );
-
                     handleNext();
                   }}>
                   <Text style={styles.TextButtonNextPrev}>Suivant</Text>
@@ -1522,14 +1557,13 @@ const SignUp = () => {
                 <TouchableOpacity
                   style={styles.submitButton}
                   onPress={() => {
-                    console.log('submit: ');
                     console.log('VALUES:', values);
 
                     console.log('ERRORS', errors);
                     handleSubmit();
                   }} // handlesubmit will collect all the values and send it to onSubmit itself
                 >
-                  <Text>valider</Text>
+                  <Text style={styles.TextButtonNextPrev}>Valider</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -1550,7 +1584,7 @@ const codePostalRegExp = /^\d{4}$/;
 const checkoutSchema = yup.object().shape({
   offer: yup
     .string()
-    .oneOf(['WeStart', 'WeTrust'], 'Invalid offer')
+    .oneOf(['WeStart', 'WeTrust'], 'Offer Invalide')
     .required('required'),
   gender: yup
     .string()
@@ -1621,6 +1655,22 @@ const checkoutSchema = yup.object().shape({
     .boolean()
     .oneOf([true], 'hasConfirmedForPersonalData must be true')
     .required('required'),
+  cinRecto: yup.string().required('required'),
+  cinVerso: yup.string().required('required'),
+  selfie: yup.string().required('required'),
 });
 
 export default SignUp;
+
+
+/*
+  TO-DO
+  - add voice guidance for each step
+  - add accessibility for each input, button, and text
+  - fix the date picker (or look for another one)
+  - fix placeholer color for the select inputs
+  - add where the user can pick for entretien visio
+  - add where the user can pick for the bank agency ???
+  - turn english to french
+
+*/
