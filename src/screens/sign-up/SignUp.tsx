@@ -801,7 +801,7 @@ const SignUp = () => {
                   <View style={styles.inputWrapper}>
                     <TextInput
                       mode="outlined"
-                      placeholder='Date de naissance'
+                      placeholder="Date de naissance"
                       value={values.birthday}
                       disabled={true}
                     />
@@ -1486,12 +1486,11 @@ const SignUp = () => {
                           'https://www.webank.com.tn/fr/mentions-legales',
                         )
                       }>
-                      <Text
-                        style={styles.linkText}>
-                        mentions légales relatives à la protection des données personnelles.
+                      <Text style={styles.linkText}>
+                        mentions légales relatives à la protection des données
+                        personnelles.
                       </Text>
                     </TouchableOpacity>{' '}
-                    
                   </Text>
                 </View>
                 {touched.hasAmericanityIndex && errors.hasAmericanityIndex && (
@@ -1524,7 +1523,7 @@ const SignUp = () => {
                       style={{
                         fontSize: 15,
                         color: 'red',
-                        margin: 30
+                        margin: 30,
                       }}>
                       {errors.hasConfirmedForPersonalData}
                     </Text>
@@ -1688,6 +1687,6 @@ export default SignUp;
   - add where the user can pick for entretien visio
   - add where the user can pick for the bank agency ???
   - turn english to french 👍
-  - fix inputs placeholders 
+  - fix inputs placeholders 👍
 
 */
