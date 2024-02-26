@@ -7,13 +7,6 @@ type HelperTextInfoProps = {
 }
 
 const HelperTextInfo = (props : HelperTextInfoProps) => {
-  const styles = StyleSheet.create({
-    helperText: {
-      fontSize: 18, // larger font size for better readability
-      color: 'green', // dark color for better contrast
-      padding: 10, // padding for better spacing
-    },
-  });
   return (
     <View>
       <HelperText type="info" style={styles.helperText}>
@@ -23,6 +16,12 @@ const HelperTextInfo = (props : HelperTextInfoProps) => {
   )
 }
 
-export default HelperTextInfo
+const styles = StyleSheet.create({
+  helperText: {
+    fontSize: 18, 
+    color: 'green', 
+    padding: 10, 
+  },
+});
 
-const styles = StyleSheet.create({})
+export default HelperTextInfo
