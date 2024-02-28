@@ -31,6 +31,17 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../../context/store';
 import {tokens} from '../../assets/palette';
 
+// axios
+import axios from "axios";
+
+// env variables
+import { API_BASE_URL } from '@env';
+
+
+
+
+
+
 const SignUp = () => {
   const {mode} = useSelector((state: RootState) => state.global);
   const colors = tokens(mode);
@@ -88,7 +99,60 @@ const SignUp = () => {
     hasAmericanityIndex: false,
     hasOtherBank: false,
     hasConfirmedForPersonalData: false,
+    agence: ''
   };
+
+  axios.defaults.withCredentials = true;
+  
+  const register = async (values: Steps) => {
+    console.log("🚀 ~ file: Form.jsx:71 ~ register ~ values", values);
+
+    const res = await axios
+      .post(`${API_BASE_URL}/api/v1/auth/register`, {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        password: values.password,
+        offer: values.offer,
+        cin: values.cin,
+        dateDelivrationCin: values.dateDelivrationCin,
+        cinRecto: values.cinRecto,
+        cinVerso: values.cinVerso,
+        selfie: values.selfie,
+        phoneNumber: values.phoneNumber,
+        gender: values.gender,
+        birthday: values.birthday,
+        nationality: values.nationality,
+        statusCivil: values.statusCivil,
+        nombre_enfant: values.nombre_enfant,
+        socio_professional: values.socio_professional,
+        secteurActivite: values.secteurActivite,
+        natureActivite: values.natureActivite,
+        revenu: values.revenu,
+        codePostal: values.codePostal,
+        gouvernorat: values.gouvernorat,
+        // hasOtherBank: values.hasOtherBank,
+        agence: values.agence 
+
+        
+      })
+      .catch((err) => {
+        console.log("🚀 ~ register ~ err:", err)
+
+      });
+  
+      if (res && res.data) {
+        // Handle successful response here
+        const data = res.data;
+        console.log("Registration successful:", data);
+        return res
+      }
+    
+  
+  
+  };
+
+  
 
   type Steps = {
     offer: string;
@@ -117,6 +181,7 @@ const SignUp = () => {
     passwordConfirm: string;
     phoneNumberConfirm: string;
     emailConfirm: string;
+    agence: string;
   };
 
   const getStep = <T extends keyof Steps>(stepNumber: number): T[] => {
@@ -132,7 +197,7 @@ const SignUp = () => {
       case 5:
         return ['email', 'emailConfirm'] as T[];
       case 6:
-        return ['phoneNumber', 'phoneNumberConfirm'] as T[];
+        return ['phoneNumber', 'phoneNumberConfirm'] as T[]; // baaed bch n7ot el agence 
       case 7:
         return ['birthday'] as T[];
       case 8:
@@ -148,7 +213,7 @@ const SignUp = () => {
       case 13:
         return ['nombre_enfant'] as T[];
       case 14:
-        return ['socio_professional'] as T[];
+        return ['socio_professional'] as T[]; 
       case 15:
         return ['revenu'] as T[];
       case 16:
@@ -507,9 +572,8 @@ const SignUp = () => {
       initialValues={initialValues}
       validationSchema={checkoutSchema} // we're using yup
       onSubmit={values => {
-        console.log('hello');
-
         console.log(values);
+        register(values)
       }}>
       {({
         values, // where we're getting all the value of the input fields
@@ -799,12 +863,12 @@ const SignUp = () => {
                 <InputTitle title="Sélectionnez votre date de naissance" />
                 <View style={styles.dateContainer}>
                   <View style={styles.inputWrapper}>
-                    <TextInput
+                    {/* <TextInput
                       mode="outlined"
                       placeholder="Date de naissance"
                       value={values.birthday}
                       disabled={true}
-                    />
+                    /> */}
                   </View>
 
                   <TouchableOpacity
@@ -920,6 +984,17 @@ const SignUp = () => {
                     style={customPickerStyles}
                   />
                 </View>
+                {touched.nationality && errors.nationality && (
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: 'red',
+                        marginTop: 10,
+                        marginRight: 30,
+                      }}>
+                      {errors.nationality}
+                    </Text>
+                  )}
               </>
             )}
             {step === 12 && ( // status civil
@@ -940,6 +1015,17 @@ const SignUp = () => {
                     style={customPickerStyles}
                   />
                 </View>
+                {touched.statusCivil && errors.statusCivil && (
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: 'red',
+                        marginTop: 10,
+                        marginRight: 30,
+                      }}>
+                      {errors.statusCivil}
+                    </Text>
+                  )}
               </>
             )}
             {step === 13 && ( // nombre d'enfant
@@ -962,6 +1048,17 @@ const SignUp = () => {
                     style={customPickerStyles}
                   />
                 </View>
+                {touched.nombre_enfant && errors.nombre_enfant && (
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: 'red',
+                        marginTop: 10,
+                        marginRight: 30,
+                      }}>
+                      {errors.nombre_enfant}
+                    </Text>
+                  )}
               </>
             )}
             {step === 14 && ( // socio_professional
@@ -973,6 +1070,9 @@ const SignUp = () => {
                       handleChange('socio_professional')(value);
                       if (value === 'Etudiant') {
                         setIsEtudiant(true);
+                      }
+                      else {
+                        setIsEtudiant(false);
                       }
                     }}
                     value={values.socio_professional}
@@ -987,6 +1087,17 @@ const SignUp = () => {
                     style={customPickerStyles}
                   />
                 </View>
+                {touched.socio_professional && errors.socio_professional && (
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: 'red',
+                        marginTop: 10,
+                        marginRight: 30,
+                      }}>
+                      {errors.socio_professional}
+                    </Text>
+                  )}
               </>
             )}
             {step === 15 &&
@@ -1011,6 +1122,7 @@ const SignUp = () => {
                       style={customPickerStyles}
                     />
                   </View>
+
                 </>
               )}
             {step === 16 &&
@@ -1074,6 +1186,7 @@ const SignUp = () => {
                     placeholder="Votre numéro Carte d'Identité Nationale"
                     contentStyle={styles.contentStyle}
                     outlineStyle={styles.outlineStyle}
+                    keyboardType='numeric'
                   />
                   {touched.cin && errors.cin && (
                     <Text
@@ -1550,9 +1663,9 @@ const SignUp = () => {
                       ? styles.disabledButton
                       : styles.nextPrevButton,
                   ]}
-                  // disabled={
-                  //   getFieldName(step).some(fieldName => values[fieldName] === '' || !!errors[fieldName])
-                  // }
+                  disabled={
+                    getFieldName(step).some(fieldName => values[fieldName] === '' || !!errors[fieldName])
+                  }
                   onPress={() => {
                     console.log('onPress Next button');
                     const fieldNames = getFieldName(step);
@@ -1634,9 +1747,9 @@ const checkoutSchema = yup.object().shape({
   statusCivil: yup.string().required('Ce champ est obligatoire'),
   nombre_enfant: yup.string().required('Ce champ est obligatoire'),
   socio_professional: yup.string().required('Ce champ est obligatoire'),
-  revenu: yup.string().required('Ce champ est obligatoire'),
-  natureActivite: yup.string().required('Ce champ est obligatoire'),
-  secteurActivite: yup.string().required('Ce champ est obligatoire'),
+  revenu: yup.string(),
+  natureActivite: yup.string(),
+  secteurActivite: yup.string(),
   cin: yup
     .string()
     .matches(cinRegExp, 'Format CIN invalide. Doit contenir 8 chiffres.')
@@ -1669,7 +1782,7 @@ const checkoutSchema = yup.object().shape({
     .required('Ce champ est obligatoire'),
   hasConfirmedForPersonalData: yup
     .boolean()
-    .oneOf([true], 'La confirmation des données personnelles doit être vraie')
+    .oneOf([true], 'La confirmation des données personnelles est requis')
     .required('Ce champ est obligatoire'),
   cinRecto: yup.string().required('Ce champ est obligatoire'),
   cinVerso: yup.string().required('Ce champ est obligatoire'),
