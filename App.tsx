@@ -5,7 +5,7 @@ import React from 'react';
 import {PaperProvider} from 'react-native-paper';
 
 //Navigation
-import {NavigationContainer} from '@react-navigation/native';
+import {LinkingOptions, NavigationContainer} from '@react-navigation/native';
 /* NavigationContainer : wrap the whole app in this container and define the routes so we can navigate between screens */
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 /* createNativeStackNavigator : Stack is the type of Navigation we're using, there is other types like Draws */
@@ -27,17 +27,33 @@ export type RootStackParamList = {
   SignUp: undefined;
   ForgotPassword: undefined;
   MultiStepForm: undefined;
-  // Profile: { userId: string };
-  // Feed: { sort: 'latest' | 'top' } | undefined;
+  AccountActivation: undefined;
 };
 
 const stack = createNativeStackNavigator<RootStackParamList>();
+
+
+// Linking is used to handle deep linking, it's a way to navigate to a specific screen in the app from a link
+const linking: LinkingOptions<RootStackParamList> = {
+  prefixes: ['webankassistive://'],
+  config: {
+    initialRouteName: 'Home',
+    screens: {
+      Home: {
+        path: 'home'
+      },
+      AccountActivation: {
+        path: 'account-activation/:activationtoken' // it worked like this and it didnt work with the token in the query account-activation?token
+      }
+    }
+  }
+};
 
 const App = () => {
   return (
     <Provider store={store}>
       <PaperProvider>
-        <NavigationContainer>
+        <NavigationContainer linking={linking}>
           <MainStack />
         </NavigationContainer>
       </PaperProvider>
