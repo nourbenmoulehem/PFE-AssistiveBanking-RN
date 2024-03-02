@@ -53,6 +53,7 @@ const SignUp = () => {
   const [isEtudiant, setIsEtudiant] = useState(false); // if the user is a student there is some options need to skip
   const [offreChanged, setOffreChanged] = useState(false);
   const [genderChanged, setGenderChanged] = useState(false);
+  const [registration, setRegistration] = useState<string>('')
 
   const [selectedCinRectoImage, setSelectedCinRectoImage] = useState<
     string | undefined
@@ -108,7 +109,7 @@ const SignUp = () => {
     console.log("🚀 ~ file: Form.jsx:71 ~ register ~ values", values);
 
     const res = await axios
-      .post(`${API_BASE_URL}/api/v1/auth/register`, {
+      .post(`${process.env.API_BASE_URL}/api/v1/auth/register`, {
         firstName: values.firstName,
         lastName: values.lastName,
         email: values.email,
@@ -135,9 +136,15 @@ const SignUp = () => {
         agence: values.agence 
 
         
+      }, {
+        headers: {
+          "Content-type": "application/json"
+        }
       })
       .catch((err) => {
-        console.log("🚀 ~ register ~ err:", err)
+        console.log("Error message:", err.message);
+        // console.log("Error stack:", err.stack);
+        setRegistration("L'inscription a échoué, veuillez réessayer plus tard ❌")
 
       });
   
@@ -145,6 +152,7 @@ const SignUp = () => {
         // Handle successful response here
         const data = res.data;
         console.log("Registration successful:", data);
+        setRegistration("Inscription réussie, veuillez vérifier votre email ✅")
         return res
       }
     
@@ -1687,7 +1695,16 @@ const SignUp = () => {
                 </TouchableOpacity>
               )}
             </View>
+              (registration && (
+              <View style={styles.container}>
+                <Text style={styles.confirmationText}>
+                {String(registration)}  
+                </Text>
+              </View>
+            ))
           </View>
+          
+          
         </>
       )}
     </Formik>
