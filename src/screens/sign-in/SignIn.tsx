@@ -11,9 +11,15 @@ import {
 } from 'react-native';
 import React from 'react';
 import {TextInput, HelperText} from 'react-native-paper';
-import {UseSelector, useSelector} from 'react-redux';
+
+// redux
+import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../context/store';
+import {setLogin} from '../../context/globalReducer';
 import {tokens} from '../../assets/palette';
+
+// storage
+import * as Keychain from 'react-native-keychain';
 
 // Navigation
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -25,6 +31,7 @@ import * as yup from 'yup';
 
 // axios
 import axios from 'axios';
+axios.defaults.withCredentials = true;
 
 const loginSchema = yup.object().shape({
   email: yup.string().email('invalid email').required('required'), //validate for an email
@@ -32,11 +39,27 @@ const loginSchema = yup.object().shape({
 });
 
 //type safety
-type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
+type SignInProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
-const SignIn = ({navigation}: HomeProps) => {
-  const {isLoggedIn, mode} = useSelector((state: RootState) => state.global);
-  const colors = tokens(mode);
+const SignIn = ({navigation}: SignInProps) => {
+  const {isLoggedIn, mode, user} = useSelector((state: RootState) => state.global);
+
+  // testing purposes, need to be deleted later
+  console.log("🚀 ~ SignIn ~ user:", user)
+  console.log("🚀 ~ SignIn ~ isLoggedIn:", isLoggedIn)
+  const getCredentials = async () => {
+    console.log('getting credentials');
+    
+    const credentials = await Keychain.getGenericPassword();
+    if (credentials) {
+      console.log('Access Token:', credentials.password);
+    }
+  };
+  getCredentials();
+  // testing purposes, need to be deleted later
+  
+  const colors = tokens(mode); // get the color palette based on the mode
+  const dispatch = useDispatch();
 
   const validationSchema = yup.object().shape({
     email: yup.string().email('invalid email').required('required'),
@@ -48,21 +71,27 @@ const SignIn = ({navigation}: HomeProps) => {
     password: string;
   };
 
-  
-  // const authenticate = async (values: FormValues) => {
-  //   const response = await axios({
-  //     method: 'post',
-  //     url: `${process.env.API_BASE_URL}/api/v1/auth/authenticate`,
-  //     withCredentials: true,
-  //     responseType: 'json',
-  //   })
-  //   .then(response => {
-  //       console.log(response.data);
-  //     })
-  //   .catch(error => {
-  //       console.log(error);
-  //     });
-  // };
+  const authenticate = async (values: FormValues) => {
+    try {
+      const response = await axios({
+        method: 'post',
+        url: `${process.env.API_BASE_URL}/api/v1/auth/authenticate`,
+        withCredentials: true,
+        responseType: 'json',
+        data: values,
+      });
+      await Keychain.setGenericPassword('accessToken', response.data.access_token);
+      const credentials = await Keychain.getGenericPassword();
+      if (credentials) {
+        console.log(
+          'Credentials successfully loaded for user ' + credentials.username,
+        );
+        dispatch(setLogin({name: "mohamed"}));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const initialValuesLogin = {
     email: '',
@@ -133,7 +162,7 @@ const SignIn = ({navigation}: HomeProps) => {
           validationSchema={validationSchema} // we're using yup
           onSubmit={values => {
             console.log(values);
-            // authenticate(values);
+            authenticate(values);
           }}>
           {({
             values, // where we're getting all the value of the input fields
@@ -203,8 +232,12 @@ const SignIn = ({navigation}: HomeProps) => {
 
               <TouchableOpacity
                 style={styles.submitButton}
-                disabled={!isValid || isSubmitting}
-                onPress={() => handleSubmit()} // handlesubmit will collect all the values and send it to onSubmit itself
+                // disabled={!isValid || isSubmitting}
+                onPress={() => {
+                  console.log('ERRORS', errors);
+
+                  handleSubmit();
+                }} // handlesubmit will collect all the values and send it to onSubmit itself
               >
                 <Text style={styles.TextButton}>Connexion</Text>
               </TouchableOpacity>
