@@ -1695,13 +1695,13 @@ const SignUp = () => {
                 </TouchableOpacity>
               )}
             </View>
-              (registration && (
+              {/* (registration && (
               <View style={styles.container}>
                 <Text style={styles.confirmationText}>
                 {String(registration)}  
                 </Text>
               </View>
-            ))
+            )) */}
           </View>
           
           
