@@ -23,7 +23,7 @@ import AppBar from './src/components/AppBar';
 
 // typescript related, specifying the type
 export type RootStackParamList = {
-  Home: undefined;
+  SignIn: undefined;
   SignUp: undefined;
   ForgotPassword: undefined;
   MultiStepForm: undefined;
@@ -37,9 +37,9 @@ const stack = createNativeStackNavigator<RootStackParamList>();
 const linking: LinkingOptions<RootStackParamList> = {
   prefixes: ['webankassistive://'],
   config: {
-    initialRouteName: 'Home',
+    initialRouteName: 'SignIn',
     screens: {
-      Home: {
+      SignIn: {
         path: 'home'
       },
       AccountActivation: {
