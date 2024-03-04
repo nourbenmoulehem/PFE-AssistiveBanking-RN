@@ -9,7 +9,7 @@ export interface GlobalState { // to define the state, TypeScript
 
 const initialState: GlobalState = {
   mode: 'dark',
-  isLoggedIn: false,
+  isLoggedIn: false, // if the token isn't there or expired it's going to be false
   user: null
 }
 
@@ -18,6 +18,9 @@ export const globalSlice = createSlice({
   initialState,
   reducers: { // reducers to update the state
     //Actions:
+    setInitialLogin: (state, action: PayloadAction<boolean>) => {
+      state.isLoggedIn = action.payload;
+    },
     setMode: (state) => {
       state.mode = state.mode === "dark" ? "light" : "dark"
     },
@@ -33,6 +36,6 @@ export const globalSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setMode, setLogin, setLogout } = globalSlice.actions
+export const { setInitialLogin, setMode, setLogin, setLogout } = globalSlice.actions
 
 export default globalSlice.reducer
