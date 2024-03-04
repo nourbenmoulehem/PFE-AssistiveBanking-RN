@@ -1,38 +1,58 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React from 'react'
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState} from 'react';
 
-import { useDispatch, useSelector } from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../context/store';
-import { setLogout } from '../../context/globalReducer'
+
 
 // storage
 import * as Keychain from 'react-native-keychain';
 
-const Home = () => {
+// api manage (custom hook)
+import getApi from '../../API/APIManager';
+
+// navigation
+import {RootStackParamListSignedIn} from '../../../App';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+
+type HomeProps = NativeStackScreenProps<RootStackParamListSignedIn, 'Home'>;
+
+const Home = ({navigation}: HomeProps) => {
   const dispatch = useDispatch();
-  const {isLoggedIn, mode, user} = useSelector((state: RootState) => state.global);
-  console.log("🚀 ~ Home ~ isLoggedIn:", isLoggedIn)
-  const handleLogout = async () => {
-    await Keychain.resetGenericPassword();
-  }
+  const {isLoggedIn, mode, user} = useSelector(
+    (state: RootState) => state.global,
+  );
+  console.log('🚀 ~ Home ~ isLoggedIn:', isLoggedIn);
+  
+  const [clientDetails, setClientDetails] = useState<Object>({});
+
+  useEffect(() => {
+    getClientDetails();
+  }, []);
+
+  const getClientDetails = async () => {
+    const api = await getApi();
+    if (api) {
+      let response = await api.get('/api/v1/client/get-by-cin?cin=123456789');
+      console.log('🚀 ~ getClientDetails ~ response.data:', response.data);
+      if (response.status === 200) {
+        setClientDetails(response.data);
+      }
+    } else {
+      // Handle the case where there is no API (e.g., show an error message)
+    }
+  };
 
   return (
     <View>
-      <TouchableOpacity
-        onPress={() => {
-          console.log('log out')
-          handleLogout()
-          dispatch(setLogout())
-        }}
-        style={{padding: 20, backgroundColor: 'red', margin: 20}}
-      >
-        <Text>Log out</Text>
+      <Text>Home Page</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Transactions')}>
+        <Text>transactions</Text>
       </TouchableOpacity>
-      
     </View>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
