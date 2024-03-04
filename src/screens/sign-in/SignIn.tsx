@@ -45,15 +45,9 @@ const SignIn = ({navigation}: SignInProps) => {
   const {isLoggedIn, mode, user} = useSelector((state: RootState) => state.global);
 
   // testing purposes, need to be deleted later
-  console.log("🚀 ~ SignIn ~ user:", user)
-  console.log("🚀 ~ SignIn ~ isLoggedIn:", isLoggedIn)
   const getCredentials = async () => {
-    console.log('getting credentials');
-    
     const credentials = await Keychain.getGenericPassword();
-    if (credentials) {
-      console.log('Access Token:', credentials.password);
-    }
+    
   };
   getCredentials();
   // testing purposes, need to be deleted later
@@ -80,12 +74,12 @@ const SignIn = ({navigation}: SignInProps) => {
         responseType: 'json',
         data: values,
       });
-      await Keychain.setGenericPassword('accessToken', response.data.access_token);
+
+      await Keychain.setGenericPassword('accessToken', response.data.access_token, { service: 'accessService' });
+
+      await Keychain.setGenericPassword('refreshToken', response.data.refresh_token, { service: 'refreshService' });
       const credentials = await Keychain.getGenericPassword();
       if (credentials) {
-        console.log(
-          'Credentials successfully loaded for user ' + credentials.username,
-        );
         dispatch(setLogin({name: "mohamed"}));
       }
     } catch (error) {
@@ -99,6 +93,7 @@ const SignIn = ({navigation}: SignInProps) => {
   };
 
   const styles = StyleSheet.create({
+      
     // stylesheet is put inside the component because it's tracking the mode
     container: {
       backgroundColor: colors.main.backgroundColor,
@@ -161,7 +156,6 @@ const SignIn = ({navigation}: SignInProps) => {
           initialValues={initialValuesLogin}
           validationSchema={validationSchema} // we're using yup
           onSubmit={values => {
-            console.log(values);
             authenticate(values);
           }}>
           {({
@@ -234,8 +228,6 @@ const SignIn = ({navigation}: SignInProps) => {
                 style={styles.submitButton}
                 // disabled={!isValid || isSubmitting}
                 onPress={() => {
-                  console.log('ERRORS', errors);
-
                   handleSubmit();
                 }} // handlesubmit will collect all the values and send it to onSubmit itself
               >
