@@ -176,7 +176,7 @@ const SignIn = ({navigation}: SignInProps) => {
                   <KeyboardAvoidingView behavior="padding">
                     <TextInput
                       mode="flat"
-                      label="email"
+                      // label="email"
                       onChangeText={handleChange('email')}
                       onBlur={handleBlur('email')}
                       placeholder="email"
@@ -203,7 +203,7 @@ const SignIn = ({navigation}: SignInProps) => {
                   <KeyboardAvoidingView behavior="position">
                     <TextInput
                       mode="flat"
-                      label="Password"
+                      // label="Password"
                       onChangeText={handleChange('password')} // to tell that we're changing the value of password
                       secureTextEntry
                       onChange={() => handleChange('password')}
