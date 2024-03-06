@@ -20,7 +20,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 // custom components
 import InputTitle from '../../components/InputTitle';
 import HelperTextInfo from '../../components/HelperTextInfo';
-import HelperTextError from '../../components/HelperTextError';
+import CustomTextInput from '../../components/TextInput';
+import OfferButton from '../../components/OfferButton';
+import GenderButton from '../../components/GenderButton';
+import ImagePicker from '../../components/ImagePicker';
 
 // form
 import {Formik} from 'formik';
@@ -32,14 +35,7 @@ import {RootState} from '../../context/store';
 import {tokens} from '../../assets/palette';
 
 // axios
-import axios from "axios";
-
-// env variables
-import { API_BASE_URL } from '@env';
-
-
-
-
+import axios from 'axios';
 
 
 const SignUp = () => {
@@ -48,12 +44,16 @@ const SignUp = () => {
 
   const [step, setStep] = useState(1);
 
-  const [checked, setChecked] = useState(''); // for offer (WeStart, WeTrust)
-  const [checkedGender, setCheckedGender] = useState(''); // for gender
+  const [checkedOffer, setCheckedOffer] = useState<
+    'WeStart' | 'WeTrust' | undefined
+  >(undefined); // for offer (WeStart, WeTrust)
+  const [checkedGender, setCheckedGender] = useState<
+    'male' | 'female' | undefined
+  >(undefined); // for gender
   const [isEtudiant, setIsEtudiant] = useState(false); // if the user is a student there is some options need to skip
   const [offreChanged, setOffreChanged] = useState(false);
   const [genderChanged, setGenderChanged] = useState(false);
-  const [registration, setRegistration] = useState<string>('')
+  const [registration, setRegistration] = useState<string>('');
 
   const [selectedCinRectoImage, setSelectedCinRectoImage] = useState<
     string | undefined
@@ -100,67 +100,40 @@ const SignUp = () => {
     hasAmericanityIndex: false,
     hasOtherBank: false,
     hasConfirmedForPersonalData: false,
-    agence: ''
+    agence: '',
   };
 
   axios.defaults.withCredentials = true;
-  
+
   const register = async (values: Steps) => {
-    console.log("🚀 ~ file: Form.jsx:71 ~ register ~ values", values);
+    console.log('🚀 ~ file: Form.jsx:71 ~ register ~ values', values);
 
     const res = await axios
-      .post(`${process.env.API_BASE_URL}/api/v1/auth/register`, {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email,
-        password: values.password,
-        offer: values.offer,
-        cin: values.cin,
-        dateDelivrationCin: values.dateDelivrationCin,
-        cinRecto: values.cinRecto,
-        cinVerso: values.cinVerso,
-        selfie: values.selfie,
-        phoneNumber: values.phoneNumber,
-        gender: values.gender,
-        birthday: values.birthday,
-        nationality: values.nationality,
-        statusCivil: values.statusCivil,
-        nombre_enfant: values.nombre_enfant,
-        socio_professional: values.socio_professional,
-        secteurActivite: values.secteurActivite,
-        natureActivite: values.natureActivite,
-        revenu: values.revenu,
-        codePostal: values.codePostal,
-        gouvernorat: values.gouvernorat,
-        // hasOtherBank: values.hasOtherBank,
-        agence: values.agence 
-
-        
-      }, {
-        headers: {
-          "Content-type": "application/json"
-        }
-      })
-      .catch((err) => {
-        console.log("Error message:", err.message);
+      .post(
+        `${process.env.API_BASE_URL}/api/v1/auth/register`,
+        {values},
+        {
+          headers: {
+            'Content-type': 'application/json',
+          },
+        },
+      )
+      .catch(err => {
+        console.log('Error message:', err.message);
         // console.log("Error stack:", err.stack);
-        setRegistration("L'inscription a échoué, veuillez réessayer plus tard ❌")
-
+        setRegistration(
+          "L'inscription a échoué, veuillez réessayer plus tard ❌",
+        );
       });
-  
-      if (res && res.data) {
-        // Handle successful response here
-        const data = res.data;
-        console.log("Registration successful:", data);
-        setRegistration("Inscription réussie, veuillez vérifier votre email ✅")
-        return res
-      }
-    
-  
-  
-  };
 
-  
+    if (res && res.data) {
+      // Handle successful response here
+      const data = res.data;
+      console.log('Registration successful:', data);
+      setRegistration('Inscription réussie, veuillez vérifier votre email ✅');
+      return res;
+    }
+  };
 
   type Steps = {
     offer: string;
@@ -205,7 +178,7 @@ const SignUp = () => {
       case 5:
         return ['email', 'emailConfirm'] as T[];
       case 6:
-        return ['phoneNumber', 'phoneNumberConfirm'] as T[]; // baaed bch n7ot el agence 
+        return ['phoneNumber', 'phoneNumberConfirm'] as T[]; // baaed bch n7ot el agence
       case 7:
         return ['birthday'] as T[];
       case 8:
@@ -221,7 +194,7 @@ const SignUp = () => {
       case 13:
         return ['nombre_enfant'] as T[];
       case 14:
-        return ['socio_professional'] as T[]; 
+        return ['socio_professional'] as T[];
       case 15:
         return ['revenu'] as T[];
       case 16:
@@ -255,7 +228,6 @@ const SignUp = () => {
 
   const getFieldName = (step: number): (keyof typeof initialValues)[] => {
     const stepFieldName = getStep(step);
-    console.log('🚀 ~ getFieldName ~ stepFieldName:', stepFieldName);
     return stepFieldName;
   };
 
@@ -267,15 +239,6 @@ const SignUp = () => {
     }
   };
 
-  const handleInputChange = (target: any) => {
-    const {name, value} = target;
-  };
-
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
-    // handle form submission
-  };
-
   const styles = StyleSheet.create({
     container: {
       backgroundColor: colors.main.backgroundColor,
@@ -283,14 +246,7 @@ const SignUp = () => {
       justifyContent: 'space-around',
       alignItems: 'center',
     },
-    contentStyle: {
-      // related to textInput decoration of react-native-paper
-      backgroundColor: 'white',
-    },
-    outlineStyle: {
-      // related to textInput decoration of react-native-paper
-      borderColor: colors.main.buttonColor,
-    },
+
     inputWrapper: {
       width: 340,
       justifyContent: 'center',
@@ -340,24 +296,7 @@ const SignUp = () => {
       fontWeight: 'bold',
       letterSpacing: 1,
     },
-    checkedButton: {
-      backgroundColor: colors.orange[300],
-      padding: 20,
-      borderRadius: 8,
-      marginRight: 10,
-      marginBottom: 40,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    uncheckedButton: {
-      backgroundColor: colors.yellow[300],
-      padding: 20,
-      borderRadius: 8,
-      marginRight: 10,
-      marginBottom: 40,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
+
     dateContainer: {
       padding: 16,
       justifyContent: 'center',
@@ -366,24 +305,6 @@ const SignUp = () => {
     },
     disabledButton: {
       backgroundColor: colors.secondary[100],
-    },
-    openGaleryButton: {
-      height: 150,
-      width: 120,
-      borderRadius: 8,
-      backgroundColor: colors.secondary[400],
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: 20,
-    },
-    openCameraButton: {
-      height: 150,
-      width: 120,
-      borderRadius: 8,
-      backgroundColor: colors.secondary[200],
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: 20,
     },
     pickDateButton: {
       flexDirection: 'row',
@@ -402,7 +323,6 @@ const SignUp = () => {
     },
     switchContainer: {
       flexDirection: 'row',
-      // justifyContent: 'space-around',
       width: '100%',
       padding: 30,
       alignItems: 'center',
@@ -417,6 +337,12 @@ const SignUp = () => {
       fontSize: 16,
       fontWeight: 'bold',
     },
+    error: {
+    fontSize: 15,
+    color: 'red',
+    marginTop: 10,
+    marginRight: 30,
+  }
   });
 
   const customPickerStyles = StyleSheet.create({
@@ -446,14 +372,8 @@ const SignUp = () => {
   };
 
   const handleConfirm = (date: Date) => {
-    console.warn('A date has been picked: ', date);
+    // console.warn('A date has been picked: ', date);
     hideDatePicker();
-  };
-
-  // select related
-  const selectedItem = {
-    title: 'Selected item title',
-    description: 'Secondary long descriptive text ...',
   };
 
   const status_civil = [
@@ -531,57 +451,12 @@ const SignUp = () => {
     value: gouvernorat,
   }));
 
-  // type safety
-  type Options = {
-    mediaType: 'photo' | 'video' | 'mixed';
-    includeBase64: boolean;
-    maxHeight: number;
-    maxWidth: number;
-  };
-
-  const options: Options = {
-    mediaType: 'photo',
-    includeBase64: false,
-    maxHeight: 2000,
-    maxWidth: 2000,
-  };
-
-  // open galerie
-  // const openImagePicker = () => {
-  //   launchImageLibrary(options, response => {
-  //     if (response.didCancel) {
-  //       console.log('User cancelled image picker');
-  //     } else if (response.errorMessage) {
-  //       console.log('Image picker errorMessage: ', response.errorMessage);
-  //     } else {
-  //       let imageUri = response.assets ? response.assets[0].uri : '';
-  //       setSelectedImage(imageUri);
-  //     }
-  //   });
-  // };
-
-  // ouvrir la caméra
-  // const handleCameraLaunch = () => {
-  //   launchCamera(options, response => {
-  //     if (response.didCancel) {
-  //       console.log('User cancelled camera');
-  //     } else if (response.errorMessage) {
-  //       console.log('Camera errorMessage: ', response.errorMessage);
-  //     } else {
-  //       let imageUri = response.assets ? response.assets[0].uri : '';
-  //       setSelectedImage(imageUri);
-  //       console.log(imageUri);
-  //     }
-  //   });
-  // };
-
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={checkoutSchema} // we're using yup
       onSubmit={values => {
-        console.log(values);
-        register(values)
+        register(values);
       }}>
       {({
         values, // where we're getting all the value of the input fields
@@ -594,6 +469,7 @@ const SignUp = () => {
         handleReset,
         isSubmitting,
         setFieldValue,
+        dirty
         /* and other goodies */
       }) => (
         <>
@@ -604,49 +480,35 @@ const SignUp = () => {
               <>
                 <InputTitle title="Choisissez l'offre qui vous convient " />
                 <View style={styles.inputWrapper}>
-                  <TouchableOpacity
-                    onPress={() => {
+                  <OfferButton
+                    offer="WeStart"
+                    checkedGender={checkedOffer}
+                    handleChange={offer => () => {
                       handleChange('offer')('WeStart');
-                      setChecked('WeStart');
-                      setOffreChanged(true);
                     }}
-                    style={
-                      checked === 'WeStart'
-                        ? styles.checkedButton
-                        : styles.uncheckedButton
-                    }>
-                    <Text style={styles.TextButton}>WeStart</Text>
-                  </TouchableOpacity>
+                    setCheckedOffer={setCheckedOffer}
+                    setOffreChanged={setOffreChanged}
+                  />
 
-                  <TouchableOpacity
-                    onPress={() => {
+                  <OfferButton
+                    offer="WeTrust"
+                    checkedGender={checkedOffer}
+                    handleChange={offer => () => {
                       handleChange('offer')('WeTrust');
-                      setChecked('WeTrust');
-                      setOffreChanged(true);
-                      console.log('TouchableOPcity WeTrust', values.offer);
                     }}
-                    style={
-                      checked === 'WeTrust'
-                        ? styles.checkedButton
-                        : styles.uncheckedButton
-                    }>
-                    <Text style={styles.TextButton}>WeTrust</Text>
-                  </TouchableOpacity>
+                    setCheckedOffer={setCheckedOffer}
+                    setOffreChanged={setOffreChanged}
+                  />
                   {touched.offer && errors.offer && (
                     <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
-                      }}>
+                      style={styles.error}>
                       {errors.offer}
                     </Text>
                   )}
 
                   {offreChanged && (
                     <HelperTextInfo
-                      info={`Vous avez choisi l'offre ${checked}`}
+                      info={`Vous avez choisi l'offre ${checkedOffer}`}
                     />
                   )}
                 </View>
@@ -657,45 +519,29 @@ const SignUp = () => {
               <>
                 <InputTitle title="Sélectionnez votre sexe " />
                 <View style={styles.inputWrapper}>
-                  <TouchableOpacity
-                    onPress={() => {
+                  <GenderButton
+                    gender="female"
+                    checkedGender={checkedGender}
+                    setCheckedGender={setCheckedGender}
+                    setGenderChanged={setGenderChanged}
+                    handleChange={gender => () => {
                       handleChange('gender')('female');
-                      setCheckedGender('female');
-                      setGenderChanged(true);
-
-                      // console.log("TouchableOPcity female", values.gender);
+                      console.log('values.gender', values.gender);
                     }}
-                    style={
-                      checkedGender === 'female'
-                        ? styles.checkedButton
-                        : styles.uncheckedButton
-                    }>
-                    <Text style={styles.TextButton}>Femme</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={() => {
+                  />
+                  <GenderButton
+                    gender="male"
+                    checkedGender={checkedGender}
+                    setCheckedGender={setCheckedGender}
+                    setGenderChanged={setGenderChanged}
+                    handleChange={gender => () => {
                       handleChange('gender')('male');
-                      setCheckedGender('male');
-                      setGenderChanged(true);
-                      // console.log("TouchableOPcity male", values.gender);
+                      console.log('values.gender', values.gender);
                     }}
-                    style={
-                      checkedGender === 'male'
-                        ? styles.checkedButton
-                        : styles.uncheckedButton
-                    }>
-                    <Text style={styles.TextButton}>Homme</Text>
-                  </TouchableOpacity>
-
+                  />
                   {touched.gender && errors.gender && (
                     <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
-                      }}>
+                      style={styles.error}>
                       {errors.gender}
                     </Text>
                   )}
@@ -711,159 +557,56 @@ const SignUp = () => {
             {step === 3 && ( // firstName
               <>
                 <InputTitle title="Sélectionnez votre prénom" />
-                <View style={styles.inputWrapper}>
-                  <TextInput
-                    mode="flat"
-                    value={values.firstName}
-                    onChangeText={handleChange('firstName')}
-                    onBlur={handleBlur('firstName')}
-                    placeholder="Votre prénom"
-                    contentStyle={styles.contentStyle}
-                    outlineStyle={styles.outlineStyle}
-                  />
-                  {touched.firstName && errors.firstName && (
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
-                      }}>
-                      {errors.firstName}
-                    </Text>
-                  )}
-                </View>
+                <CustomTextInput
+                  mode="flat"
+                  name="firstName"
+                  placeholder="Votre prénom"
+                />
               </>
             )}
             {step === 4 && ( // lastName
               <>
                 <InputTitle title="Sélectionnez votre nom" />
-                <View style={styles.inputWrapper}>
-                  <TextInput
-                    value={values.lastName}
-                    mode="flat"
-                    onChangeText={handleChange('lastName')}
-                    onBlur={handleBlur('lastName')}
-                    placeholder="Votre nom"
-                    contentStyle={styles.contentStyle}
-                    outlineStyle={styles.outlineStyle}
-                  />
-                  {touched.lastName && errors.lastName && (
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
-                      }}>
-                      {errors.lastName}
-                    </Text>
-                  )}
-                </View>
+                <CustomTextInput
+                  mode="flat"
+                  name="lastName"
+                  placeholder="Votre nom de famille"
+                />
               </>
             )}
             {step === 5 && ( // email & confirm
               <>
                 <InputTitle title="Sélectionnez votre adresse e-mail et confirmez-la, s'il vous plaît." />
-                <View style={styles.inputWrapper}>
-                  <TextInput
-                    mode="flat"
-                    onChangeText={handleChange('email')}
-                    onBlur={handleBlur('email')}
-                    placeholder="Votre adresse e-mail"
-                    value={values.email}
-                    keyboardType="email-address"
-                    contentStyle={styles.contentStyle}
-                    outlineStyle={styles.outlineStyle}
-                  />
-                  {touched.email && errors.email && (
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
-                      }}>
-                      {errors.email}
-                    </Text>
-                  )}
-                </View>
+                <CustomTextInput
+                  mode="flat"
+                  name="email"
+                  placeholder="Votre adresse e-mail"
+                  keyboardType="email-address"
+                />
 
-                <View style={styles.inputWrapper}>
-                  <TextInput
-                    mode="flat"
-                    onChangeText={handleChange('emailConfirm')}
-                    onBlur={handleBlur('emailConfirm')}
-                    placeholder="Confirmez votre adresse email"
-                    value={values.emailConfirm}
-                    keyboardType="email-address"
-                    contentStyle={styles.contentStyle}
-                    outlineStyle={styles.outlineStyle}
-                  />
-                  {touched.emailConfirm && errors.emailConfirm && (
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
-                      }}>
-                      {errors.emailConfirm}
-                    </Text>
-                  )}
-                </View>
+                <CustomTextInput
+                  mode="flat"
+                  name="emailConfirm"
+                  placeholder="Confirmez votre adresse email"
+                  keyboardType="email-address"
+                />
               </>
             )}
             {step === 6 && ( // phoneNumber & confirm
               <>
                 <InputTitle title="Sélectionnez votre numéro de téléphone et confirmez-le, s'il vous plaît." />
-                <View style={styles.inputWrapper}>
-                  <TextInput
-                    mode="flat"
-                    onChangeText={handleChange('phoneNumber')}
-                    onBlur={handleBlur('phoneNumber')}
-                    placeholder="Votre numéro de téléphone"
-                    value={values.phoneNumber}
-                    keyboardType="phone-pad"
-                    contentStyle={styles.contentStyle}
-                    outlineStyle={styles.outlineStyle}
-                  />
-                  {touched.phoneNumber && errors.phoneNumber && (
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
-                      }}>
-                      {errors.phoneNumber}
-                    </Text>
-                  )}
-                </View>
-
-                <View style={styles.inputWrapper}>
-                  <TextInput
-                    mode="flat"
-                    onChangeText={handleChange('phoneNumberConfirm')}
-                    onBlur={handleBlur('phoneNumberConfirm')}
-                    placeholder="Confirmez votre numéro de téléphone"
-                    value={values.phoneNumberConfirm}
-                    keyboardType="phone-pad"
-                    contentStyle={styles.contentStyle}
-                    outlineStyle={styles.outlineStyle}
-                  />
-                  {touched.phoneNumberConfirm && errors.phoneNumberConfirm && (
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
-                      }}>
-                      {errors.phoneNumberConfirm}
-                    </Text>
-                  )}
-                </View>
+                <CustomTextInput
+                  mode="flat"
+                  name="phoneNumber"
+                  placeholder="Votre numéro de téléphone"
+                  keyboardType="phone-pad"
+                />
+                <CustomTextInput
+                  mode="flat"
+                  name="phoneNumberConfirm"
+                  placeholder="Confirmez votre numéro de téléphone"
+                  keyboardType="phone-pad"
+                />
               </>
             )}
             {step === 7 && ( // birthday
@@ -871,12 +614,12 @@ const SignUp = () => {
                 <InputTitle title="Sélectionnez votre date de naissance" />
                 <View style={styles.dateContainer}>
                   <View style={styles.inputWrapper}>
-                    {/* <TextInput
+                    <TextInput
                       mode="outlined"
                       placeholder="Date de naissance"
                       value={values.birthday}
                       disabled={true}
-                    /> */}
+                    />
                   </View>
 
                   <TouchableOpacity
@@ -893,11 +636,10 @@ const SignUp = () => {
                   mode="date"
                   onConfirm={(date: Date) => {
                     console.log('🚀 ~ SignUp ~ date:', date);
-
                     const extractedDate = date.toISOString().split('T')[0];
                     console.log('🚀 ~ SignUp ~ extractedDate:', extractedDate);
                     handleChange('birthday')(extractedDate);
-                    console.log('values.birthday : ', values.birthday);
+                    handleConfirm(date);
                   }}
                   onCancel={hideDatePicker}
                 />
@@ -906,28 +648,11 @@ const SignUp = () => {
             {step === 8 && ( // adresse
               <>
                 <InputTitle title="Sélectionnez votre adresse" />
-                <View style={styles.inputWrapper}>
-                  <TextInput
-                    value={values.adresse}
-                    mode="flat"
-                    onChangeText={handleChange('adresse')}
-                    onBlur={handleBlur('adresse')}
-                    placeholder="Adresse"
-                    contentStyle={styles.contentStyle}
-                    outlineStyle={styles.outlineStyle}
-                  />
-                  {touched.adresse && errors.adresse && (
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
-                      }}>
-                      {errors.adresse}
-                    </Text>
-                  )}
-                </View>
+                <CustomTextInput
+                  mode="flat"
+                  name="adresse"
+                  placeholder="Adresse"
+                />
               </>
             )}
             {step === 9 && ( // gouvernorat
@@ -953,29 +678,13 @@ const SignUp = () => {
             {step === 10 && ( // code postal
               <>
                 <InputTitle title="Sélectionnez votre code postal" />
-                <View style={styles.inputWrapper}>
-                  <TextInput
-                    value={values.codePostal}
-                    mode="flat"
-                    onChangeText={handleChange('codePostal')}
-                    onBlur={handleBlur('codePostal')}
-                    placeholder="code postal"
-                    contentStyle={styles.contentStyle}
-                    outlineStyle={styles.outlineStyle}
-                    keyboardType="phone-pad"
-                  />
-                  {touched.codePostal && errors.codePostal && (
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
-                      }}>
-                      {errors.codePostal}
-                    </Text>
-                  )}
-                </View>
+
+                <CustomTextInput
+                  mode="flat"
+                  name="codePostal"
+                  placeholder="code postal"
+                  keyboardType="phone-pad"
+                />
               </>
             )}
             {step === 11 && ( // nationalite
@@ -993,16 +702,16 @@ const SignUp = () => {
                   />
                 </View>
                 {touched.nationality && errors.nationality && (
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
-                      }}>
-                      {errors.nationality}
-                    </Text>
-                  )}
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: 'red',
+                      marginTop: 10,
+                      marginRight: 30,
+                    }}>
+                    {errors.nationality}
+                  </Text>
+                )}
               </>
             )}
             {step === 12 && ( // status civil
@@ -1024,16 +733,16 @@ const SignUp = () => {
                   />
                 </View>
                 {touched.statusCivil && errors.statusCivil && (
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
-                      }}>
-                      {errors.statusCivil}
-                    </Text>
-                  )}
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: 'red',
+                      marginTop: 10,
+                      marginRight: 30,
+                    }}>
+                    {errors.statusCivil}
+                  </Text>
+                )}
               </>
             )}
             {step === 13 && ( // nombre d'enfant
@@ -1057,16 +766,16 @@ const SignUp = () => {
                   />
                 </View>
                 {touched.nombre_enfant && errors.nombre_enfant && (
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
-                      }}>
-                      {errors.nombre_enfant}
-                    </Text>
-                  )}
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: 'red',
+                      marginTop: 10,
+                      marginRight: 30,
+                    }}>
+                    {errors.nombre_enfant}
+                  </Text>
+                )}
               </>
             )}
             {step === 14 && ( // socio_professional
@@ -1078,8 +787,7 @@ const SignUp = () => {
                       handleChange('socio_professional')(value);
                       if (value === 'Etudiant') {
                         setIsEtudiant(true);
-                      }
-                      else {
+                      } else {
                         setIsEtudiant(false);
                       }
                     }}
@@ -1096,16 +804,16 @@ const SignUp = () => {
                   />
                 </View>
                 {touched.socio_professional && errors.socio_professional && (
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
-                      }}>
-                      {errors.socio_professional}
-                    </Text>
-                  )}
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: 'red',
+                      marginTop: 10,
+                      marginRight: 30,
+                    }}>
+                    {errors.socio_professional}
+                  </Text>
+                )}
               </>
             )}
             {step === 15 &&
@@ -1130,7 +838,6 @@ const SignUp = () => {
                       style={customPickerStyles}
                     />
                   </View>
-
                 </>
               )}
             {step === 16 &&
@@ -1185,29 +892,13 @@ const SignUp = () => {
             {step === 18 && ( // num cin
               <>
                 <InputTitle title="Saisissez votre numéro Carte d'Identité Nationale" />
-                <View style={styles.inputWrapper}>
-                  <TextInput
-                    value={values.cin}
-                    mode="flat"
-                    onChangeText={handleChange('cin')}
-                    onBlur={handleBlur('cin')}
-                    placeholder="Votre numéro Carte d'Identité Nationale"
-                    contentStyle={styles.contentStyle}
-                    outlineStyle={styles.outlineStyle}
-                    keyboardType='numeric'
-                  />
-                  {touched.cin && errors.cin && (
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
-                      }}>
-                      {errors.cin}
-                    </Text>
-                  )}
-                </View>
+
+                <CustomTextInput
+                  mode="flat"
+                  name="cin"
+                  placeholder="Votre numéro Carte d'Identité Nationale"
+                  keyboardType="phone-pad"
+                />
               </>
             )}
             {step === 19 && ( // date de delivration
@@ -1216,7 +907,7 @@ const SignUp = () => {
                 <View style={styles.dateContainer}>
                   <View style={styles.inputWrapper}>
                     <TextInput
-                      mode="outlined"
+                      mode="flat"
                       placeholder="date de délivrance de votre CIN"
                       value={values.dateDelivrationCin}
                       disabled={true}
@@ -1241,10 +932,7 @@ const SignUp = () => {
                     const extractedDate = date.toISOString().split('T')[0];
                     console.log('🚀 ~ SignUp ~ extractedDate:', extractedDate);
                     handleChange('dateDelivrationCin')(extractedDate);
-                    console.log(
-                      'values.dateDelivrationCin : ',
-                      values.dateDelivrationCin,
-                    );
+                    handleConfirm(date);
                   }}
                   onCancel={hideDatePicker}
                 />
@@ -1252,318 +940,70 @@ const SignUp = () => {
             )}
             {step === 20 && ( // cin recto
               <>
-                <InputTitle title="Veuillez prendre en photo le recto de votre CIN ou l'importer" />
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    width: '100%',
-                    justifyContent: 'space-around',
-                    gap: 20,
-                    alignItems: 'center',
-                  }}>
-                  <TouchableOpacity
-                    style={styles.openGaleryButton}
-                    onPress={() => {
-                      launchImageLibrary(options, response => {
-                        if (response.didCancel) {
-                          console.log('User cancelled image picker');
-                        } else if (response.errorMessage) {
-                          console.log(
-                            'Image picker errorMessage: ',
-                            response.errorMessage,
-                          );
-                        } else {
-                          let imageUri = response.assets
-                            ? response.assets[0].uri
-                            : '';
-                          handleChange('cinRecto')(imageUri ? imageUri : '');
-                          setSelectedCinRectoImage(imageUri);
-                        }
-                      });
-                    }}>
-                    <Icon name="image-search-outline" size={40} />
-                    <Text style={styles.TextButtonNextPrev}>
-                      ouvrir la galerie
+              <ImagePicker
+                title="Veuillez prendre en photo le recto de votre CIN ou l'importer"
+                selectedImage={selectedCinRectoImage}
+                setSelectedImage={setSelectedCinRectoImage}
+                handleChange={(uri: string | undefined) => setFieldValue('cinRecto', uri)}
+                field="cinRecto"
+              />
+              {touched.cinRecto && errors.cinRecto && (
+                    <Text
+                      style={styles.error}>
+                      {errors.cinRecto}
                     </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.openCameraButton}
-                    onPress={() => {
-                      launchCamera(options, response => {
-                        if (response.didCancel) {
-                          console.log('User cancelled camera');
-                        } else if (response.errorMessage) {
-                          console.log(
-                            'Camera errorMessage: ',
-                            response.errorMessage,
-                          );
-                        } else {
-                          let imageUri = response.assets
-                            ? response.assets[0].uri
-                            : '';
-                          setSelectedCinRectoImage(imageUri);
-                          handleChange('cinRecto')(imageUri ? imageUri : '');
-
-                          console.log(imageUri);
-                        }
-                      });
-                    }}>
-                    <Icon name="camera-enhance-outline" size={40} />
-                    <Text style={styles.TextButtonNextPrev}>
-                      ouvrir la caméra
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-
-                <View>
-                  {selectedCinRectoImage ? (
-                    <Image
-                      source={{uri: selectedCinRectoImage}}
-                      style={{width: 250, height: 250}}
-                      alt="votre cin recto"
-                    />
-                  ) : (
-                    <Text style={styles.linkText}> aucune image </Text>
                   )}
-                </View>
-                {touched.cinRecto && errors.cinRecto && (
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: 'red',
-                      marginTop: 10,
-                      marginRight: 30,
-                    }}>
-                    {errors.cinRecto}
-                  </Text>
-                )}
-              </>
+                  </>
             )}
             {step === 21 && ( // cin verso
               <>
-                <InputTitle title="Veuillez prendre en photo le verso de votre CIN ou l'importer" />
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    width: '100%',
-                    justifyContent: 'space-around',
-                    gap: 20,
-                    alignItems: 'center',
-                  }}>
-                  <TouchableOpacity
-                    style={styles.openGaleryButton}
-                    onPress={() => {
-                      launchImageLibrary(options, response => {
-                        if (response.didCancel) {
-                          console.log('User cancelled image picker');
-                        } else if (response.errorMessage) {
-                          console.log(
-                            'Image picker errorMessage: ',
-                            response.errorMessage,
-                          );
-                        } else {
-                          let imageUri = response.assets
-                            ? response.assets[0].uri
-                            : '';
-                          handleChange('cinVerso')(imageUri ? imageUri : '');
-                          setSelectedCinVersoImage(imageUri);
-                        }
-                      });
-                    }}>
-                    <Icon name="image-search-outline" size={40} />
-                    <Text style={styles.TextButtonNextPrev}>
-                      ouvrir la galerie
+              <ImagePicker
+                title="Veuillez prendre en photo le verso de votre CIN ou l'importer"
+                selectedImage={selectedCinVersoImage}
+                setSelectedImage={setSelectedCinVersoImage}
+                handleChange={(uri: string | undefined) => setFieldValue('cinVerso', uri)}
+                field="cinVerso"
+              />
+              {touched.cinVerso && errors.cinVerso && (
+                    <Text
+                      style={styles.error}>
+                      {errors.cinVerso}
                     </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.openCameraButton}
-                    onPress={() => {
-                      launchCamera(options, response => {
-                        if (response.didCancel) {
-                          console.log('User cancelled camera');
-                        } else if (response.errorMessage) {
-                          console.log(
-                            'Camera errorMessage: ',
-                            response.errorMessage,
-                          );
-                        } else {
-                          let imageUri = response.assets
-                            ? response.assets[0].uri
-                            : '';
-                          handleChange('cinVerso')(imageUri ? imageUri : '');
-                          setSelectedCinVersoImage(imageUri);
-                          console.log(imageUri);
-                        }
-                      });
-                    }}>
-                    <Icon name="camera-enhance-outline" size={40} />
-                    <Text style={styles.TextButtonNextPrev}>
-                      ouvrir la caméra
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-
-                <View>
-                  {selectedCinVersoImage ? (
-                    <Image
-                      source={{uri: selectedCinVersoImage}}
-                      style={{width: 250, height: 250}}
-                      alt="votre cin verso"
-                    />
-                  ) : (
-                    <Text style={styles.linkText}> aucune image </Text>
                   )}
-                </View>
-                {touched.cinVerso && errors.cinVerso && (
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: 'red',
-                      marginTop: 10,
-                      marginRight: 30,
-                    }}>
-                    {errors.cinVerso}
-                  </Text>
-                )}
               </>
             )}
             {step === 22 && ( // selfie
               <>
-                <InputTitle title="Prenez ou importez votre photo" />
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    width: '100%',
-                    justifyContent: 'space-around',
-                    gap: 20,
-                    alignItems: 'center',
-                  }}>
-                  <TouchableOpacity
-                    style={styles.openGaleryButton}
-                    onPress={() => {
-                      launchImageLibrary(options, response => {
-                        if (response.didCancel) {
-                          console.log('User cancelled image picker');
-                        } else if (response.errorMessage) {
-                          console.log(
-                            'Image picker errorMessage: ',
-                            response.errorMessage,
-                          );
-                        } else {
-                          let imageUri = response.assets
-                            ? response.assets[0].uri
-                            : '';
-                          handleChange('selfie')(imageUri ? imageUri : '');
-                          setSelectedSelfieImage(imageUri);
-                        }
-                      });
-                    }}>
-                    <Icon name="image-search-outline" size={40} />
-                    <Text style={styles.TextButtonNextPrev}>
-                      ouvrir la galerie
+              <ImagePicker
+                title="Prenez ou importez votre photo"
+                selectedImage={selectedSelfieImage}
+                setSelectedImage={setSelectedSelfieImage}
+                handleChange={(uri: string | undefined) => setFieldValue('selfie', uri)}
+                field="selfie"
+              />
+              {touched.selfie && errors.selfie && (
+                    <Text
+                      style={styles.error}>
+                      {errors.selfie}
                     </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.openCameraButton}
-                    onPress={() => {
-                      launchCamera(options, response => {
-                        if (response.didCancel) {
-                          console.log('User cancelled camera');
-                        } else if (response.errorMessage) {
-                          console.log(
-                            'Camera errorMessage: ',
-                            response.errorMessage,
-                          );
-                        } else {
-                          let imageUri = response.assets
-                            ? response.assets[0].uri
-                            : '';
-                          handleChange('selfie')(imageUri ? imageUri : '');
-                          setSelectedSelfieImage(imageUri);
-                          console.log(imageUri);
-                        }
-                      });
-                    }}>
-                    <Icon name="camera-enhance-outline" size={40} />
-                    <Text style={styles.TextButtonNextPrev}>
-                      ouvrir la caméra
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <View>
-                  {selectedSelfieImage ? (
-                    <Image
-                      source={{uri: selectedSelfieImage}}
-                      style={{width: 250, height: 250}}
-                      alt="votre selfie"
-                    />
-                  ) : (
-                    <Text style={styles.linkText}> aucune image </Text>
                   )}
-                </View>
-                {touched.selfie && errors.selfie && (
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: 'red',
-                      marginTop: 10,
-                      marginRight: 30,
-                    }}>
-                    {errors.selfie}
-                  </Text>
-                )}
               </>
             )}
             {step === 23 && ( // password
               <>
                 <InputTitle title="Choisissez un mot de passe et confirmez-le, s'il vous plaît." />
-                <View style={styles.inputWrapper}>
-                  <TextInput
-                    mode="flat"
-                    onChangeText={handleChange('password')}
-                    onBlur={handleBlur('password')}
-                    placeholder="password"
-                    value={values.password}
-                    contentStyle={styles.contentStyle}
-                    outlineStyle={styles.outlineStyle}
-                    secureTextEntry={true}
-                  />
-                  {touched.password && errors.password && (
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
-                      }}>
-                      {errors.password}
-                    </Text>
-                  )}
-                </View>
-
-                <View style={styles.inputWrapper}>
-                  <TextInput
-                    mode="flat"
-                    onChangeText={handleChange('passwordConfirm')}
-                    onBlur={handleBlur('passwordConfirm')}
-                    placeholder="passwordConfirm"
-                    value={values.passwordConfirm}
-                    contentStyle={styles.contentStyle}
-                    outlineStyle={styles.outlineStyle}
-                    secureTextEntry={true}
-                  />
-                  {touched.passwordConfirm && errors.passwordConfirm && (
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
-                      }}>
-                      {errors.passwordConfirm}
-                    </Text>
-                  )}
-                </View>
+                <CustomTextInput
+                  mode="flat"
+                  name="password"
+                  placeholder="Choisissez un mot de passe"
+                  secureTextEntry={true}
+                />
+                <CustomTextInput
+                  mode="flat"
+                  name="passwordConfirm"
+                  placeholder="Confirmez votre mot de passe"
+                  secureTextEntry={true}
+                />
               </>
             )}
             {step === 24 && ( // confirmation
@@ -1616,42 +1056,19 @@ const SignUp = () => {
                 </View>
                 {touched.hasAmericanityIndex && errors.hasAmericanityIndex && (
                   <Text
-                    style={{
-                      fontSize: 15,
-                      color: 'red',
-                      marginTop: 10,
-                      marginRight: 30,
-                    }}>
+                    style={styles.error}>
                     <Text>{errors.hasAmericanityIndex}</Text>
                   </Text>
                 )}
-
-                {/* {touched.hasOtherBank && errors.hasOtherBank && (
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: 'red',
-                      marginTop: 10,
-                      marginRight: 30,
-                    }}>
-                    {errors.hasOtherBank}
-                  </Text>
-                )} */}
-
                 {touched.hasConfirmedForPersonalData &&
                   errors.hasConfirmedForPersonalData && (
                     <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        margin: 30,
-                      }}>
+                      style={styles.error}>
                       {errors.hasConfirmedForPersonalData}
                     </Text>
                   )}
               </>
             )}
-
             <View style={styles.prevNextButtonsContainer}>
               {step > 1 && (
                 <TouchableOpacity
@@ -1671,11 +1088,11 @@ const SignUp = () => {
                       ? styles.disabledButton
                       : styles.nextPrevButton,
                   ]}
-                  disabled={
-                    getFieldName(step).some(fieldName => values[fieldName] === '' || !!errors[fieldName])
-                  }
+                  disabled={getFieldName(step).some(
+                    fieldName =>
+                      values[fieldName] === '' || !!errors[fieldName],
+                  )}
                   onPress={() => {
-                    console.log('onPress Next button');
                     const fieldNames = getFieldName(step);
                     handleNext();
                   }}>
@@ -1684,9 +1101,9 @@ const SignUp = () => {
               ) : (
                 <TouchableOpacity
                   style={styles.submitButton}
+                  // disabled={!isValid || !dirty}
                   onPress={() => {
                     console.log('VALUES:', values);
-
                     console.log('ERRORS', errors);
                     handleSubmit();
                   }} // handlesubmit will collect all the values and send it to onSubmit itself
@@ -1695,16 +1112,7 @@ const SignUp = () => {
                 </TouchableOpacity>
               )}
             </View>
-              {/* (registration && (
-              <View style={styles.container}>
-                <Text style={styles.confirmationText}>
-                {String(registration)}  
-                </Text>
-              </View>
-            )) */}
           </View>
-          
-          
         </>
       )}
     </Formik>
@@ -1808,15 +1216,3 @@ const checkoutSchema = yup.object().shape({
 
 export default SignUp;
 
-/*
-  TO-DO
-  - add voice guidance for each step
-  - add accessibility for each input, button, and text
-  - fix the date picker (or look for another one)
-  - fix placeholer color for the select inputs 👍
-  - add where the user can pick for entretien visio
-  - add where the user can pick for the bank agency ???
-  - turn english to french 👍
-  - fix inputs placeholders 👍
-
-*/
