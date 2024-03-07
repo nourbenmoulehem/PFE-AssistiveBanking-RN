@@ -7,7 +7,7 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 
 import {Formik} from 'formik';
 import * as yup from 'yup';
@@ -22,12 +22,15 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../../context/store';
 import {tokens} from '../../assets/palette';
 
+
 // axios
 import axios from 'axios';
 
 // env variables
 import {API_BASE_URL} from '@env';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
+import Modal from '../../components/Modal';
 
 const initialValues = {
   email: '',
@@ -37,10 +40,45 @@ const initialValues = {
   phoneNumber: '',
 };
 
+type FormValues = {
+  email: string;
+  cin: string;
+  birthday: string;
+  cardNumber: string;
+  phoneNumber: string;
+};
+
 const ForgotPassword = () => {
   const {mode} = useSelector((state: RootState) => state.global);
 
   const colors = tokens(mode);
+
+  const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState('');
+
+  
+  const onClose = () => setVisible(false);
+
+  const ForgotPasswordApi = async (values: FormValues) => {
+    try {
+      const response = await axios({
+        method: 'post',
+        url: `${process.env.API_BASE_URL}/api/v1/auth/forgot-password`,
+        withCredentials: true,
+        responseType: 'json',
+        data: values,
+      });
+
+      setMessage(response.data);
+      setVisible(true);
+      
+    } catch (error: any) {
+      console.log("🚀 ~ ForgotPasswordApi ~ error:", error.response.data)
+      setMessage(error.response.data);
+      setVisible(true);
+      
+    }
+  };
 
   const styles = StyleSheet.create({
     contentContainer: {
@@ -77,6 +115,7 @@ const ForgotPassword = () => {
           style={styles.container}
           onSubmit={values => {
             console.log(values);
+            ForgotPasswordApi(values);
           }}>
           {({
             values,
@@ -143,6 +182,7 @@ const ForgotPassword = () => {
           )}
         </Formik>
       </KeyboardAwareScrollView>
+      <Modal visible={visible} error={message} onClose={onClose}/>
     </View>
   );
 };

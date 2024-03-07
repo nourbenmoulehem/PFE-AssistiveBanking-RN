@@ -39,7 +39,26 @@ const ForgotPassword = () => {
 
   const colors = tokens(mode);
 
+  type FormValues = {
+    password: string;
+    passwordConfirm: string;
+  };
   
+  const resetPassword = async (values: FormValues) => {
+    try {
+      const response = await axios({
+        method: 'post',
+        url: `${process.env.API_BASE_URL}/api/v1/auth/create-new-password`,
+        withCredentials: true,
+        responseType: 'json',
+        data: values,
+      });
+
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const styles = StyleSheet.create({
     contentContainer: {
@@ -77,6 +96,7 @@ const ForgotPassword = () => {
         style={styles.container}
         onSubmit={values => {
           console.log(values);
+          resetPassword(values);
         }}>
         {({
           values,
@@ -93,19 +113,21 @@ const ForgotPassword = () => {
         }) => (
           <>
             <View style={styles.container}>
-              <Text>Votre email</Text>
               <TextInput
                 name="password"
-                placeholder="Adresse e-mail"
+                placeholder="Votre nouveau mot de passe"
                 secureTextEntry
+                showLabel
 
               />
               <TextInput
-                name="birthday"
-                placeholder="Votre date de naissance"
+                name="passwordConfirm"
+                placeholder="Confirmez votre nouveau mot de passe"
                 secureTextEntry
+                showLabel
+
               />
-              <AuthButton handleSubmit={handleSubmit} label="Envoyer" />
+              <AuthButton handleSubmit={handleSubmit} label="Envoyer" accessibilityHint='envoyer votre nouveau mot de passe'/>
             </View>
             
           </>
