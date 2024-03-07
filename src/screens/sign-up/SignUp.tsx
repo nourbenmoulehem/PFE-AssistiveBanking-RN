@@ -24,6 +24,23 @@ import CustomTextInput from '../../components/TextInput';
 import OfferButton from '../../components/OfferButton';
 import GenderButton from '../../components/GenderButton';
 import ImagePicker from '../../components/ImagePicker';
+import DatePickerInput from '../../components/DatePicker';
+import CustomSwitch from '../../components/Switch';
+import CustomButton from '../../components/PrevNextRegisterButtons';
+
+// constants
+import {
+  status_civil,
+  nombre_enfant,
+  socio_professional,
+  revenu_mensuel,
+  secteur_activite,
+  gouvernoratsOptions,
+  nature_activite,
+  nationalite,
+} from '../../constants/items';
+
+import {signUpSchema} from '../../constants/yupValidations';
 
 // form
 import {Formik} from 'formik';
@@ -36,7 +53,8 @@ import {tokens} from '../../assets/palette';
 
 // axios
 import axios from 'axios';
-
+import PickerInput from '../../components/PickerInput';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const SignUp = () => {
   const {mode} = useSelector((state: RootState) => state.global);
@@ -120,7 +138,6 @@ const SignUp = () => {
       )
       .catch(err => {
         console.log('Error message:', err.message);
-        // console.log("Error stack:", err.stack);
         setRegistration(
           "L'inscription a échoué, veuillez réessayer plus tard ❌",
         );
@@ -256,71 +273,6 @@ const SignUp = () => {
       justifyContent: 'space-around',
       width: '100%',
     },
-    TextButton: {
-      color: 'white',
-      fontSize: 20,
-      fontWeight: 'bold',
-      letterSpacing: 1,
-    },
-    nextPrevButton: {
-      backgroundColor: colors.orange[300],
-      padding: 10,
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: 120,
-      height: 70,
-      borderRadius: 30,
-      elevation: 3,
-      shadowColor: '#000',
-      shadowOffset: {width: 0, height: 2},
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-    },
-    submitButton: {
-      backgroundColor: colors.yellow[300],
-      padding: 10,
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: 120,
-      height: 70,
-      borderRadius: 30,
-      elevation: 3,
-      shadowColor: '#000',
-      shadowOffset: {width: 0, height: 2},
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-    },
-    TextButtonNextPrev: {
-      color: 'white',
-      fontSize: 18,
-      fontWeight: 'bold',
-      letterSpacing: 1,
-    },
-
-    dateContainer: {
-      padding: 16,
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: 30,
-    },
-    disabledButton: {
-      backgroundColor: colors.secondary[100],
-    },
-    pickDateButton: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-around',
-      gap: 10,
-      backgroundColor: colors.light_blue[400],
-      height: 100,
-      width: 210,
-      borderRadius: 8,
-      padding: 10,
-      shadowColor: '#000',
-      shadowOffset: {width: 0, height: 2},
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-    },
     switchContainer: {
       flexDirection: 'row',
       width: '100%',
@@ -338,123 +290,23 @@ const SignUp = () => {
       fontWeight: 'bold',
     },
     error: {
-    fontSize: 15,
-    color: 'red',
-    marginTop: 10,
-    marginRight: 30,
-  }
-  });
-
-  const customPickerStyles = StyleSheet.create({
-    inputIOS: {color: 'pink'},
-    inputAndroid: {
-      color: colors.secondary[900],
-      fontSize: 16,
-      fontWeight: 'bold',
-      backgroundColor:
-        mode === 'dark' ? colors.secondary[400] : colors.secondary[100],
-      paddingRight: 30,
-    },
-    placeholderColor: {
-      color: 'pink',
+      fontSize: 15,
+      color: 'red',
+      marginTop: 10,
+      marginRight: 30,
     },
   });
-
-  // date picker related
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = (date: Date) => {
-    // console.warn('A date has been picked: ', date);
-    hideDatePicker();
-  };
-
-  const status_civil = [
-    {label: 'Célibataire', value: 'Célibataire'},
-    {label: 'Marié', value: 'Marié'},
-    {label: 'Divorcé', value: 'Divorcé'},
-    {label: 'Veuf', value: 'Veuf'},
-  ];
-
-  const nombre_enfant = [
-    {label: '0', value: '0'},
-    {label: '1', value: '1'},
-    {label: '2', value: '2'},
-    {label: '3', value: '3'},
-    {label: '4', value: '4'},
-    {label: '5', value: '5'},
-  ];
-
-  const socio_professional = [
-    {label: 'Etudiant', value: 'Etudiant'},
-    {label: 'Salarié', value: 'Salarié'},
-    {label: 'Retraité', value: 'Retraité'},
-    {label: 'Autres', value: 'Autres'},
-  ];
-
-  const revenu_mensuel = [
-    {label: '0-700 DT', value: '0-700 DT'},
-    {label: '700-1600 DT', value: '700-1600 DT'},
-    {label: '1600-3500 DT', value: '1600-3500 DT'},
-    {label: '+3500 DT', value: '+3500 DT'},
-  ];
-
-  const secteur_activite = [
-    {label: 'Agriculture', value: 'Agriculture'},
-    {label: 'Santé', value: 'Santé'},
-    {label: 'Industrie & mécanique', value: 'Industrie & mécanique'},
-    {label: 'Artisanat', value: 'Artisanat'},
-    {label: 'Industrie', value: 'Industrie'},
-    {label: 'Services', value: 'Services'},
-    {label: 'Commerce', value: 'Commerce'},
-    {label: 'Education', value: 'Education'},
-    {label: 'Transport', value: 'Transport'},
-    {label: 'Autres', value: 'Autres'},
-  ];
-
-  const gouvernoratsTunisiens = [
-    'Ariana',
-    'Béja',
-    'Ben Arous',
-    'Bizerte',
-    'Gabès',
-    'Gafsa',
-    'Jendouba',
-    'Kairouan',
-    'Kasserine',
-    'Kébili',
-    'Le Kef',
-    'Mahdia',
-    'Manouba',
-    'Médenine',
-    'Monastir',
-    'Nabeul',
-    'Sfax',
-    'Sidi Bouzid',
-    'Siliana',
-    'Sousse',
-    'Tataouine',
-    'Tozeur',
-    'Tunis',
-    'Zaghouan',
-  ];
-
-  const gouvernoratsOptions = gouvernoratsTunisiens.map(gouvernorat => ({
-    label: gouvernorat,
-    value: gouvernorat,
-  }));
 
   return (
+    <KeyboardAwareScrollView
+      enableOnAndroid={true}
+      style={{flex: 1}}
+      contentContainerStyle={{flexGrow: 1, padding: 20, backgroundColor: colors.main.backgroundColor}}
+      
+      >
     <Formik
       initialValues={initialValues}
-      validationSchema={checkoutSchema} // we're using yup
+      validationSchema={signUpSchema} // we're using yup
       onSubmit={values => {
         register(values);
       }}>
@@ -469,7 +321,7 @@ const SignUp = () => {
         handleReset,
         isSubmitting,
         setFieldValue,
-        dirty
+        dirty,
         /* and other goodies */
       }) => (
         <>
@@ -500,10 +352,7 @@ const SignUp = () => {
                     setOffreChanged={setOffreChanged}
                   />
                   {touched.offer && errors.offer && (
-                    <Text
-                      style={styles.error}>
-                      {errors.offer}
-                    </Text>
+                    <Text style={styles.error}>{errors.offer}</Text>
                   )}
 
                   {offreChanged && (
@@ -540,10 +389,7 @@ const SignUp = () => {
                     }}
                   />
                   {touched.gender && errors.gender && (
-                    <Text
-                      style={styles.error}>
-                      {errors.gender}
-                    </Text>
+                    <Text style={styles.error}>{errors.gender}</Text>
                   )}
                   {genderChanged && (
                     <HelperTextInfo
@@ -611,38 +457,26 @@ const SignUp = () => {
             )}
             {step === 7 && ( // birthday
               <>
-                <InputTitle title="Sélectionnez votre date de naissance" />
-                <View style={styles.dateContainer}>
-                  <View style={styles.inputWrapper}>
-                    <TextInput
-                      mode="outlined"
-                      placeholder="Date de naissance"
-                      value={values.birthday}
-                      disabled={true}
-                    />
-                  </View>
-
-                  <TouchableOpacity
-                    style={styles.pickDateButton}
-                    onPress={showDatePicker}>
-                    <Icon name="calendar-month-outline" size={40} />
-                    <Text style={styles.TextButtonNextPrev}>
-                      Choisir une date
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <DateTimePickerModal
-                  isVisible={isDatePickerVisible}
-                  mode="date"
-                  onConfirm={(date: Date) => {
-                    console.log('🚀 ~ SignUp ~ date:', date);
-                    const extractedDate = date.toISOString().split('T')[0];
-                    console.log('🚀 ~ SignUp ~ extractedDate:', extractedDate);
-                    handleChange('birthday')(extractedDate);
-                    handleConfirm(date);
+                <DatePickerInput
+                  title="Sélectionnez votre date de naissance"
+                  field="birthday"
+                  placeholder="Date de naissance"
+                  value={values.birthday}
+                  handleChange={field => value => {
+                    // Create a fake event object
+                    const event = {
+                      target: {
+                        name: field,
+                        value,
+                      },
+                    };
+                    // Call Formik's handleChange with the fake event
+                    handleChange(event);
                   }}
-                  onCancel={hideDatePicker}
                 />
+                {touched.birthday && errors.birthday && (
+                  <Text style={styles.error}>{errors.birthday}</Text>
+                )}
               </>
             )}
             {step === 8 && ( // adresse
@@ -657,22 +491,15 @@ const SignUp = () => {
             )}
             {step === 9 && ( // gouvernorat
               <>
-                <InputTitle title="Gouvernorat" />
-                <View style={styles.inputWrapper}>
-                  <RNPickerSelect
-                    onValueChange={value => handleChange('gouvernorat')(value)}
-                    items={gouvernoratsOptions}
-                    value={values.gouvernorat}
-                    // touchableWrapperProps={{
-                    //   // <- Use touchableWrapperProps to pass accessibility properties
-                    //   accessible: true,
-                    //   accessibilityLabel: 'status civil',
-                    //   accessibilityHint: 'Double tap to select an option.',
-                    //   accessibilityRole: 'combobox',
-                    // }}
-                    style={customPickerStyles}
-                  />
-                </View>
+                <PickerInput
+                  title="Gouvernorat"
+                  items={gouvernoratsOptions}
+                  value={values.gouvernorat}
+                  onValueChange={value => handleChange('gouvernorat')(value)}
+                />
+                {touched.gouvernorat && errors.gouvernorat && (
+                  <Text style={styles.error}>{errors.gouvernorat}</Text>
+                )}
               </>
             )}
             {step === 10 && ( // code postal
@@ -689,204 +516,103 @@ const SignUp = () => {
             )}
             {step === 11 && ( // nationalite
               <>
-                <InputTitle title="Sélectionnez votre nationalité" />
-                <View style={styles.inputWrapper}>
-                  <RNPickerSelect
-                    onValueChange={value => handleChange('nationality')(value)}
-                    items={[
-                      {label: 'Tunisienne', value: 'Tunisienne'},
-                      {label: 'Française', value: 'Française'},
-                    ]}
-                    value={values.nationality}
-                    style={customPickerStyles}
-                  />
-                </View>
+                <PickerInput
+                  title="Sélectionnez votre nationalité"
+                  items={nationalite}
+                  value={values.nationality}
+                  onValueChange={value => handleChange('nationality')(value)}
+                />
                 {touched.nationality && errors.nationality && (
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: 'red',
-                      marginTop: 10,
-                      marginRight: 30,
-                    }}>
-                    {errors.nationality}
-                  </Text>
+                  <Text style={styles.error}>{errors.nationality}</Text>
                 )}
               </>
             )}
             {step === 12 && ( // status civil
               <>
-                <InputTitle title="Sélectionnez votre status civil" />
-                <View style={styles.inputWrapper}>
-                  <RNPickerSelect
-                    onValueChange={value => handleChange('statusCivil')(value)}
-                    items={status_civil}
-                    value={values.statusCivil}
-                    // touchableWrapperProps={{
-                    //   // <- Use touchableWrapperProps to pass accessibility properties
-                    //   accessible: true,
-                    //   accessibilityLabel: 'status civil',
-                    //   accessibilityHint: 'Double tap to select an option.',
-                    //   accessibilityRole: 'combobox',
-                    // }}
-                    style={customPickerStyles}
-                  />
-                </View>
+                <PickerInput
+                  title="Sélectionnez votre status civil"
+                  items={status_civil}
+                  value={values.statusCivil}
+                  onValueChange={value => handleChange('statusCivil')(value)}
+                />
                 {touched.statusCivil && errors.statusCivil && (
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: 'red',
-                      marginTop: 10,
-                      marginRight: 30,
-                    }}>
-                    {errors.statusCivil}
-                  </Text>
+                  <Text style={styles.error}>{errors.statusCivil}</Text>
                 )}
               </>
             )}
             {step === 13 && ( // nombre d'enfant
               <>
-                <InputTitle title="Sélectionnez le nombre d'enfants que vous avez" />
-                <View style={styles.inputWrapper}>
-                  <RNPickerSelect
-                    onValueChange={value =>
-                      handleChange('nombre_enfant')(value)
-                    }
-                    value={values.nombre_enfant}
-                    items={nombre_enfant}
-                    // touchableWrapperProps={{
-                    //   // <- Use touchableWrapperProps to pass accessibility properties
-                    //   accessible: true,
-                    //   accessibilityLabel: 'Favorite sport',
-                    //   accessibilityHint: 'Double tap to select an option.',
-                    //   accessibilityRole: 'combobox',
-                    // }}
-                    style={customPickerStyles}
-                  />
-                </View>
+                <PickerInput
+                  title="Sélectionnez le nombre d'enfants que vous avez"
+                  items={nombre_enfant}
+                  value={values.nombre_enfant}
+                  onValueChange={value => handleChange('nombre_enfant')(value)}
+                />
                 {touched.nombre_enfant && errors.nombre_enfant && (
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: 'red',
-                      marginTop: 10,
-                      marginRight: 30,
-                    }}>
-                    {errors.nombre_enfant}
-                  </Text>
+                  <Text style={styles.error}>{errors.nombre_enfant}</Text>
                 )}
               </>
             )}
             {step === 14 && ( // socio_professional
               <>
-                <InputTitle title="Sélectionnez votre statut socio-professionnel" />
-                <View style={styles.inputWrapper}>
-                  <RNPickerSelect
-                    onValueChange={value => {
-                      handleChange('socio_professional')(value);
-                      if (value === 'Etudiant') {
-                        setIsEtudiant(true);
-                      } else {
-                        setIsEtudiant(false);
-                      }
-                    }}
-                    value={values.socio_professional}
-                    items={socio_professional}
-                    // touchableWrapperProps={{
-                    //   // <- Use touchableWrapperProps to pass accessibility properties
-                    //   accessible: true,
-                    //   accessibilityLabel: 'Favorite sport',
-                    //   accessibilityHint: 'Double tap to select an option.',
-                    //   accessibilityRole: 'combobox',
-                    // }}
-                    style={customPickerStyles}
-                  />
-                </View>
+                <PickerInput
+                  title="Sélectionnez votre statut socio-professionnel"
+                  items={socio_professional}
+                  value={values.socio_professional}
+                  onValueChange={value =>
+                    handleChange('socio_professional')(value)
+                  }
+                />
                 {touched.socio_professional && errors.socio_professional && (
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: 'red',
-                      marginTop: 10,
-                      marginRight: 30,
-                    }}>
-                    {errors.socio_professional}
-                  </Text>
+                  <Text style={styles.error}>{errors.socio_professional}</Text>
                 )}
               </>
             )}
             {step === 15 &&
               !isEtudiant && ( // revenu_mensuel
                 <>
-                  <InputTitle title="Sélectionnez votre revenu net mensuel" />
-                  <View style={styles.inputWrapper}>
-                    <RNPickerSelect
-                      onValueChange={value => {
-                        handleChange('revenu')(value);
-                        console.log('isEtudiant', isEtudiant);
-                      }}
-                      value={values.revenu}
-                      items={revenu_mensuel}
-                      touchableWrapperProps={{
-                        // <- Use touchableWrapperProps to pass accessibility properties
-                        accessible: true,
-                        accessibilityLabel: 'Favorite sport',
-                        accessibilityHint: 'Double tap to select an option.',
-                        accessibilityRole: 'combobox',
-                      }}
-                      style={customPickerStyles}
-                    />
-                  </View>
+                  <PickerInput
+                    title="Sélectionnez votre revenu net mensuel"
+                    items={revenu_mensuel}
+                    value={values.revenu}
+                    onValueChange={value => handleChange('revenu')(value)}
+                  />
+                  
+                  {touched.revenu && errors.revenu && (
+                    <Text style={styles.error}>{errors.revenu}</Text>
+                  )}
                 </>
               )}
             {step === 16 &&
               !isEtudiant && ( // natureActivite
                 <>
-                  <InputTitle title="Sélectionnez la nature de votre activité" />
-                  <View style={styles.inputWrapper}>
-                    <RNPickerSelect
-                      onValueChange={value =>
-                        handleChange('natureActivite')(value)
-                      }
-                      value={values.natureActivite}
-                      items={[
-                        {label: 'Public', value: 'Public'},
-                        {label: 'Privé', value: 'Privé'},
-                      ]}
-                      touchableWrapperProps={{
-                        // <- Use touchableWrapperProps to pass accessibility properties
-                        accessible: true,
-                        accessibilityLabel: 'Favorite sport',
-                        accessibilityHint: 'Double tap to select an option.',
-                        accessibilityRole: 'combobox',
-                      }}
-                      style={customPickerStyles}
-                    />
-                  </View>
+                  <PickerInput
+                    title="Sélectionnez la nature de votre activité"
+                    items={nature_activite}
+                    value={values.natureActivite}
+                    onValueChange={value =>
+                      handleChange('natureActivite')(value)
+                    }
+                  />
+                  {touched.natureActivite && errors.natureActivite && (
+                    <Text style={styles.error}>{errors.natureActivite}</Text>
+                  )}
                 </>
               )}
             {step === 17 &&
               !isEtudiant && ( // secteurActivite
                 <>
-                  <InputTitle title="Sélectionnez votre secteur d'activité" />
-                  <View style={styles.inputWrapper}>
-                    <RNPickerSelect
-                      onValueChange={value =>
-                        handleChange('secteurActivite')(value)
-                      }
-                      value={values.secteurActivite}
-                      items={secteur_activite}
-                      // touchableWrapperProps={{
-                      //   // <- Use touchableWrapperProps to pass accessibility properties
-                      //   accessible: true,
-                      //   accessibilityLabel: 'Favorite sport',
-                      //   accessibilityHint: 'Double tap to select an option.',
-                      //   accessibilityRole: 'combobox',
-                      // }}
-                      style={customPickerStyles}
-                    />
-                  </View>
+                  <PickerInput
+                    title="Sélectionnez votre secteur d'activité"
+                    items={secteur_activite}
+                    value={values.secteurActivite}
+                    onValueChange={value =>
+                      handleChange('secteurActivite')(value)
+                    }
+                  />
+                  {touched.secteurActivite && errors.secteurActivite && (
+                    <Text style={styles.error}>{errors.secteurActivite}</Text>
+                  )}
                 </>
               )}
             {step === 18 && ( // num cin
@@ -902,91 +628,73 @@ const SignUp = () => {
               </>
             )}
             {step === 19 && ( // date de delivration
-              <>
-                <InputTitle title="Sélectionnez la date de délivrance de votre CIN" />
-                <View style={styles.dateContainer}>
-                  <View style={styles.inputWrapper}>
-                    <TextInput
-                      mode="flat"
-                      placeholder="date de délivrance de votre CIN"
-                      value={values.dateDelivrationCin}
-                      disabled={true}
-                    />
-                  </View>
-
-                  <TouchableOpacity
-                    style={styles.pickDateButton}
-                    onPress={showDatePicker}>
-                    <Icon name="calendar-month-outline" size={24} />
-                    <Text style={styles.TextButtonNextPrev}>
-                      Choisir une date
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <DateTimePickerModal
-                  isVisible={isDatePickerVisible}
-                  mode="date"
-                  onConfirm={(date: Date) => {
-                    console.log('🚀 ~ SignUp ~ date:', date);
-
-                    const extractedDate = date.toISOString().split('T')[0];
-                    console.log('🚀 ~ SignUp ~ extractedDate:', extractedDate);
-                    handleChange('dateDelivrationCin')(extractedDate);
-                    handleConfirm(date);
-                  }}
-                  onCancel={hideDatePicker}
-                />
+            <>
+              <DatePickerInput
+                title="Sélectionnez la date de délivrance de votre CIN"
+                field="dateDelivrationCin"
+                placeholder="date de délivrance de votre CINe"
+                value={values.dateDelivrationCin}
+                handleChange={field => value => {
+                  const event = {
+                    target: {
+                      name: field,
+                      value,
+                    },
+                  };
+                  handleChange(event);
+                }}
+              />
+              {touched.dateDelivrationCin && errors.dateDelivrationCin && (
+                <Text style={styles.error}>{errors.dateDelivrationCin}</Text>
+              )}
               </>
             )}
             {step === 20 && ( // cin recto
               <>
-              <ImagePicker
-                title="Veuillez prendre en photo le recto de votre CIN ou l'importer"
-                selectedImage={selectedCinRectoImage}
-                setSelectedImage={setSelectedCinRectoImage}
-                handleChange={(uri: string | undefined) => setFieldValue('cinRecto', uri)}
-                field="cinRecto"
-              />
-              {touched.cinRecto && errors.cinRecto && (
-                    <Text
-                      style={styles.error}>
-                      {errors.cinRecto}
-                    </Text>
-                  )}
-                  </>
+                <ImagePicker
+                  title="Veuillez prendre en photo le recto de votre CIN ou l'importer"
+                  selectedImage={selectedCinRectoImage}
+                  setSelectedImage={setSelectedCinRectoImage}
+                  handleChange={(uri: string | undefined) =>
+                    setFieldValue('cinRecto', uri)
+                  }
+                  field="cinRecto"
+                />
+                {touched.cinRecto && errors.cinRecto && (
+                  <Text style={styles.error}>{errors.cinRecto}</Text>
+                )}
+              </>
             )}
             {step === 21 && ( // cin verso
               <>
-              <ImagePicker
-                title="Veuillez prendre en photo le verso de votre CIN ou l'importer"
-                selectedImage={selectedCinVersoImage}
-                setSelectedImage={setSelectedCinVersoImage}
-                handleChange={(uri: string | undefined) => setFieldValue('cinVerso', uri)}
-                field="cinVerso"
-              />
-              {touched.cinVerso && errors.cinVerso && (
-                    <Text
-                      style={styles.error}>
-                      {errors.cinVerso}
-                    </Text>
-                  )}
+                <ImagePicker
+                  title="Veuillez prendre en photo le verso de votre CIN ou l'importer"
+                  selectedImage={selectedCinVersoImage}
+                  setSelectedImage={setSelectedCinVersoImage}
+                  handleChange={(uri: string | undefined) =>
+                    setFieldValue('cinVerso', uri)
+                  }
+                  field="cinVerso"
+                />
+                {touched.cinVerso && errors.cinVerso && (
+                  <Text style={styles.error}>{errors.cinVerso}</Text>
+                )}
               </>
             )}
             {step === 22 && ( // selfie
               <>
-              <ImagePicker
-                title="Prenez ou importez votre photo"
-                selectedImage={selectedSelfieImage}
-                setSelectedImage={setSelectedSelfieImage}
-                handleChange={(uri: string | undefined) => setFieldValue('selfie', uri)}
-                field="selfie"
-              />
-              {touched.selfie && errors.selfie && (
-                    <Text
-                      style={styles.error}>
-                      {errors.selfie}
-                    </Text>
-                  )}
+                <ImagePicker
+                  title="Prenez ou importez votre photo"
+                  selectedImage={selectedSelfieImage}
+                  setSelectedImage={setSelectedSelfieImage}
+                  handleChange={(uri: string | undefined) =>
+                    setFieldValue('selfie', uri)
+                  }
+                  field="selfie"
+                />
+                {touched.selfie && errors.selfie && (
+                  <Text style={styles.error}>{errors.selfie}</Text>
+                )}
               </>
             )}
             {step === 23 && ( // password
@@ -1008,29 +716,21 @@ const SignUp = () => {
             )}
             {step === 24 && ( // confirmation
               <>
-                <View style={styles.switchContainer}>
-                  <Switch
-                    value={values.hasAmericanityIndex}
-                    onValueChange={value => {
-                      setFieldValue('hasAmericanityIndex', value);
-                    }}
-                  />
-                  <Text style={styles.confirmationText}>
-                    Je confirme que je n'ai pas d'indice d'américanité.
-                  </Text>
-                </View>
+                <CustomSwitch
+                  value={values.hasAmericanityIndex}
+                  onValueChange={value => {
+                    setFieldValue('hasAmericanityIndex', value);
+                  }}
+                  text="Je confirme que je n'ai pas d'indice d'américanité."
+                />
 
-                <View style={styles.switchContainer}>
-                  <Switch
-                    value={values.hasOtherBank}
-                    onValueChange={value => {
-                      setFieldValue('hasOtherBank', value);
-                    }}
-                  />
-                  <Text style={styles.confirmationText}>
-                    Je suis client dans une autre banque
-                  </Text>
-                </View>
+                <CustomSwitch
+                  value={values.hasOtherBank}
+                  onValueChange={value => {
+                    setFieldValue('hasOtherBank', value);
+                  }}
+                  text=" Je suis client dans une autre banque"
+                />
 
                 <View style={styles.switchContainer}>
                   <Switch
@@ -1055,15 +755,13 @@ const SignUp = () => {
                   </Text>
                 </View>
                 {touched.hasAmericanityIndex && errors.hasAmericanityIndex && (
-                  <Text
-                    style={styles.error}>
+                  <Text style={styles.error}>
                     <Text>{errors.hasAmericanityIndex}</Text>
                   </Text>
                 )}
                 {touched.hasConfirmedForPersonalData &&
                   errors.hasConfirmedForPersonalData && (
-                    <Text
-                      style={styles.error}>
+                    <Text style={styles.error}>
                       {errors.hasConfirmedForPersonalData}
                     </Text>
                   )}
@@ -1071,148 +769,40 @@ const SignUp = () => {
             )}
             <View style={styles.prevNextButtonsContainer}>
               {step > 1 && (
-                <TouchableOpacity
-                  style={styles.nextPrevButton}
-                  onPress={handlePrevious}>
-                  <Text style={styles.TextButtonNextPrev}>Précédent</Text>
-                </TouchableOpacity>
+                <CustomButton onPress={handlePrevious} text="Précédent" />
               )}
               {step < 24 ? (
-                <TouchableOpacity
-                  style={[
-                    styles.nextPrevButton,
-                    getFieldName(step).some(
-                      fieldName =>
-                        values[fieldName] === '' || !!errors[fieldName],
-                    )
-                      ? styles.disabledButton
-                      : styles.nextPrevButton,
-                  ]}
+                <CustomButton
+                  onPress={() => {
+                    handleNext();
+                  }}
+                  text="Suivant"
+                  values={values}
+                  errors={errors}
+                  getFieldName={getFieldName}
+                  step={step}
                   disabled={getFieldName(step).some(
                     fieldName =>
                       values[fieldName] === '' || !!errors[fieldName],
                   )}
-                  onPress={() => {
-                    const fieldNames = getFieldName(step);
-                    handleNext();
-                  }}>
-                  <Text style={styles.TextButtonNextPrev}>Suivant</Text>
-                </TouchableOpacity>
+                />
               ) : (
-                <TouchableOpacity
-                  style={styles.submitButton}
-                  // disabled={!isValid || !dirty}
+                <CustomButton
                   onPress={() => {
                     console.log('VALUES:', values);
                     console.log('ERRORS', errors);
                     handleSubmit();
-                  }} // handlesubmit will collect all the values and send it to onSubmit itself
-                >
-                  <Text style={styles.TextButtonNextPrev}>Valider</Text>
-                </TouchableOpacity>
+                  }}
+                  text="Valider"
+                />
               )}
             </View>
           </View>
         </>
       )}
     </Formik>
+    </KeyboardAwareScrollView>
   );
 };
 
-const phoneRegExp =
-  /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
-const passwordRegExp =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
-const cinRegExp = /^[0-9]{8}$/;
-const codePostalRegExp = /^\d{4}$/;
-
-const checkoutSchema = yup.object().shape({
-  offer: yup
-    .string()
-    .oneOf(['WeStart', 'WeTrust'], 'Offer Invalide')
-    .required('Ce champ est obligatoire'),
-  gender: yup
-    .string()
-    .oneOf(['female', 'male'], 'Invalid gender')
-    .required('Ce champ est obligatoire'),
-  firstName: yup.string().required('Ce champ est obligatoire'),
-  lastName: yup.string().required('Ce champ est obligatoire'),
-  email: yup
-    .string()
-    .email('Adresse e-mail invalide')
-    .required('Ce champ est obligatoire'),
-  emailConfirm: yup
-    .string()
-    .oneOf([yup.ref('email')], 'Les adresses e-mail doivent correspondre')
-    .email('Adresse e-mail invalide')
-    .required('Ce champ est obligatoire'),
-  phoneNumber: yup
-    .string()
-    .matches(phoneRegExp, 'Numéro de téléphone invalide')
-    .required('Ce champ est obligatoire'),
-  phoneNumberConfirm: yup
-    .string()
-    .oneOf(
-      [yup.ref('phoneNumber')],
-      'Les numéros de téléphone doivent correspondre',
-    )
-    .matches(phoneRegExp, 'Numéro de téléphone invalide')
-    .required('Ce champ est obligatoire'),
-  birthday: yup.date().required('Ce champ est obligatoire'),
-  adresse: yup.string().required('Ce champ est obligatoire'),
-  gouvernorat: yup.string().required('Ce champ est obligatoire'),
-  codePostal: yup
-    .string()
-    .matches(
-      codePostalRegExp,
-      'Code postal invalide. Doit contenir 4 chiffres.',
-    )
-    .required('Ce champ est obligatoire'),
-  nationality: yup.string().required('Ce champ est obligatoire'),
-  statusCivil: yup.string().required('Ce champ est obligatoire'),
-  nombre_enfant: yup.string().required('Ce champ est obligatoire'),
-  socio_professional: yup.string().required('Ce champ est obligatoire'),
-  revenu: yup.string(),
-  natureActivite: yup.string(),
-  secteurActivite: yup.string(),
-  cin: yup
-    .string()
-    .matches(cinRegExp, 'Format CIN invalide. Doit contenir 8 chiffres.')
-    .required('Ce champ est obligatoire'),
-  dateDelivrationCin: yup.date().required('Ce champ est obligatoire'),
-  password: yup
-    .string()
-    .matches(
-      passwordRegExp,
-      'Le mot de passe doit contenir au moins 5 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial',
-    )
-    .min(5, 'Le mot de passe doit avoir exactement 5 caractères')
-    .required('Ce champ est obligatoire'),
-  passwordConfirm: yup
-    .string()
-    .oneOf([yup.ref('password')], 'Les mots de passe doivent correspondre')
-    .matches(
-      passwordRegExp,
-      'Le mot de passe doit contenir au moins 5 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial',
-    )
-    .min(5, 'Le mot de passe doit avoir exactement 5 caractères')
-    .required('Ce champ est obligatoire'),
-  hasAmericanityIndex: yup
-    .boolean()
-    .oneOf([true], "Aucun indice d'américanité requis.")
-    .required('Ce champ est obligatoire'),
-  hasOtherBank: yup
-    .boolean()
-    .oneOf([true], ' ?? ')
-    .required('Ce champ est obligatoire'),
-  hasConfirmedForPersonalData: yup
-    .boolean()
-    .oneOf([true], 'La confirmation des données personnelles est requis')
-    .required('Ce champ est obligatoire'),
-  cinRecto: yup.string().required('Ce champ est obligatoire'),
-  cinVerso: yup.string().required('Ce champ est obligatoire'),
-  selfie: yup.string().required('Ce champ est obligatoire'),
-});
-
 export default SignUp;
-
