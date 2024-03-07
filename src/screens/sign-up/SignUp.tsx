@@ -27,6 +27,7 @@ import ImagePicker from '../../components/ImagePicker';
 import DatePickerInput from '../../components/DatePicker';
 import CustomSwitch from '../../components/Switch';
 import CustomButton from '../../components/PrevNextRegisterButtons';
+import Modal from '../../components/Modal';
 
 // constants
 import {
@@ -82,6 +83,9 @@ const SignUp = () => {
   const [selectedSelfieImage, setSelectedSelfieImage] = useState<
     string | undefined
   >(''); // selfie
+
+  const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState('');
 
   const initialValues = {
     firstName: '',
@@ -141,6 +145,8 @@ const SignUp = () => {
         setRegistration(
           "L'inscription a échoué, veuillez réessayer plus tard ❌",
         );
+        setMessage(err.response.data);
+        setVisible(true);
       });
 
     if (res && res.data) {
@@ -151,6 +157,7 @@ const SignUp = () => {
       return res;
     }
   };
+  const onClose = () => setVisible(false);
 
   type Steps = {
     offer: string;
@@ -836,6 +843,7 @@ const SignUp = () => {
           </>
         )}
       </Formik>
+      <Modal visible={visible} error={message} onClose={onClose}/>
     </KeyboardAwareScrollView>
   );
 };

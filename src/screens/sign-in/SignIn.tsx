@@ -9,7 +9,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 
 // components
 import TextInput from '../../components/TextInput';
@@ -34,6 +34,7 @@ import {RootStackParamList} from '../../../App';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {loginSchema} from '../../constants/yupValidations';
+import Modal from '../../components/Modal';
 
 // axios
 import axios from 'axios';
@@ -45,6 +46,9 @@ axios.defaults.withCredentials = true;
 type SignInProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
 const SignIn = ({navigation}: SignInProps) => {
+  const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState('');
+  
   const {isLoggedIn, mode, user} = useSelector(
     (state: RootState) => state.global,
   );
@@ -89,10 +93,14 @@ const SignIn = ({navigation}: SignInProps) => {
       if (credentials) {
         dispatch(setLogin({name: 'mohamed'}));
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      setMessage(error.response.data);
+      setVisible(true);
     }
   };
+
+  const onClose = () => setVisible(false); // close the modal
 
   const initialValuesLogin = {
     email: '',
@@ -198,6 +206,7 @@ const SignIn = ({navigation}: SignInProps) => {
           </View>
         </View>
       </KeyboardAwareScrollView>
+      <Modal visible={visible} error={message} onClose={onClose}/>
     </View>
   );
 };
