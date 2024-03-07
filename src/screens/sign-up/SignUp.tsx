@@ -569,8 +569,15 @@ const SignUp = () => {
                     title="Sélectionnez votre statut socio-professionnel"
                     items={socio_professional}
                     value={values.socio_professional}
-                    onValueChange={value =>
+                    onValueChange={value =>{
                       handleChange('socio_professional')(value)
+                      if (value === 'Etudiant') {
+                        setIsEtudiant(true);
+                      }
+                      else {
+                        setIsEtudiant(false);
+                      }
+                    }
                     }
                   />
                   {touched.socio_professional && errors.socio_professional && (
