@@ -1,20 +1,18 @@
 import React from 'react';
-import { TouchableOpacity, Text, ViewStyle,StyleSheet } from 'react-native';
+import {TouchableOpacity, Text, ViewStyle, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 // redux
-import { useSelector } from 'react-redux';
-import { RootState } from '../context/store';
-import { tokens } from '../assets/palette';
+import {useSelector} from 'react-redux';
+import {RootState} from '../context/store';
+import {tokens} from '../assets/palette';
 
 interface GenderButtonProps {
   gender: 'male' | 'female' | undefined;
   checkedGender: 'male' | 'female' | undefined;
   handleChange: (field: string) => (value: string | undefined) => void;
   setCheckedGender: (gender: 'male' | 'female' | undefined) => void;
-  setGenderChanged: (changed: boolean) => void; 
+  setGenderChanged: (changed: boolean) => void;
 }
-
-
 
 const GenderButton: React.FC<GenderButtonProps> = ({
   gender,
@@ -53,28 +51,36 @@ const GenderButton: React.FC<GenderButtonProps> = ({
     },
   });
 
-  return(
-  <TouchableOpacity
-    onPress={() => {
-      handleChange('gender')(gender);
-      setCheckedGender(gender);
-      setGenderChanged(true);
-      console.log("🚀 ~ gender:", gender)
-    }}
-    style={
-      
-      checkedGender === gender
-        ? styles.checkedButton
-        : styles.uncheckedButton
-    }
-  >
-    <Icon
-      name={gender === "female" ? "gender-female" : "gender-male"}
-      size={35}
-      color="white"
-    />
-    <Text style={styles.TextButton} >{gender === 'male' ? 'Homme' : 'Femme'}</Text>
-  </TouchableOpacity>
-);}
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        handleChange('gender')(gender);
+        setCheckedGender(gender);
+        setGenderChanged(true);
+        console.log('🚀 ~ gender:', gender);
+      }}
+      style={
+        checkedGender === gender ? styles.checkedButton : styles.uncheckedButton
+      }
+      accessible={true}
+      accessibilityRole="button"
+      accessibilityLabel={gender === 'male' ? 'Bouton Homme' : 'Bouton Femme'}
+      accessibilityState={{selected: checkedGender === gender}}
+      accessibilityHint={
+        gender === 'male'
+          ? 'Sélectionnez pour choisir Homme'
+          : 'Sélectionnez pour choisir Femme'
+      }>
+      <Icon
+        name={gender === 'female' ? 'gender-female' : 'gender-male'}
+        size={35}
+        color="white"
+      />
+      <Text style={styles.TextButton}>
+        {gender === 'male' ? 'Homme' : 'Femme'}
+      </Text>
+    </TouchableOpacity>
+  );
+};
 
 export default GenderButton;

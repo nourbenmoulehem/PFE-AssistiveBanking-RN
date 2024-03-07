@@ -12,6 +12,7 @@ import { tokens } from '../assets/palette';
 
 interface PickerInputProps {
   title: string;
+  name: string;
   items: { label: string; value: string }[];
   value: string;
   onValueChange: (value: string) => void;
@@ -21,6 +22,7 @@ const PickerInput: React.FC<PickerInputProps> = ({
   title,
   items,
   value,
+  name,
   onValueChange,
 }) => {
   
@@ -58,11 +60,10 @@ const PickerInput: React.FC<PickerInputProps> = ({
         items={items}
         value={value}
         style={customPickerStyles}
-        touchableWrapperProps={{
+        pickerProps={{
           // <- Use touchableWrapperProps to pass accessibility properties
           accessible: true,
-          accessibilityLabel: 'Favorite sport',
-          accessibilityHint: 'Double tap to select an option.',
+          accessibilityLabel: `${name}`,
           accessibilityRole: 'combobox',
         }}
       />

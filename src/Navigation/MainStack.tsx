@@ -33,7 +33,6 @@ export type RootStackParamList = {
   AccountActivation: undefined;
   Transactions: undefined;
   // Profile: { userId: string };
-  // Feed: { sort: 'latest' | 'top' } | undefined;
 };
 
 const stack = createNativeStackNavigator<RootStackParamList>();
@@ -71,6 +70,8 @@ const MainStack = () => {
         headerStyle: {
           backgroundColor: colors.main.backgroundColor,
         },
+        headerTintColor: mode === 'dark' ? 'white' : 'black',
+        // headerBackTitleVisible: false,
         headerShadowVisible: false, // to remove shadow from the header
         headerTitle: () => (
           <View
@@ -78,10 +79,15 @@ const MainStack = () => {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'center',
-            }}>
+            }}
+            accessible={true}
+            accessibilityRole="header"
+            accessibilityLabel="WeBank">
             <Image
               source={require('../assets/logo/logo-webank.png')}
               style={{width: 68, height: 48, marginRight: 10}}
+              accessible={true}
+              accessibilityLabel="WeBank Logo"
             />
             <Text
               style={{
@@ -95,13 +101,22 @@ const MainStack = () => {
         ),
         headerRight: () => (
           <>
-            <Icon
-              name={mode == 'dark' ? 'brightness-3' : 'white-balance-sunny'}
-              size={30}
-              color={colors.main.buttonColor}
-              style={{marginRight: 10}}
-              onPress={toggleMode}
-            />
+            <TouchableOpacity
+              onPressIn={toggleMode}
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityLabel={
+                mode == 'dark'
+                  ? 'Passer en mode clair'
+                  : 'Passer en mode sombre'
+              }>
+              <Icon
+                name={mode == 'dark' ? 'brightness-3' : 'white-balance-sunny'}
+                size={30}
+                color={colors.main.buttonColor}
+                style={{marginRight: 10}}
+              />
+            </TouchableOpacity>
             {isLoggedIn ? (
               loading ? (
                 <ActivityIndicator
@@ -117,7 +132,11 @@ const MainStack = () => {
                     gap: 15,
                   }}>
                   <Avatar.Text size={30} label="XD" />
-                  <TouchableOpacity onPress={handleLogout}>
+                  <TouchableOpacity
+                    onPressIn={handleLogout}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel="Logout">
                     <Icon
                       name="logout"
                       size={30}

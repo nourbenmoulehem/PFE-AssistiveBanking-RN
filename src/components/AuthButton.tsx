@@ -9,9 +9,10 @@ import { tokens } from '../assets/palette';
 interface SubmitButtonProps {
   handleSubmit: () => void;
   label: string;
+  accessibilityHint: string
 }
 
-const SubmitButton: React.FC<SubmitButtonProps> = ({ handleSubmit, label }) => {
+const SubmitButton: React.FC<SubmitButtonProps> = ({ handleSubmit, label, accessibilityHint }) => {
   const {mode} = useSelector((state: RootState) => state.global);
   const colors = tokens(mode);
   const styles = StyleSheet.create({
@@ -32,7 +33,13 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({ handleSubmit, label }) => {
     },
   });
   return(
-  <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+  <TouchableOpacity style={styles.submitButton} onPress={handleSubmit} 
+  accessibilityRole='button'
+  accessibilityLabel={label}
+  accessibilityHint={accessibilityHint}
+  
+  
+  >
     <Text style={styles.textButton}>{label}</Text>
   </TouchableOpacity>
 )

@@ -11,12 +11,13 @@ interface ImagePickerProps {
   // errors: any;
   field: string;
   title: string;
+  name: string;
 }
 // redux
 import {useSelector} from 'react-redux';
 import {RootState} from '../context/store';
 import {tokens} from '../assets/palette';
-import { FormikHandlers, useFormikContext } from 'formik';
+import {FormikHandlers, useFormikContext} from 'formik';
 import InputTitle from './InputTitle';
 // options for opening camera
 // type safety
@@ -40,13 +41,14 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
   // touched,
   // errors,
   field,
-  title
+  title,
+  name
 }) => {
   const {mode} = useSelector((state: RootState) => state.global);
   const colors = tokens(mode);
   const formikContext = useFormikContext();
   const handleChange = (imageUri: string | undefined) => {
-    const { setFieldValue } = formikContext;
+    const {setFieldValue} = formikContext;
     setFieldValue(field, imageUri); // Update 'image' with your form field name
   };
 
@@ -84,7 +86,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
   });
   return (
     <>
-    <InputTitle title={title} />
+      <InputTitle title={title} />
       <View
         style={{
           flexDirection: 'row',
@@ -106,12 +108,17 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
                 );
               } else {
                 let imageUri = response.assets ? response.assets[0].uri : '';
-                console.log("🚀 ~ imageUri:", imageUri)
+                console.log('🚀 ~ imageUri:', imageUri);
                 handleChange(imageUri);
                 setSelectedImage(imageUri);
               }
             });
-          }}>
+          }}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel={`Ouvrir la galerie pour choisir une photo de votre ${name}`}
+          // accessibilityHint="Double-tap pour ouvrir la galerie."
+          >
           <Icon name="image-search-outline" size={40} />
           <Text style={styles.TextButtonNextPrev}>ouvrir la galerie</Text>
         </TouchableOpacity>
@@ -131,7 +138,12 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
                 console.log(imageUri);
               }
             });
-          }}>
+          }}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel={`Ouvrir la caméra pour prendre une photo de votre ${name}`}
+          // accessibilityHint="Double-tap pour ouvrir la caméra."
+          >
           <Icon name="camera-enhance-outline" size={40} />
           <Text style={styles.TextButtonNextPrev}>ouvrir la caméra</Text>
         </TouchableOpacity>
@@ -142,23 +154,15 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
           <Image
             source={{uri: selectedImage}}
             style={{width: 250, height: 250}}
-            alt= {`votre ${field} `}
+            alt={`votre ${field} `}
+            accessible={true}
+            accessibilityLabel={`Votre ${field}`}
           />
         ) : (
           <Text style={styles.linkText}> aucune image </Text>
         )}
       </View>
-      {/* {touched.field && errors.field && (
-        <Text
-          style={{
-            fontSize: 15,
-            color: 'red',
-            marginTop: 10,
-            marginRight: 30,
-          }}>
-          {errors.field}
-        </Text>
-      )} */}
+      
     </>
   );
 };

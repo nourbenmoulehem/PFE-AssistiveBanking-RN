@@ -1,5 +1,9 @@
 import React from 'react';
-import {TextInput as PaperTextInput, HelperText, Text} from 'react-native-paper';
+import {
+  TextInput as PaperTextInput,
+  HelperText,
+  Text,
+} from 'react-native-paper';
 import {useField} from 'formik';
 import {View, StyleSheet} from 'react-native';
 
@@ -7,7 +11,13 @@ interface TextInputProps {
   name: string;
   placeholder: string;
   mode?: 'flat' | 'outlined';
-  keyboardType?: 'default' | 'number-pad' | 'decimal-pad' | 'numeric' | 'email-address' | 'phone-pad';
+  keyboardType?:
+    | 'default'
+    | 'number-pad'
+    | 'decimal-pad'
+    | 'numeric'
+    | 'email-address'
+    | 'phone-pad';
   secureTextEntry?: boolean;
   showLabel?: boolean;
 }
@@ -35,7 +45,10 @@ const TextInput: React.FC<TextInputProps> = ({
         keyboardType={keyboardType}
         secureTextEntry={secureTextEntry}
         contentStyle={styles.contentStyle}
-
+        accessible={true}
+        accessibilityLabel={`Champ de saisie ${placeholder}`}
+        accessibilityRole="text"
+        
       />
       {meta.error ? (
         <HelperText style={styles.error} type="error">
@@ -65,7 +78,7 @@ const styles = StyleSheet.create({
     color: 'orange',
     fontWeight: 'bold',
     paddingBottom: 10,
-  }
+  },
 });
 
 export default TextInput;

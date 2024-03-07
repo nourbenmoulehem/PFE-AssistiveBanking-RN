@@ -1,12 +1,11 @@
 // CustomSwitch.tsx
-import React, { FC } from 'react';
-import { StyleSheet, Switch, Text, View } from 'react-native';
+import React, {FC} from 'react';
+import {StyleSheet, Switch, Text, View} from 'react-native';
 
 // redux
-import { useSelector } from 'react-redux';
-import { RootState } from '../context/store';
-import { tokens } from '../assets/palette';
-
+import {useSelector} from 'react-redux';
+import {RootState} from '../context/store';
+import {tokens} from '../assets/palette';
 
 interface CustomSwitchProps {
   value: boolean;
@@ -14,12 +13,10 @@ interface CustomSwitchProps {
   text: string;
 }
 
-const CustomSwitch: FC<CustomSwitchProps> = ({ value, onValueChange, text }) => 
-{
-  const { mode } = useSelector((state: RootState) => state.global);
+const CustomSwitch: FC<CustomSwitchProps> = ({value, onValueChange, text}) => {
+  const {mode} = useSelector((state: RootState) => state.global);
   const colors = tokens(mode);
   const styles = StyleSheet.create({
-    
     switchContainer: {
       flexDirection: 'row',
       width: '100%',
@@ -37,12 +34,20 @@ const CustomSwitch: FC<CustomSwitchProps> = ({ value, onValueChange, text }) =>
       fontWeight: 'bold',
     },
   });
-  
-  return(
-  <View style={styles.switchContainer}>
-    <Switch value={value} onValueChange={onValueChange} />
-    <Text style={styles.confirmationText}>{text}</Text>
-  </View>
-);}
+
+  return (
+    <View style={styles.switchContainer}>
+      <Switch
+        value={value}
+        onValueChange={onValueChange}
+        accessible={true}
+        accessibilityRole="switch"
+        accessibilityLabel={text}
+        accessibilityState={{checked: value}}
+      />
+      <Text style={styles.confirmationText}>{text}</Text>
+    </View>
+  );
+};
 
 export default CustomSwitch;

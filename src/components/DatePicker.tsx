@@ -1,26 +1,30 @@
-import React, { useState } from 'react';
-import { TouchableOpacity, Text, ViewStyle,StyleSheet, View } from 'react-native';
+import React, {useState} from 'react';
+import {
+  TouchableOpacity,
+  Text,
+  ViewStyle,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import InputTitle from './InputTitle';
 
 // redux
-import { useSelector } from 'react-redux';
-import { RootState } from '../context/store';
-import { tokens } from '../assets/palette';
-import { TextInput } from 'react-native-paper';
- 
+import {useSelector} from 'react-redux';
+import {RootState} from '../context/store';
+import {tokens} from '../assets/palette';
+import {TextInput} from 'react-native-paper';
 
-  
 type DatePickerProps = {
-  title: string,
-  field: string,
-  placeholder: string,
-  value: string,
+  name: 'date de naissance' | 'date de délivration CIN' | 'date de fin';
+  title: string;
+  field: string;
+  placeholder: string;
+  value: string;
   handleChange: (field: string) => (value: string) => void;
-  
-}
+};
 
 const DatePickerInput: React.FC<DatePickerProps> = ({
   title,
@@ -28,12 +32,13 @@ const DatePickerInput: React.FC<DatePickerProps> = ({
   value,
   handleChange,
   field,
+  name
 }) => {
   const {mode} = useSelector((state: RootState) => state.global);
   const colors = tokens(mode);
-   // date picker related
-   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-   const showDatePicker = () => {
+  // date picker related
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
 
@@ -80,38 +85,44 @@ const DatePickerInput: React.FC<DatePickerProps> = ({
     },
   });
   return (
-  <>
-    <InputTitle title={title} />
-    <View style={styles.dateContainer}>
-      <View style={styles.inputWrapper}>
-        <TextInput
-          mode="outlined"
-          placeholder={placeholder}
-          value={value}
-          disabled={true}
-        />
-      </View>
+    <>
+      <InputTitle title={title} />
+      <View style={styles.dateContainer}>
+        <View style={styles.inputWrapper}>
+          <TextInput
+            mode="outlined"
+            placeholder={placeholder}
+            value={value}
+            disabled={true}
+            accessible={true}
+            accessibilityRole="text"
+            accessibilityLabel={placeholder}
+          />
+        </View>
 
-      <TouchableOpacity
-        style={styles.pickDateButton}
-        onPress={showDatePicker}>
-        <Icon name="calendar-month-outline" size={40} />
-        <Text style={styles.TextButtonNextPrev}>
-          Choisir une date
-        </Text>
-      </TouchableOpacity>
-    </View>
-    <DateTimePickerModal
-      isVisible={isDatePickerVisible}
-      mode="date"
-      onConfirm={(date: Date) => {
-        const extractedDate = date.toISOString().split('T')[0];
-        handleChange(field)(extractedDate);
-        handleConfirm(date);
-      }}
-      onCancel={hideDatePicker}
-    />
-  </>
-);}
+        <TouchableOpacity
+          style={styles.pickDateButton}
+          onPressIn={showDatePicker}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel={`Choisir une ${name}`}
+          accessibilityHint={`Ouvrir le calendrier pour sélectionner une ${name}`}>
+          <Icon name="calendar-month-outline" size={40} />
+          <Text style={styles.TextButtonNextPrev}>Choisir une date</Text>
+        </TouchableOpacity>
+      </View>
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={(date: Date) => {
+          const extractedDate = date.toISOString().split('T')[0];
+          handleChange(field)(extractedDate);
+          handleConfirm(date);
+        }}
+        onCancel={hideDatePicker}
+      />
+    </>
+  );
+};
 
 export default DatePickerInput;

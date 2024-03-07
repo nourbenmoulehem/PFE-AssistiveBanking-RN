@@ -54,7 +54,7 @@ import {tokens} from '../../assets/palette';
 // axios
 import axios from 'axios';
 import PickerInput from '../../components/PickerInput';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const SignUp = () => {
   const {mode} = useSelector((state: RootState) => state.global);
@@ -301,506 +301,534 @@ const SignUp = () => {
     <KeyboardAwareScrollView
       enableOnAndroid={true}
       style={{flex: 1}}
-      contentContainerStyle={{flexGrow: 1, padding: 20, backgroundColor: colors.main.backgroundColor}}
-      
-      >
-    <Formik
-      initialValues={initialValues}
-      validationSchema={signUpSchema} // we're using yup
-      onSubmit={values => {
-        register(values);
+      contentContainerStyle={{
+        flexGrow: 1,
+        padding: 20,
+        backgroundColor: colors.main.backgroundColor,
       }}>
-      {({
-        values, // where we're getting all the value of the input fields
-        errors,
-        touched,
-        isValid,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        handleReset,
-        isSubmitting,
-        setFieldValue,
-        dirty,
-        /* and other goodies */
-      }) => (
-        <>
-          <View style={styles.container}>
-            {/* <ProgressBar progress={(step / 24)} width={300} color={colors.orange[200]} /> */}
+      <Formik
+        initialValues={initialValues}
+        validationSchema={signUpSchema} // we're using yup
+        onSubmit={values => {
+          register(values);
+        }}>
+        {({
+          values, // where we're getting all the value of the input fields
+          errors,
+          touched,
+          isValid,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          handleReset,
+          isSubmitting,
+          setFieldValue,
+          dirty,
+          /* and other goodies */
+        }) => (
+          <>
+            <View style={styles.container}>
+              {/* <ProgressBar progress={(step / 24)} width={300} color={colors.orange[200]} /> */}
 
-            {step === 1 && ( // offre
-              <>
-                <InputTitle title="Choisissez l'offre qui vous convient " />
-                <View style={styles.inputWrapper}>
-                  <OfferButton
-                    offer="WeStart"
-                    checkedGender={checkedOffer}
-                    handleChange={offer => () => {
-                      handleChange('offer')('WeStart');
-                    }}
-                    setCheckedOffer={setCheckedOffer}
-                    setOffreChanged={setOffreChanged}
-                  />
-
-                  <OfferButton
-                    offer="WeTrust"
-                    checkedGender={checkedOffer}
-                    handleChange={offer => () => {
-                      handleChange('offer')('WeTrust');
-                    }}
-                    setCheckedOffer={setCheckedOffer}
-                    setOffreChanged={setOffreChanged}
-                  />
-                  {touched.offer && errors.offer && (
-                    <Text style={styles.error}>{errors.offer}</Text>
-                  )}
-
-                  {offreChanged && (
-                    <HelperTextInfo
-                      info={`Vous avez choisi l'offre ${checkedOffer}`}
-                    />
-                  )}
-                </View>
-              </>
-            )}
-
-            {step === 2 && ( // gender
-              <>
-                <InputTitle title="Sélectionnez votre sexe " />
-                <View style={styles.inputWrapper}>
-                  <GenderButton
-                    gender="female"
-                    checkedGender={checkedGender}
-                    setCheckedGender={setCheckedGender}
-                    setGenderChanged={setGenderChanged}
-                    handleChange={gender => () => {
-                      handleChange('gender')('female');
-                      console.log('values.gender', values.gender);
-                    }}
-                  />
-                  <GenderButton
-                    gender="male"
-                    checkedGender={checkedGender}
-                    setCheckedGender={setCheckedGender}
-                    setGenderChanged={setGenderChanged}
-                    handleChange={gender => () => {
-                      handleChange('gender')('male');
-                      console.log('values.gender', values.gender);
-                    }}
-                  />
-                  {touched.gender && errors.gender && (
-                    <Text style={styles.error}>{errors.gender}</Text>
-                  )}
-                  {genderChanged && (
-                    <HelperTextInfo
-                      info={`Vous avez choisi ${checkedGender}`}
-                    />
-                  )}
-                </View>
-              </>
-            )}
-
-            {step === 3 && ( // firstName
-              <>
-                <InputTitle title="Sélectionnez votre prénom" />
-                <CustomTextInput
-                  mode="flat"
-                  name="firstName"
-                  placeholder="Votre prénom"
-                />
-              </>
-            )}
-            {step === 4 && ( // lastName
-              <>
-                <InputTitle title="Sélectionnez votre nom" />
-                <CustomTextInput
-                  mode="flat"
-                  name="lastName"
-                  placeholder="Votre nom de famille"
-                />
-              </>
-            )}
-            {step === 5 && ( // email & confirm
-              <>
-                <InputTitle title="Sélectionnez votre adresse e-mail et confirmez-la, s'il vous plaît." />
-                <CustomTextInput
-                  mode="flat"
-                  name="email"
-                  placeholder="Votre adresse e-mail"
-                  keyboardType="email-address"
-                />
-
-                <CustomTextInput
-                  mode="flat"
-                  name="emailConfirm"
-                  placeholder="Confirmez votre adresse email"
-                  keyboardType="email-address"
-                />
-              </>
-            )}
-            {step === 6 && ( // phoneNumber & confirm
-              <>
-                <InputTitle title="Sélectionnez votre numéro de téléphone et confirmez-le, s'il vous plaît." />
-                <CustomTextInput
-                  mode="flat"
-                  name="phoneNumber"
-                  placeholder="Votre numéro de téléphone"
-                  keyboardType="phone-pad"
-                />
-                <CustomTextInput
-                  mode="flat"
-                  name="phoneNumberConfirm"
-                  placeholder="Confirmez votre numéro de téléphone"
-                  keyboardType="phone-pad"
-                />
-              </>
-            )}
-            {step === 7 && ( // birthday
-              <>
-                <DatePickerInput
-                  title="Sélectionnez votre date de naissance"
-                  field="birthday"
-                  placeholder="Date de naissance"
-                  value={values.birthday}
-                  handleChange={field => value => {
-                    // Create a fake event object
-                    const event = {
-                      target: {
-                        name: field,
-                        value,
-                      },
-                    };
-                    // Call Formik's handleChange with the fake event
-                    handleChange(event);
-                  }}
-                />
-                {touched.birthday && errors.birthday && (
-                  <Text style={styles.error}>{errors.birthday}</Text>
-                )}
-              </>
-            )}
-            {step === 8 && ( // adresse
-              <>
-                <InputTitle title="Sélectionnez votre adresse" />
-                <CustomTextInput
-                  mode="flat"
-                  name="adresse"
-                  placeholder="Adresse"
-                />
-              </>
-            )}
-            {step === 9 && ( // gouvernorat
-              <>
-                <PickerInput
-                  title="Gouvernorat"
-                  items={gouvernoratsOptions}
-                  value={values.gouvernorat}
-                  onValueChange={value => handleChange('gouvernorat')(value)}
-                />
-                {touched.gouvernorat && errors.gouvernorat && (
-                  <Text style={styles.error}>{errors.gouvernorat}</Text>
-                )}
-              </>
-            )}
-            {step === 10 && ( // code postal
-              <>
-                <InputTitle title="Sélectionnez votre code postal" />
-
-                <CustomTextInput
-                  mode="flat"
-                  name="codePostal"
-                  placeholder="code postal"
-                  keyboardType="phone-pad"
-                />
-              </>
-            )}
-            {step === 11 && ( // nationalite
-              <>
-                <PickerInput
-                  title="Sélectionnez votre nationalité"
-                  items={nationalite}
-                  value={values.nationality}
-                  onValueChange={value => handleChange('nationality')(value)}
-                />
-                {touched.nationality && errors.nationality && (
-                  <Text style={styles.error}>{errors.nationality}</Text>
-                )}
-              </>
-            )}
-            {step === 12 && ( // status civil
-              <>
-                <PickerInput
-                  title="Sélectionnez votre status civil"
-                  items={status_civil}
-                  value={values.statusCivil}
-                  onValueChange={value => handleChange('statusCivil')(value)}
-                />
-                {touched.statusCivil && errors.statusCivil && (
-                  <Text style={styles.error}>{errors.statusCivil}</Text>
-                )}
-              </>
-            )}
-            {step === 13 && ( // nombre d'enfant
-              <>
-                <PickerInput
-                  title="Sélectionnez le nombre d'enfants que vous avez"
-                  items={nombre_enfant}
-                  value={values.nombre_enfant}
-                  onValueChange={value => handleChange('nombre_enfant')(value)}
-                />
-                {touched.nombre_enfant && errors.nombre_enfant && (
-                  <Text style={styles.error}>{errors.nombre_enfant}</Text>
-                )}
-              </>
-            )}
-            {step === 14 && ( // socio_professional
-              <>
-                <PickerInput
-                  title="Sélectionnez votre statut socio-professionnel"
-                  items={socio_professional}
-                  value={values.socio_professional}
-                  onValueChange={value =>
-                    handleChange('socio_professional')(value)
-                  }
-                />
-                {touched.socio_professional && errors.socio_professional && (
-                  <Text style={styles.error}>{errors.socio_professional}</Text>
-                )}
-              </>
-            )}
-            {step === 15 &&
-              !isEtudiant && ( // revenu_mensuel
+              {step === 1 && ( // offre
                 <>
-                  <PickerInput
-                    title="Sélectionnez votre revenu net mensuel"
-                    items={revenu_mensuel}
-                    value={values.revenu}
-                    onValueChange={value => handleChange('revenu')(value)}
+                  <InputTitle title="Choisissez l'offre qui vous convient " />
+                  <View style={styles.inputWrapper}>
+                    <OfferButton
+                      offer="WeStart"
+                      checkedGender={checkedOffer}
+                      handleChange={offer => () => {
+                        handleChange('offer')('WeStart');
+                      }}
+                      setCheckedOffer={setCheckedOffer}
+                      setOffreChanged={setOffreChanged}
+                    />
+
+                    <OfferButton
+                      offer="WeTrust"
+                      checkedGender={checkedOffer}
+                      handleChange={offer => () => {
+                        handleChange('offer')('WeTrust');
+                      }}
+                      setCheckedOffer={setCheckedOffer}
+                      setOffreChanged={setOffreChanged}
+                    />
+                    {touched.offer && errors.offer && (
+                      <Text style={styles.error}>{errors.offer}</Text>
+                    )}
+
+                    {offreChanged && (
+                      <HelperTextInfo
+                        info={`Vous avez choisi l'offre ${checkedOffer}`}
+                      />
+                    )}
+                  </View>
+                </>
+              )}
+
+              {step === 2 && ( // gender
+                <>
+                  <InputTitle title="Sélectionnez votre sexe " />
+                  <View style={styles.inputWrapper}>
+                    <GenderButton
+                      gender="female"
+                      checkedGender={checkedGender}
+                      setCheckedGender={setCheckedGender}
+                      setGenderChanged={setGenderChanged}
+                      handleChange={gender => () => {
+                        handleChange('gender')('female');
+                        console.log('values.gender', values.gender);
+                      }}
+                    />
+                    <GenderButton
+                      gender="male"
+                      checkedGender={checkedGender}
+                      setCheckedGender={setCheckedGender}
+                      setGenderChanged={setGenderChanged}
+                      handleChange={gender => () => {
+                        handleChange('gender')('male');
+                        console.log('values.gender', values.gender);
+                      }}
+                    />
+                    {touched.gender && errors.gender && (
+                      <Text style={styles.error}>{errors.gender}</Text>
+                    )}
+                    {genderChanged && (
+                      <HelperTextInfo
+                        info={`Vous avez choisi ${checkedGender}`}
+                      />
+                    )}
+                  </View>
+                </>
+              )}
+
+              {step === 3 && ( // firstName
+                <>
+                  <InputTitle title="Sélectionnez votre prénom" />
+                  <CustomTextInput
+                    mode="flat"
+                    name="firstName"
+                    placeholder="Votre prénom"
                   />
-                  
-                  {touched.revenu && errors.revenu && (
-                    <Text style={styles.error}>{errors.revenu}</Text>
+                </>
+              )}
+              {step === 4 && ( // lastName
+                <>
+                  <InputTitle title="Sélectionnez votre nom" />
+                  <CustomTextInput
+                    mode="flat"
+                    name="lastName"
+                    placeholder="Votre nom de famille"
+                  />
+                </>
+              )}
+              {step === 5 && ( // email & confirm
+                <>
+                  <InputTitle title="Sélectionnez votre adresse e-mail et confirmez-la, s'il vous plaît." />
+                  <CustomTextInput
+                    mode="flat"
+                    name="email"
+                    placeholder="Votre adresse e-mail"
+                    keyboardType="email-address"
+                  />
+
+                  <CustomTextInput
+                    mode="flat"
+                    name="emailConfirm"
+                    placeholder="Confirmez votre adresse email"
+                    keyboardType="email-address"
+                  />
+                </>
+              )}
+              {step === 6 && ( // phoneNumber & confirm
+                <>
+                  <InputTitle title="Sélectionnez votre numéro de téléphone et confirmez-le, s'il vous plaît." />
+                  <CustomTextInput
+                    mode="flat"
+                    name="phoneNumber"
+                    placeholder="Votre numéro de téléphone"
+                    keyboardType="phone-pad"
+                  />
+                  <CustomTextInput
+                    mode="flat"
+                    name="phoneNumberConfirm"
+                    placeholder="Confirmez votre numéro de téléphone"
+                    keyboardType="phone-pad"
+                  />
+                </>
+              )}
+              {step === 7 && ( // birthday
+                <>
+                  <DatePickerInput
+                    title="Sélectionnez votre date de naissance"
+                    name="date de naissance"
+                    field="birthday"
+                    placeholder="Date de naissance"
+                    value={values.birthday}
+                    handleChange={field => value => {
+                      // Create a fake event object
+                      const event = {
+                        target: {
+                          name: field,
+                          value,
+                        },
+                      };
+                      // Call Formik's handleChange with the fake event
+                      handleChange(event);
+                    }}
+                  />
+                  {touched.birthday && errors.birthday && (
+                    <Text style={styles.error}>{errors.birthday}</Text>
                   )}
                 </>
               )}
-            {step === 16 &&
-              !isEtudiant && ( // natureActivite
+              {step === 8 && ( // adresse
+                <>
+                  <InputTitle title="Sélectionnez votre adresse" />
+                  <CustomTextInput
+                    mode="flat"
+                    name="adresse"
+                    placeholder="Adresse"
+                  />
+                </>
+              )}
+              {step === 9 && ( // gouvernorat
                 <>
                   <PickerInput
-                    title="Sélectionnez la nature de votre activité"
-                    items={nature_activite}
-                    value={values.natureActivite}
+                    title="Gouvernorat"
+                    name="Gouvernorat"
+                    items={gouvernoratsOptions}
+                    value={values.gouvernorat}
+                    onValueChange={value => handleChange('gouvernorat')(value)}
+                  />
+                  {touched.gouvernorat && errors.gouvernorat && (
+                    <Text style={styles.error}>{errors.gouvernorat}</Text>
+                  )}
+                </>
+              )}
+              {step === 10 && ( // code postal
+                <>
+                  <InputTitle title="Sélectionnez votre code postal" />
+
+                  <CustomTextInput
+                    mode="flat"
+                    name="codePostal"
+                    placeholder="code postal"
+                    keyboardType="phone-pad"
+                  />
+                </>
+              )}
+              {step === 11 && ( // nationalite
+                <>
+                  <PickerInput
+                    name="nationalité"
+                    title="Sélectionnez votre nationalité"
+                    items={nationalite}
+                    value={values.nationality}
+                    onValueChange={value => handleChange('nationality')(value)}
+                  />
+                  {touched.nationality && errors.nationality && (
+                    <Text style={styles.error}>{errors.nationality}</Text>
+                  )}
+                </>
+              )}
+              {step === 12 && ( // status civil
+                <>
+                  <PickerInput
+                    name="Status civil"
+                    title="Sélectionnez votre status civil"
+                    items={status_civil}
+                    value={values.statusCivil}
+                    onValueChange={value => handleChange('statusCivil')(value)}
+                  />
+                  {touched.statusCivil && errors.statusCivil && (
+                    <Text style={styles.error}>{errors.statusCivil}</Text>
+                  )}
+                </>
+              )}
+              {step === 13 && ( // nombre d'enfant
+                <>
+                  <PickerInput
+                    name="Nombre d'enfant"
+                    title="Sélectionnez le nombre d'enfants que vous avez"
+                    items={nombre_enfant}
+                    value={values.nombre_enfant}
                     onValueChange={value =>
-                      handleChange('natureActivite')(value)
+                      handleChange('nombre_enfant')(value)
                     }
                   />
-                  {touched.natureActivite && errors.natureActivite && (
-                    <Text style={styles.error}>{errors.natureActivite}</Text>
+                  {touched.nombre_enfant && errors.nombre_enfant && (
+                    <Text style={styles.error}>{errors.nombre_enfant}</Text>
                   )}
                 </>
               )}
-            {step === 17 &&
-              !isEtudiant && ( // secteurActivite
+              {step === 14 && ( // socio_professional
                 <>
                   <PickerInput
-                    title="Sélectionnez votre secteur d'activité"
-                    items={secteur_activite}
-                    value={values.secteurActivite}
+                    name="Statut socio-professionnel"
+                    title="Sélectionnez votre statut socio-professionnel"
+                    items={socio_professional}
+                    value={values.socio_professional}
                     onValueChange={value =>
-                      handleChange('secteurActivite')(value)
+                      handleChange('socio_professional')(value)
                     }
                   />
-                  {touched.secteurActivite && errors.secteurActivite && (
-                    <Text style={styles.error}>{errors.secteurActivite}</Text>
-                  )}
-                </>
-              )}
-            {step === 18 && ( // num cin
-              <>
-                <InputTitle title="Saisissez votre numéro Carte d'Identité Nationale" />
-
-                <CustomTextInput
-                  mode="flat"
-                  name="cin"
-                  placeholder="Votre numéro Carte d'Identité Nationale"
-                  keyboardType="phone-pad"
-                />
-              </>
-            )}
-            {step === 19 && ( // date de delivration
-            <>
-              <DatePickerInput
-                title="Sélectionnez la date de délivrance de votre CIN"
-                field="dateDelivrationCin"
-                placeholder="date de délivrance de votre CINe"
-                value={values.dateDelivrationCin}
-                handleChange={field => value => {
-                  const event = {
-                    target: {
-                      name: field,
-                      value,
-                    },
-                  };
-                  handleChange(event);
-                }}
-              />
-              {touched.dateDelivrationCin && errors.dateDelivrationCin && (
-                <Text style={styles.error}>{errors.dateDelivrationCin}</Text>
-              )}
-              </>
-            )}
-            {step === 20 && ( // cin recto
-              <>
-                <ImagePicker
-                  title="Veuillez prendre en photo le recto de votre CIN ou l'importer"
-                  selectedImage={selectedCinRectoImage}
-                  setSelectedImage={setSelectedCinRectoImage}
-                  handleChange={(uri: string | undefined) =>
-                    setFieldValue('cinRecto', uri)
-                  }
-                  field="cinRecto"
-                />
-                {touched.cinRecto && errors.cinRecto && (
-                  <Text style={styles.error}>{errors.cinRecto}</Text>
-                )}
-              </>
-            )}
-            {step === 21 && ( // cin verso
-              <>
-                <ImagePicker
-                  title="Veuillez prendre en photo le verso de votre CIN ou l'importer"
-                  selectedImage={selectedCinVersoImage}
-                  setSelectedImage={setSelectedCinVersoImage}
-                  handleChange={(uri: string | undefined) =>
-                    setFieldValue('cinVerso', uri)
-                  }
-                  field="cinVerso"
-                />
-                {touched.cinVerso && errors.cinVerso && (
-                  <Text style={styles.error}>{errors.cinVerso}</Text>
-                )}
-              </>
-            )}
-            {step === 22 && ( // selfie
-              <>
-                <ImagePicker
-                  title="Prenez ou importez votre photo"
-                  selectedImage={selectedSelfieImage}
-                  setSelectedImage={setSelectedSelfieImage}
-                  handleChange={(uri: string | undefined) =>
-                    setFieldValue('selfie', uri)
-                  }
-                  field="selfie"
-                />
-                {touched.selfie && errors.selfie && (
-                  <Text style={styles.error}>{errors.selfie}</Text>
-                )}
-              </>
-            )}
-            {step === 23 && ( // password
-              <>
-                <InputTitle title="Choisissez un mot de passe et confirmez-le, s'il vous plaît." />
-                <CustomTextInput
-                  mode="flat"
-                  name="password"
-                  placeholder="Choisissez un mot de passe"
-                  secureTextEntry={true}
-                />
-                <CustomTextInput
-                  mode="flat"
-                  name="passwordConfirm"
-                  placeholder="Confirmez votre mot de passe"
-                  secureTextEntry={true}
-                />
-              </>
-            )}
-            {step === 24 && ( // confirmation
-              <>
-                <CustomSwitch
-                  value={values.hasAmericanityIndex}
-                  onValueChange={value => {
-                    setFieldValue('hasAmericanityIndex', value);
-                  }}
-                  text="Je confirme que je n'ai pas d'indice d'américanité."
-                />
-
-                <CustomSwitch
-                  value={values.hasOtherBank}
-                  onValueChange={value => {
-                    setFieldValue('hasOtherBank', value);
-                  }}
-                  text=" Je suis client dans une autre banque"
-                />
-
-                <View style={styles.switchContainer}>
-                  <Switch
-                    value={values.hasConfirmedForPersonalData}
-                    onValueChange={value => {
-                      setFieldValue('hasConfirmedForPersonalData', value);
-                    }}
-                  />
-                  <Text style={styles.confirmationText}>
-                    J'accepte les{' '}
-                    <TouchableOpacity
-                      onPress={() =>
-                        Linking.openURL(
-                          'https://www.webank.com.tn/fr/mentions-legales',
-                        )
-                      }>
-                      <Text style={styles.linkText}>
-                        mentions légales relatives à la protection des données
-                        personnelles.
-                      </Text>
-                    </TouchableOpacity>{' '}
-                  </Text>
-                </View>
-                {touched.hasAmericanityIndex && errors.hasAmericanityIndex && (
-                  <Text style={styles.error}>
-                    <Text>{errors.hasAmericanityIndex}</Text>
-                  </Text>
-                )}
-                {touched.hasConfirmedForPersonalData &&
-                  errors.hasConfirmedForPersonalData && (
+                  {touched.socio_professional && errors.socio_professional && (
                     <Text style={styles.error}>
-                      {errors.hasConfirmedForPersonalData}
+                      {errors.socio_professional}
                     </Text>
                   )}
-              </>
-            )}
-            <View style={styles.prevNextButtonsContainer}>
-              {step > 1 && (
-                <CustomButton onPress={handlePrevious} text="Précédent" />
+                </>
               )}
-              {step < 24 ? (
-                <CustomButton
-                  onPress={() => {
-                    handleNext();
-                  }}
-                  text="Suivant"
-                  values={values}
-                  errors={errors}
-                  getFieldName={getFieldName}
-                  step={step}
-                  disabled={getFieldName(step).some(
-                    fieldName =>
-                      values[fieldName] === '' || !!errors[fieldName],
+              {step === 15 &&
+                !isEtudiant && ( // revenu_mensuel
+                  <>
+                    <PickerInput
+                      name="Revenu net mensuel"
+                      title="Sélectionnez votre revenu net mensuel"
+                      items={revenu_mensuel}
+                      value={values.revenu}
+                      onValueChange={value => handleChange('revenu')(value)}
+                    />
+
+                    {touched.revenu && errors.revenu && (
+                      <Text style={styles.error}>{errors.revenu}</Text>
+                    )}
+                  </>
+                )}
+              {step === 16 &&
+                !isEtudiant && ( // natureActivite
+                  <>
+                    <PickerInput
+                      name="Nature de l'activité"
+                      title="Sélectionnez la nature de votre activité"
+                      items={nature_activite}
+                      value={values.natureActivite}
+                      onValueChange={value =>
+                        handleChange('natureActivite')(value)
+                      }
+                    />
+                    {touched.natureActivite && errors.natureActivite && (
+                      <Text style={styles.error}>{errors.natureActivite}</Text>
+                    )}
+                  </>
+                )}
+              {step === 17 &&
+                !isEtudiant && ( // secteurActivite
+                  <>
+                    <PickerInput
+                      name="Secteur d'activité"
+                      title="Sélectionnez votre secteur d'activité"
+                      items={secteur_activite}
+                      value={values.secteurActivite}
+                      onValueChange={value =>
+                        handleChange('secteurActivite')(value)
+                      }
+                    />
+                    {touched.secteurActivite && errors.secteurActivite && (
+                      <Text style={styles.error}>{errors.secteurActivite}</Text>
+                    )}
+                  </>
+                )}
+              {step === 18 && ( // num cin
+                <>
+                  <InputTitle title="Saisissez votre numéro Carte d'Identité Nationale" />
+
+                  <CustomTextInput
+                    mode="flat"
+                    name="cin"
+                    placeholder="Votre numéro Carte d'Identité Nationale"
+                    keyboardType="phone-pad"
+                  />
+                </>
+              )}
+              {step === 19 && ( // date de delivration
+                <>
+                  <DatePickerInput
+                    title="Sélectionnez la date de délivrance de votre CIN"
+                    name="date de délivration CIN"
+                    field="dateDelivrationCin"
+                    placeholder="date de délivrance de votre CINe"
+                    value={values.dateDelivrationCin}
+                    handleChange={field => value => {
+                      const event = {
+                        target: {
+                          name: field,
+                          value,
+                        },
+                      };
+                      handleChange(event);
+                    }}
+                  />
+                  {touched.dateDelivrationCin && errors.dateDelivrationCin && (
+                    <Text style={styles.error}>
+                      {errors.dateDelivrationCin}
+                    </Text>
                   )}
-                />
-              ) : (
-                <CustomButton
-                  onPress={() => {
-                    console.log('VALUES:', values);
-                    console.log('ERRORS', errors);
-                    handleSubmit();
-                  }}
-                  text="Valider"
-                />
+                </>
               )}
+              {step === 20 && ( // cin recto
+                <>
+                  <ImagePicker
+                    name="CIN recto"
+                    title="Veuillez prendre en photo le recto de votre CIN ou l'importer"
+                    selectedImage={selectedCinRectoImage}
+                    setSelectedImage={setSelectedCinRectoImage}
+                    handleChange={(uri: string | undefined) =>
+                      setFieldValue('cinRecto', uri)
+                    }
+                    field="cinRecto"
+                  />
+                  {touched.cinRecto && errors.cinRecto && (
+                    <Text style={styles.error}>{errors.cinRecto}</Text>
+                  )}
+                </>
+              )}
+              {step === 21 && ( // cin verso
+                <>
+                  <ImagePicker
+                    name="CIN verso"
+                    title="Veuillez prendre en photo le verso de votre CIN ou l'importer"
+                    selectedImage={selectedCinVersoImage}
+                    setSelectedImage={setSelectedCinVersoImage}
+                    handleChange={(uri: string | undefined) =>
+                      setFieldValue('cinVerso', uri)
+                    }
+                    field="cinVerso"
+                  />
+                  {touched.cinVerso && errors.cinVerso && (
+                    <Text style={styles.error}>{errors.cinVerso}</Text>
+                  )}
+                </>
+              )}
+              {step === 22 && ( // selfie
+                <>
+                  <ImagePicker
+                    name="Selfie"
+                    title="Prenez ou importez votre photo"
+                    selectedImage={selectedSelfieImage}
+                    setSelectedImage={setSelectedSelfieImage}
+                    handleChange={(uri: string | undefined) =>
+                      setFieldValue('selfie', uri)
+                    }
+                    field="selfie"
+                  />
+                  {touched.selfie && errors.selfie && (
+                    <Text style={styles.error}>{errors.selfie}</Text>
+                  )}
+                </>
+              )}
+              {step === 23 && ( // password
+                <>
+                  <InputTitle title="Choisissez un mot de passe et confirmez-le, s'il vous plaît." />
+                  <CustomTextInput
+                    mode="flat"
+                    name="password"
+                    placeholder="Choisissez un mot de passe"
+                    secureTextEntry={true}
+                  />
+                  <CustomTextInput
+                    mode="flat"
+                    name="passwordConfirm"
+                    placeholder="Confirmez votre mot de passe"
+                    secureTextEntry={true}
+                  />
+                </>
+              )}
+              {step === 24 && ( // confirmation
+                <>
+                  <CustomSwitch
+                    value={values.hasAmericanityIndex}
+                    onValueChange={value => {
+                      setFieldValue('hasAmericanityIndex', value);
+                    }}
+                    text="Je confirme que je n'ai pas d'indice d'américanité."
+                  />
+
+                  <CustomSwitch
+                    value={values.hasOtherBank}
+                    onValueChange={value => {
+                      setFieldValue('hasOtherBank', value);
+                    }}
+                    text=" Je suis client dans une autre banque"
+                  />
+
+                  <View style={styles.switchContainer}>
+                    <Switch
+                      value={values.hasConfirmedForPersonalData}
+                      onValueChange={value => {
+                        setFieldValue('hasConfirmedForPersonalData', value);
+                      }}
+                      accessible={true}
+                      accessibilityRole="switch"
+                      accessibilityLabel="J'accepte les mentions légales relatives à la protection des données personnelles."
+                      accessibilityState={{
+                        checked: values.hasConfirmedForPersonalData,
+                      }}
+                    />
+                    <Text style={styles.confirmationText}>
+                      J'accepte les{' '}
+                      <TouchableOpacity
+                        onPress={() =>
+                          Linking.openURL(
+                            'https://www.webank.com.tn/fr/mentions-legales',
+                          )
+                        }>
+                        <Text style={styles.linkText}>
+                          mentions légales relatives à la protection des données
+                          personnelles.
+                        </Text>
+                      </TouchableOpacity>{' '}
+                    </Text>
+                  </View>
+                  {touched.hasAmericanityIndex &&
+                    errors.hasAmericanityIndex && (
+                      <Text style={styles.error}>
+                        <Text>{errors.hasAmericanityIndex}</Text>
+                      </Text>
+                    )}
+                  {touched.hasConfirmedForPersonalData &&
+                    errors.hasConfirmedForPersonalData && (
+                      <Text style={styles.error}>
+                        {errors.hasConfirmedForPersonalData}
+                      </Text>
+                    )}
+                </>
+              )}
+              <View style={styles.prevNextButtonsContainer}>
+                {step > 1 && (
+                  <CustomButton onPress={handlePrevious} text="Précédent" />
+                )}
+                {step < 24 ? (
+                  <CustomButton
+                    onPress={() => {
+                      handleNext();
+                    }}
+                    text="Suivant"
+                    values={values}
+                    errors={errors}
+                    getFieldName={getFieldName}
+                    step={step}
+                    // disabled={getFieldName(step).some(
+                    //   fieldName =>
+                    //     values[fieldName] === '' || !!errors[fieldName],
+                    // )}
+                  />
+                ) : (
+                  <CustomButton
+                    onPress={() => {
+                      console.log('VALUES:', values);
+                      console.log('ERRORS', errors);
+                      handleSubmit();
+                    }}
+                    text="Valider"
+                  />
+                )}
+              </View>
             </View>
-          </View>
-        </>
-      )}
-    </Formik>
+          </>
+        )}
+      </Formik>
     </KeyboardAwareScrollView>
   );
 };

@@ -15,6 +15,7 @@ import React from 'react';
 import TextInput from '../../components/TextInput';
 import AuthButton from '../../components/AuthButton';
 import InputTitle from '../../components/InputTitle';
+import NavigationLink from '../../components/NavigationLink';
 
 // redux
 import {useDispatch, useSelector} from 'react-redux';
@@ -57,11 +58,6 @@ const SignIn = ({navigation}: SignInProps) => {
 
   const colors = tokens(mode); // get the color palette based on the mode
   const dispatch = useDispatch();
-
-  const validationSchema = yup.object().shape({
-    email: yup.string().email('invalid email').required('required'),
-    password: yup.string().required('required'),
-  });
 
   type FormValues = {
     email: string;
@@ -116,22 +112,12 @@ const SignIn = ({navigation}: SignInProps) => {
       alignItems: 'center',
       justifyContent: 'center',
     },
-    linkText: {
-      color: colors.main.buttonColor,
-      fontSize: 15,
-      fontWeight: 'bold',
-      margin: 10,
-    },
+
     linksWrapper: {
       alignItems: 'center',
       justifyContent: 'center',
       marginTop: 20,
       gap: 20,
-    },
-    textNotLinked: {
-      color: mode == 'dark' ? 'white' : 'black',
-      fontSize: 15,
-      fontWeight: 'bold',
     },
   });
 
@@ -183,21 +169,32 @@ const SignIn = ({navigation}: SignInProps) => {
                   />
                 </View>
 
-                <AuthButton handleSubmit={handleSubmit} label="Envoyer" />
+                <AuthButton
+                  handleSubmit={handleSubmit}
+                  label="Envoyer"
+                  accessibilityHint={
+                    Object.keys(errors).length === 0
+                      ? !touched.email && !touched.password
+                        ? 'Vous devez entrer des données'
+                        : 'Vos informations sont valides. Bienvenue !'
+                      : 'Veuillez vérifier vos saisies'
+                  }
+                />
               </>
             )}
           </Formik>
           <View style={styles.linksWrapper}>
-            <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-              <Text style={styles.textNotLinked}>
-                Vous n'avez pas de compte ?{' '}
-                <Text style={styles.linkText}>Inscrivez-vous</Text>{' '}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('ForgotPassword')}>
-              <Text style={styles.linkText}>Mot de passe oublié ?</Text>
-            </TouchableOpacity>
+            <NavigationLink
+              navigation={navigation}
+              navigationTarget="SignUp"
+              text="Vous n'avez pas de compte ?"
+              linkText="Inscrivez-vous"
+            />
+            <NavigationLink
+              navigation={navigation}
+              navigationTarget="ForgotPassword"
+              linkText="Mot de passe oublié ?"
+            />
           </View>
         </View>
       </KeyboardAwareScrollView>

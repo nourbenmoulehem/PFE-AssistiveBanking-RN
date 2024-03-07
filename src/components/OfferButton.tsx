@@ -1,20 +1,18 @@
 import React from 'react';
-import { TouchableOpacity, Text, ViewStyle,StyleSheet } from 'react-native';
+import {TouchableOpacity, Text, ViewStyle, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 // redux
-import { useSelector } from 'react-redux';
-import { RootState } from '../context/store';
-import { tokens } from '../assets/palette';
+import {useSelector} from 'react-redux';
+import {RootState} from '../context/store';
+import {tokens} from '../assets/palette';
 
 interface OfferButtonProps {
   offer: 'WeStart' | 'WeTrust' | undefined;
   checkedGender: 'WeStart' | 'WeTrust' | undefined;
   handleChange: (field: string) => (value: string | undefined) => void;
   setCheckedOffer: (offer: 'WeStart' | 'WeTrust' | undefined) => void;
-  setOffreChanged: (changed: boolean) => void; 
+  setOffreChanged: (changed: boolean) => void;
 }
-
-
 
 const OfferButton: React.FC<OfferButtonProps> = ({
   offer,
@@ -53,28 +51,38 @@ const OfferButton: React.FC<OfferButtonProps> = ({
     },
   });
 
-  return(
-  <TouchableOpacity
-    onPress={() => {
-      handleChange('offer')(offer);
-      setCheckedOffer(offer);
-      setOffreChanged(true);
-      console.log("🚀 ~ offer:", offer)
-    }}
-    style={
-      
-      checkedGender === offer
-        ? styles.checkedButton
-        : styles.uncheckedButton
-    }
-  >
-    {/* <Icon
+  return (
+    <TouchableOpacity
+      onPressIn={() => {
+        handleChange('offer')(offer);
+        setCheckedOffer(offer);
+        setOffreChanged(true);
+        console.log('🚀 ~ offer:', offer);
+      }}
+      style={
+        checkedGender === offer ? styles.checkedButton : styles.uncheckedButton
+      }
+      accessible={true}
+      accessibilityRole="button"
+      accessibilityLabel={
+        offer === 'WeStart' ? 'Bouton Offre WeStart' : 'Bouton Offre WeTrust'
+      }
+      accessibilityState={{selected: checkedGender === offer}}
+      accessibilityHint={
+        offer === 'WeStart'
+          ? 'Sélectionnez pour choisir WeStart'
+          : 'Sélectionnez pour choisir WeTrust'
+      }>
+      {/* <Icon
       name={gender === "WeTrust" ? "gender-WeTrust" : "gender-male"}
       size={35}
       color="white"
     /> */}
-    <Text style={styles.TextButton} >{offer === 'WeStart' ? 'WeStart' : 'WeTrust'}</Text>
-  </TouchableOpacity>
-);}
+      <Text style={styles.TextButton}>
+        {offer === 'WeStart' ? 'WeStart' : 'WeTrust'}
+      </Text>
+    </TouchableOpacity>
+  );
+};
 
 export default OfferButton;

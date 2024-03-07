@@ -34,14 +34,13 @@ const initialValues = {
   cin: '',
   birthday: '',
   cardNumber: '',
+  phoneNumber: '',
 };
 
 const ForgotPassword = () => {
   const {mode} = useSelector((state: RootState) => state.global);
 
   const colors = tokens(mode);
-
-  
 
   const styles = StyleSheet.create({
     contentContainer: {
@@ -52,7 +51,6 @@ const ForgotPassword = () => {
       backgroundColor: colors.main.backgroundColor,
       alignItems: 'center',
       justifyContent: 'center',
-      
     },
     title: {
       fontSize: 20,
@@ -63,76 +61,89 @@ const ForgotPassword = () => {
   //behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
   return (
     <View style={{flex: 1, margin: 0, padding: 0}}>
-      
-
-    <KeyboardAwareScrollView
-      enableOnAndroid={true}
-      style={{flex: 1}}
-      contentContainerStyle={{flexGrow: 1, padding: 20, backgroundColor: colors.main.backgroundColor}}
-      
-      >
-        <InputTitle title="Mot de passe oublié ?" />
-      <Formik
-        initialValues={initialValues}
-        validationSchema={checkoutSchema}
-        validateOnChange={true}
-        style={styles.container}
-        onSubmit={values => {
-          console.log(values);
+      <KeyboardAwareScrollView
+        enableOnAndroid={true}
+        style={{flex: 1}}
+        contentContainerStyle={{
+          flexGrow: 1,
+          padding: 20,
+          backgroundColor: colors.main.backgroundColor,
         }}>
-        {({
-          values,
-          errors,
-          touched,
-          isValid,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          handleReset,
-          isSubmitting,
-          setFieldValue,
-          /* and other goodies */
-        }) => (
-          <>
-            <View style={styles.container}>
-              <TextInput
-                name="email"
-                placeholder="Adresse e-mail"
-                keyboardType="email-address"
-                showLabel
-              />
-              <TextInput
-                name="birthday"
-                placeholder="Votre date de naissance"
-                keyboardType="number-pad"
-                showLabel
-              />
-              <TextInput 
-                name="cin" 
-                placeholder="CIN" 
-                keyboardType="numeric" 
-                showLabel 
-              />
-              <TextInput
-                name="phoneNumber"
-                placeholder="Numéro de téléphone"
-                keyboardType="numeric"
-                showLabel
-              />
-              <TextInput
-                name="cardNumber"
-                placeholder="4 derniers chiffres de carte"
-                keyboardType="numeric"
-                showLabel
-              />
-              <AuthButton handleSubmit={handleSubmit} label="Envoyer" />
-            </View>
-            
-          </>
-        )}
-      </Formik>
-    </KeyboardAwareScrollView>
-    </View> 
+        <InputTitle title="Mot de passe oublié ?" />
+        <Formik
+          initialValues={initialValues}
+          validationSchema={checkoutSchema}
+          validateOnChange={true}
+          style={styles.container}
+          onSubmit={values => {
+            console.log(values);
+          }}>
+          {({
+            values,
+            errors,
+            touched,
+            isValid,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            handleReset,
+            isSubmitting,
+            setFieldValue,
+            /* and other goodies */
+          }) => (
+            <>
+              <View style={styles.container}>
+                <TextInput
+                  name="email"
+                  placeholder="Adresse e-mail"
+                  keyboardType="email-address"
+                  showLabel
+                />
+                <TextInput
+                  name="birthday"
+                  placeholder="Votre date de naissance"
+                  keyboardType="number-pad"
+                  showLabel
+                />
+                <TextInput
+                  name="cin"
+                  placeholder="CIN"
+                  keyboardType="numeric"
+                  showLabel
+                />
+                <TextInput
+                  name="phoneNumber"
+                  placeholder="Numéro de téléphone"
+                  keyboardType="numeric"
+                  showLabel
+                />
+                <TextInput
+                  name="cardNumber"
+                  placeholder="4 derniers chiffres de carte"
+                  keyboardType="numeric"
+                  showLabel
+                />
+                <AuthButton
+                  handleSubmit={handleSubmit}
+                  label="Envoyer"
+                  accessibilityHint={
+                    Object.keys(errors).length === 0
+                      ? !touched.email &&
+                        !touched.birthday &&
+                        !touched.cin &&
+                        !touched.phoneNumber &&
+                        !touched.cardNumber
+                        ? 'Vous devez entrer des données'
+                        : 'Vos informations sont valides. Vous pouvez réinitialiser votre mot de passe'
+                      : 'Veuillez vérifier vos saisies'
+                  }
+                />
+              </View>
+            </>
+          )}
+        </Formik>
+      </KeyboardAwareScrollView>
+    </View>
   );
 };
 
@@ -172,5 +183,8 @@ const checkoutSchema = yup.object().shape({
     .string()
     .matches(phoneRegExp, 'Numéro de téléphone invalide')
     .required('Ce champ est obligatoire'),
-  cardNumber: yup.string().matches(lastFourDigitRegExp, 'Dernier 4 chiffres de votre carte.').required('Ce champ est obligatoire'),
+  cardNumber: yup
+    .string()
+    .matches(lastFourDigitRegExp, 'Dernier 4 chiffres de votre carte.')
+    .required('Ce champ est obligatoire'),
 });
