@@ -10,7 +10,11 @@ import {
   ScrollView,
 } from 'react-native';
 import React from 'react';
-import {TextInput, HelperText} from 'react-native-paper';
+
+// components
+import TextInput from '../../components/TextInput';
+import AuthButton from '../../components/AuthButton';
+import InputTitle from '../../components/InputTitle';
 
 // redux
 import {useDispatch, useSelector} from 'react-redux';
@@ -28,30 +32,29 @@ import {RootStackParamList} from '../../../App';
 // forms
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import {loginSchema} from '../../constants/yupValidations';
 
 // axios
 import axios from 'axios';
-axios.defaults.withCredentials = true;
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-const loginSchema = yup.object().shape({
-  email: yup.string().email('invalid email').required('required'), //validate for an email
-  password: yup.string().required('required'),
-});
+axios.defaults.withCredentials = true;
 
 //type safety
 type SignInProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
 const SignIn = ({navigation}: SignInProps) => {
-  const {isLoggedIn, mode, user} = useSelector((state: RootState) => state.global);
+  const {isLoggedIn, mode, user} = useSelector(
+    (state: RootState) => state.global,
+  );
 
   // testing purposes, need to be deleted later
   const getCredentials = async () => {
     const credentials = await Keychain.getGenericPassword();
-    
   };
   getCredentials();
   // testing purposes, need to be deleted later
-  
+
   const colors = tokens(mode); // get the color palette based on the mode
   const dispatch = useDispatch();
 
@@ -75,12 +78,20 @@ const SignIn = ({navigation}: SignInProps) => {
         data: values,
       });
 
-      await Keychain.setGenericPassword('accessToken', response.data.access_token, { service: 'accessService' });
+      await Keychain.setGenericPassword(
+        'accessToken',
+        response.data.access_token,
+        {service: 'accessService'},
+      );
 
-      await Keychain.setGenericPassword('refreshToken', response.data.refresh_token, { service: 'refreshService' });
+      await Keychain.setGenericPassword(
+        'refreshToken',
+        response.data.refresh_token,
+        {service: 'refreshService'},
+      );
       const credentials = await Keychain.getGenericPassword();
       if (credentials) {
-        dispatch(setLogin({name: "mohamed"}));
+        dispatch(setLogin({name: 'mohamed'}));
       }
     } catch (error) {
       console.log(error);
@@ -93,7 +104,6 @@ const SignIn = ({navigation}: SignInProps) => {
   };
 
   const styles = StyleSheet.create({
-      
     // stylesheet is put inside the component because it's tracking the mode
     container: {
       backgroundColor: colors.main.backgroundColor,
@@ -101,34 +111,10 @@ const SignIn = ({navigation}: SignInProps) => {
       justifyContent: 'center',
       alignItems: 'center',
     },
-    submitButton: {
-      backgroundColor: colors.main.buttonColor,
-      padding: 10,
-      margin: 30,
-      height: 60,
-      width: 275,
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: 12,
-    },
-    TextButton: {
-      color: colors.main.backgroundColor,
-      fontSize: 20,
-      fontWeight: 'bold',
-    },
-    inputWrapper: {
-      width: 340,
-      marginBottom: 20,
-    },
+
     inputFieldsWrapper: {
       alignItems: 'center',
       justifyContent: 'center',
-    },
-    contentStyle: {
-      backgroundColor: 'white',
-    },
-    outlineStyle: {
-      borderColor: colors.main.buttonColor,
     },
     linkText: {
       color: colors.main.buttonColor,
@@ -150,105 +136,72 @@ const SignIn = ({navigation}: SignInProps) => {
   });
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <Formik
-          initialValues={initialValuesLogin}
-          validationSchema={validationSchema} // we're using yup
-          onSubmit={values => {
-            authenticate(values);
-          }}>
-          {({
-            values, // where we're getting all the value of the input fields
-            errors,
-            touched,
-            isValid,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            handleReset,
-            isSubmitting,
-            /* and other goodies */
-          }) => (
-            <>
-              <View style={styles.inputFieldsWrapper}>
-                <View style={styles.inputWrapper}>
-                  <KeyboardAvoidingView behavior="padding">
-                    <TextInput
-                      mode="flat"
-                      // label="email"
-                      onChangeText={handleChange('email')}
-                      onBlur={handleBlur('email')}
-                      placeholder="email"
-                      value={values.email}
-                      keyboardType="email-address"
-                      contentStyle={styles.contentStyle}
-                      outlineStyle={styles.outlineStyle}
-                    />
-                  </KeyboardAvoidingView>
-                  {touched.email && errors.email && (
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: 'red',
-                        marginTop: 10,
-                        marginRight: 30,
-                      }}>
-                      {errors.email}
-                    </Text>
-                  )}
+    <View style={{flex: 1, margin: 0, padding: 0}}>
+      <KeyboardAwareScrollView
+        enableOnAndroid={true}
+        style={{flex: 1}}
+        contentContainerStyle={{
+          flexGrow: 1,
+          padding: 20,
+          backgroundColor: colors.main.backgroundColor,
+        }}>
+        <View style={styles.container}>
+          <InputTitle title="S'authentifier" />
+          <Formik
+            initialValues={initialValuesLogin}
+            validationSchema={loginSchema} // we're using yup
+            onSubmit={values => {
+              authenticate(values);
+            }}>
+            {({
+              values, // where we're getting all the value of the input fields
+              errors,
+              touched,
+              isValid,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              handleReset,
+              isSubmitting,
+              /* and other goodies */
+            }) => (
+              <>
+                <View style={styles.inputFieldsWrapper}>
+                  <TextInput
+                    name="email"
+                    placeholder="Adresse e-mail"
+                    keyboardType="email-address"
+                    showLabel
+                  />
+
+                  <TextInput
+                    mode="flat"
+                    name="password"
+                    placeholder="Choisissez un mot de passe"
+                    showLabel
+                    secureTextEntry={true}
+                  />
                 </View>
 
-                <View style={styles.inputWrapper}>
-                  <KeyboardAvoidingView behavior="position">
-                    <TextInput
-                      mode="flat"
-                      // label="Password"
-                      onChangeText={handleChange('password')} // to tell that we're changing the value of password
-                      secureTextEntry
-                      onChange={() => handleChange('password')}
-                      placeholder="password"
-                      onBlur={handleBlur('password')}
-                      value={values.password}
-                      contentStyle={styles.contentStyle}
-                      outlineStyle={styles.outlineStyle}
-                      outlineColor={colors.main.buttonColor}
-                    />
-                  </KeyboardAvoidingView>
-
-                  {touched.password && errors.password && (
-                    <Text style={{fontSize: 15, color: 'red', marginTop: 10}}>
-                      {errors.password}
-                    </Text>
-                  )}
-                </View>
-              </View>
-
-              <TouchableOpacity
-                style={styles.submitButton}
-                // disabled={!isValid || isSubmitting}
-                onPress={() => {
-                  handleSubmit();
-                }} // handlesubmit will collect all the values and send it to onSubmit itself
-              >
-                <Text style={styles.TextButton}>Connexion</Text>
-              </TouchableOpacity>
-            </>
-          )}
-        </Formik>
-      </View>
-      <View style={styles.linksWrapper}>
-        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-          <Text style={styles.textNotLinked}>
-            Vous n'avez pas de compte ?{' '}
-            <Text style={styles.linkText}>Inscrivez-vous</Text>{' '}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-          <Text style={styles.linkText}>Mot de passe oublié ?</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+                <AuthButton handleSubmit={handleSubmit} label="Envoyer" />
+              </>
+            )}
+          </Formik>
+          <View style={styles.linksWrapper}>
+            <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+              <Text style={styles.textNotLinked}>
+                Vous n'avez pas de compte ?{' '}
+                <Text style={styles.linkText}>Inscrivez-vous</Text>{' '}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ForgotPassword')}>
+              <Text style={styles.linkText}>Mot de passe oublié ?</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </KeyboardAwareScrollView>
+    </View>
   );
 };
 
