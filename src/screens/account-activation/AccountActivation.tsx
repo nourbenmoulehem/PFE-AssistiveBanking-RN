@@ -19,7 +19,6 @@ const AccountActivation = () => {
   const route = useRoute();
   const {activationToken} = route.params as {activationToken?: string};
 
-  console.log('🚀 ~ AccountActivation ~ token:', activationToken);
 
   const styles = StyleSheet.create({
     container: {
