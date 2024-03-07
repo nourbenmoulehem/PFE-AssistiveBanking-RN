@@ -15,6 +15,7 @@ import ForgotPassword from '../screens/forgot-password/ForgotPassword';
 import AccountActivation from '../screens/account-activation/AccountActivation';
 import Home from '../screens/home/Home';
 import Transactions from '../screens/transactions/Transactions';
+import NewPassword from '../screens/new-password/NewPassword';
 
 // Redux
 import {useDispatch, useSelector} from 'react-redux';
@@ -32,6 +33,7 @@ export type RootStackParamList = {
   MultiStepForm: undefined;
   AccountActivation: undefined;
   Transactions: undefined;
+  NewPassword: undefined;
   // Profile: { userId: string };
 };
 
@@ -169,16 +171,15 @@ const MainStack = () => {
               title: 'Transactions',
             }}
           />
+          
         </>
       ) : (
         <>
           <stack.Screen name="SignIn" component={SignIn} />
           <stack.Screen name="SignUp" component={SignUp} />
           <stack.Screen name="ForgotPassword" component={ForgotPassword} />
-          <stack.Screen
-            name="AccountActivation"
-            component={AccountActivation}
-          />
+          <stack.Screen name="AccountActivation" component={AccountActivation} />
+          <stack.Screen name="NewPassword" component={NewPassword} />
         </>
       )}
     </stack.Navigator>
