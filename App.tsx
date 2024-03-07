@@ -32,6 +32,7 @@ export type RootStackParamList = {
   ForgotPassword: undefined;
   MultiStepForm: undefined;
   AccountActivation: undefined;
+  NewPassword: undefined;
 };
 
 export type RootStackParamListSignedIn = {
@@ -53,6 +54,9 @@ const linking: LinkingOptions<RootStackParamList> = {
       },
       AccountActivation: {
         path: 'account-activation/:activationtoken' // it worked like this and it didnt work with the token in the query account-activation?token
+      },
+      NewPassword: {
+        path: 'create-new-password/:token' 
       }
     }
   }
