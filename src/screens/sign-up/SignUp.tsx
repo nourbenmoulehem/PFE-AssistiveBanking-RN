@@ -122,7 +122,7 @@ const SignUp = () => {
     hasAmericanityIndex: false,
     hasOtherBank: false,
     hasConfirmedForPersonalData: false,
-    agence: '',
+    // agence: '',
   };
 
   axios.defaults.withCredentials = true;
@@ -132,8 +132,30 @@ const SignUp = () => {
 
     const res = await axios
       .post(
-        `${process.env.API_BASE_URL}/api/v1/auth/register`,
-        {values},
+        `http://192.168.1.7:5001/api/v1/auth/register`,
+          {email: values.email,
+          password: values.password,
+          cin: values.cin,
+          offer: values.offer,
+          dateDelivrationCin: values.dateDelivrationCin,
+          cinRecto: values.cinRecto,
+          cinVerso: values.cinVerso,
+          selfie: values.selfie,
+          firstName: values.firstName,
+          lastName: values.lastName,
+          phoneNumber: values.phoneNumber,
+          gender: values.gender,
+          birthday: values.birthday,
+          nationality: values.nationality,
+          statusCivil: values.statusCivil,
+          nombre_enfant: values.nombre_enfant,
+          socio_professional: values.socio_professional,
+          secteurActivite: values.secteurActivite,
+          natureActivite: values.natureActivite,
+          revenu: values.revenu,
+          codePostal:values.codePostal,
+          gouvernorat: values.gouvernorat,
+        },
         {
           headers: {
             'Content-type': 'application/json',
@@ -145,9 +167,14 @@ const SignUp = () => {
         setRegistration(
           "L'inscription a échoué, veuillez réessayer plus tard ❌",
         );
-        setMessage(err.response.data);
+        console.log(res);
+        
+        // setMessage(err.response);
         setVisible(true);
       });
+      console.log("res:");
+      
+    console.log("🚀 ~ register ~ res:", res)
 
     if (res && res.data) {
       // Handle successful response here
@@ -186,7 +213,7 @@ const SignUp = () => {
     passwordConfirm: string;
     phoneNumberConfirm: string;
     emailConfirm: string;
-    agence: string;
+    // agence: string;
   };
 
   const getStep = <T extends keyof Steps>(stepNumber: number): T[] => {
@@ -823,10 +850,10 @@ const SignUp = () => {
                     errors={errors}
                     getFieldName={getFieldName}
                     step={step}
-                    // disabled={getFieldName(step).some(
-                    //   fieldName =>
-                    //     values[fieldName] === '' || !!errors[fieldName],
-                    // )}
+                    disabled={getFieldName(step).some(
+                      fieldName =>
+                        values[fieldName] === '' || !!errors[fieldName],
+                    )}
                   />
                 ) : (
                   <CustomButton

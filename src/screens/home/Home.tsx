@@ -26,22 +26,22 @@ const Home = ({navigation}: HomeProps) => {
   
   const [clientDetails, setClientDetails] = useState<Object>({});
 
-  useEffect(() => {
-    getClientDetails();
-  }, []);
+  // useEffect(() => {
+  //   getClientDetails();
+  // }, []);
 
-  const getClientDetails = async () => {
-    const api = await getApi();
-    if (api) {
-      let response = await api.get('/api/v1/client/get-by-cin?cin=123456789');
-      console.log('🚀 ~ getClientDetails ~ response.data:', response.data);
-      if (response.status === 200) {
-        setClientDetails(response.data);
-      }
-    } else {
-      // Handle the case where there is no API (e.g., show an error message)
-    }
-  };
+  // const getClientDetails = async () => {
+  //   const api = await getApi();
+  //   if (api) {
+  //     let response = await api.get('/api/v1/client/get-by-cin?cin=123456789');
+  //     console.log('🚀 ~ getClientDetails ~ response.data:', response.data);
+  //     if (response.status === 200) {
+  //       setClientDetails(response.data);
+  //     }
+  //   } else {
+  //     // Handle the case where there is no API (e.g., show an error message)
+  //   }
+  // };
 
   return (
     <View>

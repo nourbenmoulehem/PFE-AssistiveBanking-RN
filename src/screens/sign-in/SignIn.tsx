@@ -69,16 +69,19 @@ const SignIn = ({navigation}: SignInProps) => {
   };
 
   const authenticate = async (values: FormValues) => {
+    console.log("hello");
+    
     try {
       const response = await axios({
         method: 'post',
-        url: `${process.env.API_BASE_URL}/api/v1/auth/authenticate`,
+        url: `http://192.168.1.7:5001/api/v1/auth/authenticate`,
         withCredentials: true,
         responseType: 'json',
         data: values,
       });
-
+      console.log("🚀 ~ authenticate ~ response:", response)
       await Keychain.setGenericPassword(
+        
         'accessToken',
         response.data.access_token,
         {service: 'accessService'},
@@ -94,6 +97,8 @@ const SignIn = ({navigation}: SignInProps) => {
         dispatch(setLogin({name: 'mohamed'}));
       }
     } catch (error: any) {
+      console.log('error');
+      
       console.log(error);
       setMessage(error.response.data);
       setVisible(true);
