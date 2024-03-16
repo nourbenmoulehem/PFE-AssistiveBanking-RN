@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Image,
   Linking,
+  ActivityIndicator,
 } from 'react-native';
 import {TextInput, Switch, HelperText} from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -86,6 +87,8 @@ const SignUp = () => {
 
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [isRedirectSignIn, setIsRedirectSignIn] = useState('false')
 
   const initialValues = {
     firstName: '',
@@ -128,11 +131,12 @@ const SignUp = () => {
   axios.defaults.withCredentials = true;
 
   const register = async (values: Steps) => {
-    console.log('🚀 ~ file: Form.jsx:71 ~ register ~ values', values);
-
-    const res = await axios
+    setVisible(true);
+    setLoading(true);
+    let res:any;
+     res = await axios
       .post(
-        `http://192.168.1.7:5001/api/v1/auth/register`,
+        `${process.env.API_BASE_URL}/api/v1/auth/register`,
           {email: values.email,
           password: values.password,
           cin: values.cin,
@@ -163,24 +167,26 @@ const SignUp = () => {
         },
       )
       .catch(err => {
-        console.log('Error message:', err.message);
-        setRegistration(
-          "L'inscription a échoué, veuillez réessayer plus tard ❌",
-        );
-        console.log(res);
-        
-        // setMessage(err.response);
+        setLoading(false);
+        // setRegistration(
+        //   "L'inscription a échoué, veuillez réessayer plus tard ❌",
+        // );
+        console.log("res", res);
+        console.log(err);
+        console.log("Server response:", err.response.data);
+        setMessage(err.response.data);
         setVisible(true);
-      });
-      console.log("res:");
-      
-    console.log("🚀 ~ register ~ res:", res)
+      })
+      // .finally(() => {
+      //   setLoading(false);
+      // });
 
     if (res && res.data) {
-      // Handle successful response here
+      console.log("res && res.data");
+      setLoading(false);
       const data = res.data;
-      console.log('Registration successful:', data);
-      setRegistration('Inscription réussie, veuillez vérifier votre email ✅');
+      setMessage(data);
+      setIsRedirectSignIn('true');
       return res;
     }
   };
@@ -340,7 +346,8 @@ const SignUp = () => {
         padding: 20,
         backgroundColor: colors.main.backgroundColor,
       }}>
-      <Formik
+
+        <Formik
         initialValues={initialValues}
         validationSchema={signUpSchema} // we're using yup
         onSubmit={values => {
@@ -870,7 +877,9 @@ const SignUp = () => {
           </>
         )}
       </Formik>
-      <Modal visible={visible} error={message} onClose={onClose}/>
+      
+      <Modal visible={visible} isRedirectSignIn isLoading={loading} error={message} onClose={onClose}/>
+      
     </KeyboardAwareScrollView>
   );
 };
