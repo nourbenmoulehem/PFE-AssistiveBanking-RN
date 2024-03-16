@@ -8,6 +8,7 @@ import {
   TextInput as NativeTextInput,
   KeyboardAvoidingView,
   ScrollView,
+  ActivityIndicator
 } from 'react-native';
 import React, { useState } from 'react';
 
@@ -69,12 +70,10 @@ const SignIn = ({navigation}: SignInProps) => {
   };
 
   const authenticate = async (values: FormValues) => {
-    console.log("hello");
-    
     try {
       const response = await axios({
         method: 'post',
-        url: `http://192.168.1.7:5001/api/v1/auth/authenticate`,
+        url: `${process.env.API_BASE_URL}/api/v1/auth/authenticate`,
         withCredentials: true,
         responseType: 'json',
         data: values,
@@ -92,16 +91,18 @@ const SignIn = ({navigation}: SignInProps) => {
         response.data.refresh_token,
         {service: 'refreshService'},
       );
-      const credentials = await Keychain.getGenericPassword();
-      if (credentials) {
+      const accessCredentials = await Keychain.getGenericPassword({ service: 'accessService' });
+      const refreshCredentials = await Keychain.getGenericPassword({ service: 'refreshService' });
+
+      if (accessCredentials && refreshCredentials) {
         dispatch(setLogin({name: 'mohamed'}));
       }
     } catch (error: any) {
       console.log('error');
-      
+      setVisible(true);
       console.log(error);
       setMessage(error.response.data);
-      setVisible(true);
+      
     }
   };
 
