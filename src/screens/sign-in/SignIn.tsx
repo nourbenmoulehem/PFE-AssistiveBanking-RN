@@ -76,7 +76,10 @@ const SignIn = ({navigation}: SignInProps) => {
         url: `${process.env.API_BASE_URL}/api/v1/auth/authenticate`,
         withCredentials: true,
         responseType: 'json',
-        data: values,
+        data: {
+          email: values.email.toLowerCase(), // we're making sure the email is lowercase
+          password: values.password,
+        },
       });
       await Keychain.setGenericPassword(
         'accessToken',

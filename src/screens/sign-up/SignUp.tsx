@@ -57,14 +57,11 @@ import axios from 'axios';
 import PickerInput from '../../components/PickerInput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-
 // Define a type for your stack's route names
 type RootStackParamList = {
   Home: undefined;
   // Add other routes here
 };
-
-
 
 const SignUp = () => {
   const {mode} = useSelector((state: RootState) => state.global);
@@ -146,7 +143,7 @@ const SignUp = () => {
       .post(
         `${process.env.API_BASE_URL}/api/v1/auth/register`,
         {
-          email: values.email,
+          email: values.email.toLowerCase(),
           password: values.password,
           cin: values.cin,
           offer: values.offer,
