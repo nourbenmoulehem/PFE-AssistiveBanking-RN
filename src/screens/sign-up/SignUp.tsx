@@ -37,6 +37,7 @@ import {
   gouvernoratsOptions,
   nature_activite,
   nationalite,
+  agenceItems
 } from '../../constants/items';
 
 import {signUpSchema} from '../../constants/yupValidations';
@@ -46,6 +47,7 @@ import {Formik} from 'formik';
 
 // navigation
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../../App';
 
 // redux
 import {useSelector} from 'react-redux';
@@ -57,13 +59,9 @@ import axios from 'axios';
 import PickerInput from '../../components/PickerInput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-// Define a type for your stack's route names
-type RootStackParamList = {
-  Home: undefined;
-  // Add other routes here
-};
+type Props = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
-const SignUp = () => {
+const SignUp: React.FC<Props> = ({ navigation }) => {
   const {mode} = useSelector((state: RootState) => state.global);
   const colors = tokens(mode);
 
@@ -93,7 +91,7 @@ const SignUp = () => {
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [isRedirectSignIn, setIsRedirectSignIn] = useState('false');
+  const [isRedirectSignIn, setIsRedirectSignIn] = useState(false);
 
   const initialValues = {
     firstName: '',
@@ -130,7 +128,7 @@ const SignUp = () => {
     hasAmericanityIndex: false,
     hasOtherBank: false,
     hasConfirmedForPersonalData: false,
-    // agence: '',
+    agence: '',
   };
 
   axios.defaults.withCredentials = true;
@@ -165,6 +163,9 @@ const SignUp = () => {
           revenu: values.revenu,
           codePostal: values.codePostal,
           gouvernorat: values.gouvernorat,
+          adresse: values.adresse,
+          agence: values.agence,
+      
         },
         {
           headers: {
@@ -174,6 +175,7 @@ const SignUp = () => {
       )
       .catch(err => {
         setVisible(true);
+        setIsRedirectSignIn(false)
         setLoading(false);
         setMessage(err.response.data);
       });
@@ -185,7 +187,7 @@ const SignUp = () => {
       setLoading(false);
       const data = res.data;
       setMessage(data);
-      setIsRedirectSignIn('true');
+      setIsRedirectSignIn(true);
       return res;
     }
   };
@@ -218,7 +220,7 @@ const SignUp = () => {
     passwordConfirm: string;
     phoneNumberConfirm: string;
     emailConfirm: string;
-    // agence: string;
+    agence: string;
   };
 
   const getStep = <T extends keyof Steps>(stepNumber: number): T[] => {
@@ -236,38 +238,40 @@ const SignUp = () => {
       case 6:
         return ['phoneNumber', 'phoneNumberConfirm'] as T[]; // baaed bch n7ot el agence
       case 7:
-        return ['birthday'] as T[];
+        return ['agence'] as T[];
       case 8:
-        return ['adresse'] as T[];
+        return ['birthday'] as T[];
       case 9:
-        return ['gouvernorat'] as T[];
+        return ['adresse'] as T[];
       case 10:
-        return ['codePostal'] as T[];
+        return ['gouvernorat'] as T[];
       case 11:
-        return ['nationality'] as T[];
+        return ['codePostal'] as T[];
       case 12:
-        return ['statusCivil'] as T[];
+        return ['nationality'] as T[];
       case 13:
-        return ['nombre_enfant'] as T[];
+        return ['statusCivil'] as T[];
       case 14:
-        return ['socio_professional'] as T[];
+        return ['nombre_enfant'] as T[];
       case 15:
-        return ['revenu'] as T[];
+        return ['socio_professional'] as T[];
       case 16:
-        return ['natureActivite'] as T[];
+        return ['revenu'] as T[];
       case 17:
-        return ['secteurActivite'] as T[];
+        return ['natureActivite'] as T[];
       case 18:
-        return ['cin'] as T[];
+        return ['secteurActivite'] as T[];
       case 19:
-        return ['dateDelivrationCin'] as T[];
+        return ['cin'] as T[];
       case 20:
-        return ['cinRecto'] as T[];
+        return ['dateDelivrationCin'] as T[];
       case 21:
-        return ['cinVerso'] as T[];
+        return ['cinRecto'] as T[];
       case 22:
-        return ['selfie'] as T[];
+        return ['cinVerso'] as T[];
       case 23:
+        return ['selfie'] as T[];
+      case 24:
         return ['password', 'confirmPassword'] as T[];
       default:
         return ['secteurActivite'] as T[];
@@ -275,7 +279,7 @@ const SignUp = () => {
   };
 
   const handleNext = () => {
-    if (step === 14 && isEtudiant) {
+    if (step === 15 && isEtudiant) {
       setStep(step + 4);
     } else {
       setStep(step + 1);
@@ -288,7 +292,7 @@ const SignUp = () => {
   };
 
   const handlePrevious = () => {
-    if (step === 18 && isEtudiant) {
+    if (step === 19 && isEtudiant) {
       setStep(step - 4);
     } else {
       setStep(step - 1);
@@ -333,6 +337,8 @@ const SignUp = () => {
       color: 'red',
       marginTop: 10,
       marginRight: 30,
+      textAlign: 'center',
+      fontWeight: 'bold',
     },
   });
 
@@ -494,7 +500,21 @@ const SignUp = () => {
                   />
                 </>
               )}
-              {step === 7 && ( // birthday
+              {step === 7 && ( // AGENCE
+                <>
+                <PickerInput
+                  title="Sélectionnez l'agence la plus proche de vous"
+                  name="Agence"
+                  items={agenceItems}
+                  value={values.agence}
+                  onValueChange={value => handleChange('agence')(value)}
+                />
+                {errors.agence && (
+                  <Text style={styles.error}>{errors.agence}</Text>
+                )}
+              </>
+              )}
+              {step === 8 && ( // birthday
                 <>
                   <DatePickerInput
                     title="Sélectionnez votre date de naissance"
@@ -519,7 +539,7 @@ const SignUp = () => {
                   )}
                 </>
               )}
-              {step === 8 && ( // adresse
+              {step === 9 && ( // adresse
                 <>
                   <InputTitle title="Sélectionnez votre adresse" />
                   <CustomTextInput
@@ -529,7 +549,7 @@ const SignUp = () => {
                   />
                 </>
               )}
-              {step === 9 && ( // gouvernorat
+              {step === 10 && ( // gouvernorat
                 <>
                   <PickerInput
                     title="Gouvernorat"
@@ -543,7 +563,7 @@ const SignUp = () => {
                   )}
                 </>
               )}
-              {step === 10 && ( // code postal
+              {step === 11 && ( // code postal
                 <>
                   <InputTitle title="Sélectionnez votre code postal" />
 
@@ -555,7 +575,7 @@ const SignUp = () => {
                   />
                 </>
               )}
-              {step === 11 && ( // nationalite
+              {step === 12 && ( // nationalite
                 <>
                   <PickerInput
                     name="nationalité"
@@ -569,7 +589,7 @@ const SignUp = () => {
                   )}
                 </>
               )}
-              {step === 12 && ( // status civil
+              {step === 13 && ( // status civil
                 <>
                   <PickerInput
                     name="Status civil"
@@ -583,7 +603,7 @@ const SignUp = () => {
                   )}
                 </>
               )}
-              {step === 13 && ( // nombre d'enfant
+              {step === 14 && ( // nombre d'enfant
                 <>
                   <PickerInput
                     name="Nombre d'enfant"
@@ -599,7 +619,7 @@ const SignUp = () => {
                   )}
                 </>
               )}
-              {step === 14 && ( // socio_professional
+              {step === 15 && ( // socio_professional
                 <>
                   <PickerInput
                     name="Statut socio-professionnel"
@@ -622,7 +642,7 @@ const SignUp = () => {
                   )}
                 </>
               )}
-              {step === 15 &&
+              {step === 16 &&
                 !isEtudiant && ( // revenu_mensuel
                   <>
                     <PickerInput
@@ -638,7 +658,7 @@ const SignUp = () => {
                     )}
                   </>
                 )}
-              {step === 16 &&
+              {step === 17 &&
                 !isEtudiant && ( // natureActivite
                   <>
                     <PickerInput
@@ -655,7 +675,7 @@ const SignUp = () => {
                     )}
                   </>
                 )}
-              {step === 17 &&
+              {step === 18 &&
                 !isEtudiant && ( // secteurActivite
                   <>
                     <PickerInput
@@ -672,7 +692,7 @@ const SignUp = () => {
                     )}
                   </>
                 )}
-              {step === 18 && ( // num cin
+              {step === 19 && ( // num cin
                 <>
                   <InputTitle title="Saisissez votre numéro Carte d'Identité Nationale" />
 
@@ -684,7 +704,7 @@ const SignUp = () => {
                   />
                 </>
               )}
-              {step === 19 && ( // date de delivration
+              {step === 20 && ( // date de delivration
                 <>
                   <DatePickerInput
                     title="Sélectionnez la date de délivrance de votre CIN"
@@ -709,7 +729,7 @@ const SignUp = () => {
                   )}
                 </>
               )}
-              {step === 20 && ( // cin recto
+              {step === 21 && ( // cin recto
                 <>
                   <ImagePicker
                     name="CIN recto"
@@ -726,7 +746,7 @@ const SignUp = () => {
                   )}
                 </>
               )}
-              {step === 21 && ( // cin verso
+              {step === 22 && ( // cin verso
                 <>
                   <ImagePicker
                     name="CIN verso"
@@ -743,7 +763,7 @@ const SignUp = () => {
                   )}
                 </>
               )}
-              {step === 22 && ( // selfie
+              {step === 23 && ( // selfie
                 <>
                   <ImagePicker
                     name="Selfie"
@@ -760,7 +780,7 @@ const SignUp = () => {
                   )}
                 </>
               )}
-              {step === 23 && ( // password
+              {step === 24 && ( // password
                 <>
                   <InputTitle title="Choisissez un mot de passe et confirmez-le, s'il vous plaît." />
                   <CustomTextInput
@@ -777,7 +797,7 @@ const SignUp = () => {
                   />
                 </>
               )}
-              {step === 24 && ( // confirmation
+              {step === 25 && ( // confirmation
                 <>
                   <CustomSwitch
                     value={values.hasAmericanityIndex}
@@ -840,7 +860,7 @@ const SignUp = () => {
                 {step > 1 && (
                   <CustomButton onPress={handlePrevious} text="Précédent" />
                 )}
-                {step < 24 ? (
+                {step < 25 ? (
                   <CustomButton
                     onPress={() => {
                       handleNext();
@@ -873,10 +893,11 @@ const SignUp = () => {
 
       <Modal
         visible={visible}
-        isRedirectSignIn={isRedirectSignIn === 'true'}
+        isRedirectSignIn={isRedirectSignIn}
         isLoading={loading}
         error={message}
         onClose={onClose}
+        navigation={navigation}
       />
     </KeyboardAwareScrollView>
   );
