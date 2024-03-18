@@ -17,7 +17,6 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../context/store';
 import {tokens} from '../assets/palette';
 
-
 interface ErrorModalProps {
   visible: boolean;
   error?: string;
@@ -40,8 +39,6 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
 }) => {
   const {mode} = useSelector((state: RootState) => state.global);
   const colors = tokens(mode);
-
-  console.log(isRedirectSignIn, 'isRedirectSignIn'); // TODO: when isRedirectSignIn is true, redirect to SignIn screen when clicking on the button "Fermer" and modify accessibility label or hint with the appropriate message
 
   const styles = StyleSheet.create({
     modalContainer: {
@@ -80,24 +77,30 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
         onDismiss={onClose}
         contentContainerStyle={styles.modalContainer}>
         {isLoading ? (
-          <ActivityIndicator />
+          <ActivityIndicator color={colors.main.buttonColor} size='large'/>
         ) : (
           <>
             <Text style={styles.errorText}>{error}</Text>
             <TouchableOpacity
               style={styles.Button}
               onPressIn={() => {
-                onClose();
-                // if (isRedirectSignIn) {
-                //   navigation?.navigate('SignIn');
-                // } else {
-                //   onClose();
-                // }
+                if (isRedirectSignIn) {
+                  navigation?.navigate('SignIn');
+                  onClose();
+                } else {
+                  onClose();
+                }
               }}
-              accessibilityRole='button'
-              accessibilityLabel="Fermer">
-                <Text style={styles.TextButton}>Fermer</Text>
-              
+              accessibilityRole="button"
+              accessibilityLabel="Fermer"
+              accessibilityHint={
+                isRedirectSignIn
+                  ? 'Rediriger vers la page de connexion'
+                  : 'Fermer la fenêtre'
+              }>
+              <Text style={styles.TextButton}>
+                {isRedirectSignIn ? 'Aller à la page de connexion' : 'Fermer'}
+              </Text>
             </TouchableOpacity>
           </>
         )}
