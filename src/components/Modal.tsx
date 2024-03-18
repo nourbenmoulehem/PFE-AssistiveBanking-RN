@@ -1,10 +1,21 @@
 import React from 'react';
-import { Modal, Portal, Text, Button, ActivityIndicator } from 'react-native-paper';
+import {
+  Modal,
+  Portal,
+  Text,
+  Button,
+  ActivityIndicator,
+} from 'react-native-paper';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 
 // navigation
 import {RootStackParamList} from '../../App';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
+// redux
+import {useSelector} from 'react-redux';
+import {RootState} from '../context/store';
+import {tokens} from '../assets/palette';
 
 
 interface ErrorModalProps {
@@ -19,43 +30,80 @@ interface ErrorModalProps {
   >['navigation'];
 }
 
-const ErrorModal: React.FC<ErrorModalProps> = ({ visible, error, isLoading, isRedirectSignIn, navigation, onClose }) => {
+const ErrorModal: React.FC<ErrorModalProps> = ({
+  visible,
+  error,
+  isLoading,
+  isRedirectSignIn,
+  navigation,
+  onClose,
+}) => {
+  const {mode} = useSelector((state: RootState) => state.global);
+  const colors = tokens(mode);
+
   console.log(isRedirectSignIn, 'isRedirectSignIn'); // TODO: when isRedirectSignIn is true, redirect to SignIn screen when clicking on the button "Fermer" and modify accessibility label or hint with the appropriate message
 
-  
+  const styles = StyleSheet.create({
+    modalContainer: {
+      backgroundColor: 'white',
+      padding: 20,
+      margin: 20,
+      borderRadius: 8,
+    },
+    errorText: {
+      color: 'black',
+      fontSize: 17,
+      fontWeight: 'bold',
+      marginBottom: 10,
+    },
+    Button: {
+      backgroundColor: colors.main.buttonColor,
+      padding: 10,
+      margin: 30,
+      height: 60,
+      width: 275,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 12,
+    },
+    TextButton: {
+      color: mode === 'dark' ? 'white' : 'black',
+      fontSize: 20,
+      fontWeight: 'bold',
+    },
+  });
+
   return (
     <Portal>
-      <Modal visible={visible} onDismiss={onClose} contentContainerStyle={styles.modalContainer}>
-        { isLoading ? <ActivityIndicator /> : 
+      <Modal
+        visible={visible}
+        onDismiss={onClose}
+        contentContainerStyle={styles.modalContainer}>
+        {isLoading ? (
+          <ActivityIndicator />
+        ) : (
           <>
             <Text style={styles.errorText}>{error}</Text>
-            <Button mode="contained" onPress={() => {
-    if (isRedirectSignIn) {
-      navigation?.navigate('SignIn'); // Replace 'SignIn' with your actual SignIn route
-    } else {
-      onClose();
-    }
-  }}  accessibilityLabel="Fermer">
-              Fermer
-            </Button>
+            <TouchableOpacity
+              style={styles.Button}
+              onPressIn={() => {
+                onClose();
+                // if (isRedirectSignIn) {
+                //   navigation?.navigate('SignIn');
+                // } else {
+                //   onClose();
+                // }
+              }}
+              accessibilityRole='button'
+              accessibilityLabel="Fermer">
+                <Text style={styles.TextButton}>Fermer</Text>
+              
+            </TouchableOpacity>
           </>
-        }
+        )}
       </Modal>
     </Portal>
   );
-};
-
-const styles = {
-  modalContainer: {
-    backgroundColor: 'white',
-    padding: 20,
-    margin: 20,
-    borderRadius: 8,
-  },
-  errorText: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
 };
 
 export default ErrorModal;
