@@ -65,10 +65,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   error: {
-    fontSize: 15,
+    fontSize: 16,
     color: 'red',
     marginTop: 10,
     marginRight: 30,
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
   contentStyle: {
     backgroundColor: 'white',
