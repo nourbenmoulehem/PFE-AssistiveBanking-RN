@@ -1,11 +1,14 @@
 import * as yup from 'yup';
 
-const phoneRegExp =
-  /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
+const phoneRegExp = /^[0-9]{8}$/;
 const passwordRegExp =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
 const cinRegExp = /^[0-9]{8}$/;
 const codePostalRegExp = /^\d{4}$/;
+
+const birthdayRegExp = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
+
+const lastFourDigitRegExp = /^\d{4}$/;
 
 const loginSchema = yup.object().shape({
   email: yup.string().email('Adresse e-mail invalide').required('Ce champ est obligatoire'), 
@@ -100,4 +103,59 @@ const signUpSchema = yup.object().shape({
   selfie: yup.string().required('Ce champ est obligatoire'),
 });
 
-export { signUpSchema, loginSchema };
+const ForgotPasswordSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email('Adresse e-mail invalide')
+    .required('Ce champ est obligatoire'),
+  birthday: yup
+    .string()
+    .matches(
+      birthdayRegExp,
+      'La date de naissance doit être au format YYYY-MM-DD',
+    )
+    .required('Ce champ est obligatoire')
+    .test(
+      'is-future-date',
+      'La date de naissance ne peut pas être une date future',
+      value => {
+        const today = new Date();
+        const birthDate = new Date(value);
+        return birthDate <= today;
+      },
+    ),
+  cin: yup
+    .string()
+    .matches(cinRegExp, 'Format CIN invalide. Doit contenir 8 chiffres.')
+    .required('Ce champ est obligatoire'),
+  phoneNumber: yup
+    .string()
+    .matches(phoneRegExp, 'Numéro de téléphone invalide')
+    .required('Ce champ est obligatoire'),
+  cardNumber: yup
+    .string()
+    .matches(lastFourDigitRegExp, 'Dernier 4 chiffres de votre carte.')
+    .required('Ce champ est obligatoire'),
+});
+
+const NewPasswordSchema = yup.object().shape({
+  password: yup
+    .string()
+    .matches(
+      passwordRegExp,
+      'Le mot de passe doit contenir au moins 5 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial',
+    )
+    .min(5, 'Le mot de passe doit avoir exactement 5 caractères')
+    .required('Ce champ est obligatoire'),
+  passwordConfirm: yup
+    .string()
+    .oneOf([yup.ref('password')], 'Les mots de passe doivent correspondre')
+    .matches(
+      passwordRegExp,
+      'Le mot de passe doit contenir au moins 5 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial',
+    )
+    .min(5, 'Le mot de passe doit avoir exactement 5 caractères')
+    .required('Ce champ est obligatoire'),
+});
+
+export { signUpSchema, loginSchema, ForgotPasswordSchema, NewPasswordSchema };
