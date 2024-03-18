@@ -33,7 +33,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({ handleSubmit, label, access
     },
   });
   return(
-  <TouchableOpacity style={styles.submitButton} onPress={handleSubmit} 
+  <TouchableOpacity style={styles.submitButton} onPressIn={handleSubmit} 
   accessibilityRole='button'
   accessibilityLabel={label}
   accessibilityHint={accessibilityHint}
