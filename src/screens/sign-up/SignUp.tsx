@@ -11,11 +11,8 @@ import {
   Linking,
   ActivityIndicator,
 } from 'react-native';
-import {TextInput, Switch, HelperText} from 'react-native-paper';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import RNPickerSelect from 'react-native-picker-select';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Switch} from 'react-native-paper';
+
 // import ProgressBar from 'react-native-progress/Bar';
 
 // custom components
@@ -46,7 +43,9 @@ import {signUpSchema} from '../../constants/yupValidations';
 
 // form
 import {Formik} from 'formik';
-import * as yup from 'yup';
+
+// navigation
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 // redux
 import {useSelector} from 'react-redux';
@@ -57,6 +56,15 @@ import {tokens} from '../../assets/palette';
 import axios from 'axios';
 import PickerInput from '../../components/PickerInput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
+
+// Define a type for your stack's route names
+type RootStackParamList = {
+  Home: undefined;
+  // Add other routes here
+};
+
+
 
 const SignUp = () => {
   const {mode} = useSelector((state: RootState) => state.global);
@@ -88,7 +96,7 @@ const SignUp = () => {
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [isRedirectSignIn, setIsRedirectSignIn] = useState('false')
+  const [isRedirectSignIn, setIsRedirectSignIn] = useState('false');
 
   const initialValues = {
     firstName: '',
@@ -133,11 +141,12 @@ const SignUp = () => {
   const register = async (values: Steps) => {
     setVisible(true);
     setLoading(true);
-    let res:any;
-     res = await axios
+    let res: any;
+    res = await axios
       .post(
         `${process.env.API_BASE_URL}/api/v1/auth/register`,
-          {email: values.email,
+        {
+          email: values.email,
           password: values.password,
           cin: values.cin,
           offer: values.offer,
@@ -157,7 +166,7 @@ const SignUp = () => {
           secteurActivite: values.secteurActivite,
           natureActivite: values.natureActivite,
           revenu: values.revenu,
-          codePostal:values.codePostal,
+          codePostal: values.codePostal,
           gouvernorat: values.gouvernorat,
         },
         {
@@ -167,22 +176,15 @@ const SignUp = () => {
         },
       )
       .catch(err => {
-        setLoading(false);
-        // setRegistration(
-        //   "L'inscription a échoué, veuillez réessayer plus tard ❌",
-        // );
-        console.log("res", res);
-        console.log(err);
-        console.log("Server response:", err.response.data);
-        setMessage(err.response.data);
         setVisible(true);
-      })
-      // .finally(() => {
-      //   setLoading(false);
-      // });
+        setLoading(false);
+        setMessage(err.response.data);
+      });
+    // .finally(() => {
+    //   setLoading(false);
+    // });
 
     if (res && res.data) {
-      console.log("res && res.data");
       setLoading(false);
       const data = res.data;
       setMessage(data);
@@ -346,8 +348,7 @@ const SignUp = () => {
         padding: 20,
         backgroundColor: colors.main.backgroundColor,
       }}>
-
-        <Formik
+      <Formik
         initialValues={initialValues}
         validationSchema={signUpSchema} // we're using yup
         onSubmit={values => {
@@ -418,7 +419,6 @@ const SignUp = () => {
                       setGenderChanged={setGenderChanged}
                       handleChange={gender => () => {
                         handleChange('gender')('female');
-                        console.log('values.gender', values.gender);
                       }}
                     />
                     <GenderButton
@@ -428,7 +428,6 @@ const SignUp = () => {
                       setGenderChanged={setGenderChanged}
                       handleChange={gender => () => {
                         handleChange('gender')('male');
-                        console.log('values.gender', values.gender);
                       }}
                     />
                     {touched.gender && errors.gender && (
@@ -610,16 +609,14 @@ const SignUp = () => {
                     title="Sélectionnez votre statut socio-professionnel"
                     items={socio_professional}
                     value={values.socio_professional}
-                    onValueChange={value =>{
-                      handleChange('socio_professional')(value)
+                    onValueChange={value => {
+                      handleChange('socio_professional')(value);
                       if (value === 'Etudiant') {
                         setIsEtudiant(true);
-                      }
-                      else {
+                      } else {
                         setIsEtudiant(false);
                       }
-                    }
-                    }
+                    }}
                   />
                   {touched.socio_professional && errors.socio_professional && (
                     <Text style={styles.error}>
@@ -877,9 +874,14 @@ const SignUp = () => {
           </>
         )}
       </Formik>
-      
-      <Modal visible={visible} isRedirectSignIn isLoading={loading} error={message} onClose={onClose}/>
-      
+
+      <Modal
+        visible={visible}
+        isRedirectSignIn={isRedirectSignIn === 'true'}
+        isLoading={loading}
+        error={message}
+        onClose={onClose}
+      />
     </KeyboardAwareScrollView>
   );
 };

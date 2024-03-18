@@ -8,9 +8,9 @@ import {
   TextInput as NativeTextInput,
   KeyboardAvoidingView,
   ScrollView,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 // components
 import TextInput from '../../components/TextInput';
@@ -49,7 +49,7 @@ type SignInProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 const SignIn = ({navigation}: SignInProps) => {
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
-  
+
   const {isLoggedIn, mode, user} = useSelector(
     (state: RootState) => state.global,
   );
@@ -78,9 +78,7 @@ const SignIn = ({navigation}: SignInProps) => {
         responseType: 'json',
         data: values,
       });
-      console.log("🚀 ~ authenticate ~ response:", response)
       await Keychain.setGenericPassword(
-        
         'accessToken',
         response.data.access_token,
         {service: 'accessService'},
@@ -91,18 +89,20 @@ const SignIn = ({navigation}: SignInProps) => {
         response.data.refresh_token,
         {service: 'refreshService'},
       );
-      const accessCredentials = await Keychain.getGenericPassword({ service: 'accessService' });
-      const refreshCredentials = await Keychain.getGenericPassword({ service: 'refreshService' });
+      const accessCredentials = await Keychain.getGenericPassword({
+        service: 'accessService',
+      });
+      const refreshCredentials = await Keychain.getGenericPassword({
+        service: 'refreshService',
+      });
 
       if (accessCredentials && refreshCredentials) {
         dispatch(setLogin({name: 'mohamed'}));
       }
     } catch (error: any) {
-      console.log('error');
       setVisible(true);
-      console.log(error);
+      console.log('error', error);
       setMessage(error.response.data);
-      
     }
   };
 
@@ -212,7 +212,7 @@ const SignIn = ({navigation}: SignInProps) => {
           </View>
         </View>
       </KeyboardAwareScrollView>
-      <Modal visible={visible} error={message} onClose={onClose}/>
+      <Modal visible={visible} error={message} onClose={onClose} />
     </View>
   );
 };
