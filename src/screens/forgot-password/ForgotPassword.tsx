@@ -9,8 +9,10 @@ import {
 } from 'react-native';
 import React, {useRef, useState} from 'react';
 
+// formik
 import {Formik} from 'formik';
-import * as yup from 'yup';
+// yup
+import {ForgotPasswordSchema} from '../../constants/yupValidations';
 
 // components
 import TextInput from '../../components/TextInput';
@@ -21,7 +23,7 @@ import InputTitle from '../../components/InputTitle';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../context/store';
 import {tokens} from '../../assets/palette';
-
+import Modal from '../../components/Modal';
 
 // axios
 import axios from 'axios';
@@ -30,7 +32,7 @@ import axios from 'axios';
 import {API_BASE_URL} from '@env';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-import Modal from '../../components/Modal';
+
 
 const initialValues = {
   email: '',
@@ -55,12 +57,15 @@ const ForgotPassword = () => {
 
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
   
   const onClose = () => setVisible(false);
 
   const ForgotPasswordApi = async (values: FormValues) => {
     try {
+      setVisible(true);
+      setLoading(true);
       const response = await axios({
         method: 'post',
         url: `${process.env.API_BASE_URL}/api/v1/auth/forgot-password`,
@@ -69,13 +74,15 @@ const ForgotPassword = () => {
         data: values,
       });
 
-      setMessage(response.data);
-      setVisible(true);
-      
+      if(response.status === 200) {
+        setLoading(false);
+        setMessage(response.data);
+      }
+
     } catch (error: any) {
-      console.log("🚀 ~ ForgotPasswordApi ~ error:", error.response.data)
+      // console.log("🚀 ~ ForgotPasswordApi ~ error:", error.response.data)
+      setLoading(false);
       setMessage(error.response.data);
-      setVisible(true);
       
     }
   };
@@ -110,7 +117,7 @@ const ForgotPassword = () => {
         <InputTitle title="Mot de passe oublié ?" />
         <Formik
           initialValues={initialValues}
-          validationSchema={checkoutSchema}
+          validationSchema={ForgotPasswordSchema}
           validateOnChange={true}
           style={styles.container}
           onSubmit={values => {
@@ -182,7 +189,7 @@ const ForgotPassword = () => {
           )}
         </Formik>
       </KeyboardAwareScrollView>
-      <Modal visible={visible} error={message} onClose={onClose}/>
+      <Modal visible={visible} isLoading={loading} error={message} onClose={onClose}/>
     </View>
   );
 };
@@ -190,41 +197,7 @@ const ForgotPassword = () => {
 export default ForgotPassword;
 
 // yup validation schema
-const cinRegExp = /^[0-9]{8}$/;
-const phoneRegExp = /^[0-9]{8}$/;
-const birthdayRegExp = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
-const lastFourDigitRegExp = /^\d{4}$/;
-const checkoutSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email('Adresse e-mail invalide')
-    .required('Ce champ est obligatoire'),
-  birthday: yup
-    .string()
-    .matches(
-      birthdayRegExp,
-      'La date de naissance doit être au format YYYY-MM-DD',
-    )
-    .required('Ce champ est obligatoire')
-    .test(
-      'is-future-date',
-      'La date de naissance ne peut pas être une date future',
-      value => {
-        const today = new Date();
-        const birthDate = new Date(value);
-        return birthDate <= today;
-      },
-    ),
-  cin: yup
-    .string()
-    .matches(cinRegExp, 'Format CIN invalide. Doit contenir 8 chiffres.')
-    .required('Ce champ est obligatoire'),
-  phoneNumber: yup
-    .string()
-    .matches(phoneRegExp, 'Numéro de téléphone invalide')
-    .required('Ce champ est obligatoire'),
-  cardNumber: yup
-    .string()
-    .matches(lastFourDigitRegExp, 'Dernier 4 chiffres de votre carte.')
-    .required('Ce champ est obligatoire'),
-});
+
+
+
+
