@@ -392,7 +392,7 @@ const SignUp = () => {
                       setCheckedOffer={setCheckedOffer}
                       setOffreChanged={setOffreChanged}
                     />
-                    {touched.offer && errors.offer && (
+                    {errors.offer && (
                       <Text style={styles.error}>{errors.offer}</Text>
                     )}
 
@@ -427,7 +427,7 @@ const SignUp = () => {
                         handleChange('gender')('male');
                       }}
                     />
-                    {touched.gender && errors.gender && (
+                    {errors.gender && (
                       <Text style={styles.error}>{errors.gender}</Text>
                     )}
                     {genderChanged && (
