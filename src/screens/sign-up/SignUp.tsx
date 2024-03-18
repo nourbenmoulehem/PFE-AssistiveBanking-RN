@@ -514,7 +514,7 @@ const SignUp = () => {
                       handleChange(event);
                     }}
                   />
-                  {touched.birthday && errors.birthday && (
+                  {errors.birthday && (
                     <Text style={styles.error}>{errors.birthday}</Text>
                   )}
                 </>
@@ -538,7 +538,7 @@ const SignUp = () => {
                     value={values.gouvernorat}
                     onValueChange={value => handleChange('gouvernorat')(value)}
                   />
-                  {touched.gouvernorat && errors.gouvernorat && (
+                  {errors.gouvernorat && (
                     <Text style={styles.error}>{errors.gouvernorat}</Text>
                   )}
                 </>
@@ -564,7 +564,7 @@ const SignUp = () => {
                     value={values.nationality}
                     onValueChange={value => handleChange('nationality')(value)}
                   />
-                  {touched.nationality && errors.nationality && (
+                  {errors.nationality && (
                     <Text style={styles.error}>{errors.nationality}</Text>
                   )}
                 </>
@@ -578,7 +578,7 @@ const SignUp = () => {
                     value={values.statusCivil}
                     onValueChange={value => handleChange('statusCivil')(value)}
                   />
-                  {touched.statusCivil && errors.statusCivil && (
+                  {errors.statusCivil && (
                     <Text style={styles.error}>{errors.statusCivil}</Text>
                   )}
                 </>
@@ -594,7 +594,7 @@ const SignUp = () => {
                       handleChange('nombre_enfant')(value)
                     }
                   />
-                  {touched.nombre_enfant && errors.nombre_enfant && (
+                  {errors.nombre_enfant && (
                     <Text style={styles.error}>{errors.nombre_enfant}</Text>
                   )}
                 </>
@@ -615,7 +615,7 @@ const SignUp = () => {
                       }
                     }}
                   />
-                  {touched.socio_professional && errors.socio_professional && (
+                  {errors.socio_professional && (
                     <Text style={styles.error}>
                       {errors.socio_professional}
                     </Text>
@@ -633,7 +633,7 @@ const SignUp = () => {
                       onValueChange={value => handleChange('revenu')(value)}
                     />
 
-                    {touched.revenu && errors.revenu && (
+                    {errors.revenu && (
                       <Text style={styles.error}>{errors.revenu}</Text>
                     )}
                   </>
@@ -650,7 +650,7 @@ const SignUp = () => {
                         handleChange('natureActivite')(value)
                       }
                     />
-                    {touched.natureActivite && errors.natureActivite && (
+                    {errors.natureActivite && (
                       <Text style={styles.error}>{errors.natureActivite}</Text>
                     )}
                   </>
@@ -667,7 +667,7 @@ const SignUp = () => {
                         handleChange('secteurActivite')(value)
                       }
                     />
-                    {touched.secteurActivite && errors.secteurActivite && (
+                    {errors.secteurActivite && (
                       <Text style={styles.error}>{errors.secteurActivite}</Text>
                     )}
                   </>
@@ -702,7 +702,7 @@ const SignUp = () => {
                       handleChange(event);
                     }}
                   />
-                  {touched.dateDelivrationCin && errors.dateDelivrationCin && (
+                  {errors.dateDelivrationCin && (
                     <Text style={styles.error}>
                       {errors.dateDelivrationCin}
                     </Text>
@@ -721,7 +721,7 @@ const SignUp = () => {
                     }
                     field="cinRecto"
                   />
-                  {touched.cinRecto && errors.cinRecto && (
+                  {errors.cinRecto && (
                     <Text style={styles.error}>{errors.cinRecto}</Text>
                   )}
                 </>
@@ -738,7 +738,7 @@ const SignUp = () => {
                     }
                     field="cinVerso"
                   />
-                  {touched.cinVerso && errors.cinVerso && (
+                  {errors.cinVerso && (
                     <Text style={styles.error}>{errors.cinVerso}</Text>
                   )}
                 </>
@@ -755,7 +755,7 @@ const SignUp = () => {
                     }
                     field="selfie"
                   />
-                  {touched.selfie && errors.selfie && (
+                  {errors.selfie && (
                     <Text style={styles.error}>{errors.selfie}</Text>
                   )}
                 </>
@@ -823,13 +823,12 @@ const SignUp = () => {
                       </TouchableOpacity>{' '}
                     </Text>
                   </View>
-                  {touched.hasAmericanityIndex &&
-                    errors.hasAmericanityIndex && (
+                  {errors.hasAmericanityIndex && (
                       <Text style={styles.error}>
                         <Text>{errors.hasAmericanityIndex}</Text>
                       </Text>
                     )}
-                  {touched.hasConfirmedForPersonalData &&
+                  {
                     errors.hasConfirmedForPersonalData && (
                       <Text style={styles.error}>
                         {errors.hasConfirmedForPersonalData}

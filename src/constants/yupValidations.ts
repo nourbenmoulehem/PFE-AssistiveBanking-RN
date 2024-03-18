@@ -11,9 +11,13 @@ const birthdayRegExp = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
 const lastFourDigitRegExp = /^\d{4}$/;
 
 const loginSchema = yup.object().shape({
-  email: yup.string().email('Adresse e-mail invalide').required('Ce champ est obligatoire'), 
+  email: yup
+    .string()
+    .email('Adresse e-mail invalide')
+    .required('Ce champ est obligatoire'),
   password: yup.string().required('Ce champ est obligatoire'),
 });
+
 
 const signUpSchema = yup.object().shape({
   offer: yup
@@ -47,7 +51,13 @@ const signUpSchema = yup.object().shape({
     )
     .matches(phoneRegExp, 'Numéro de téléphone invalide')
     .required('Ce champ est obligatoire'),
-  birthday: yup.date().required('Ce champ est obligatoire'),
+  birthday: yup
+    .date()
+    .required('Ce champ est obligatoire')
+    .max(
+      new Date(new Date().getFullYear() - 18, new Date().getMonth(), new Date().getDate() + 1),
+      'Vous devez avoir au moins 18 ans pour vous inscrire',
+    ),
   adresse: yup.string().required('Ce champ est obligatoire'),
   gouvernorat: yup.string().required('Ce champ est obligatoire'),
   codePostal: yup
@@ -158,4 +168,4 @@ const NewPasswordSchema = yup.object().shape({
     .required('Ce champ est obligatoire'),
 });
 
-export { signUpSchema, loginSchema, ForgotPasswordSchema, NewPasswordSchema };
+export {signUpSchema, loginSchema, ForgotPasswordSchema, NewPasswordSchema};
