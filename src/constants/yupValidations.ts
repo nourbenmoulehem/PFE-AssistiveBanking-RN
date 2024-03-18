@@ -97,13 +97,13 @@ const signUpSchema = yup.object().shape({
     .min(5, 'Le mot de passe doit avoir exactement 5 caractères')
     .required('Ce champ est obligatoire'),
   hasAmericanityIndex: yup
-    .boolean()
-    .oneOf([true], "Aucun indice d'américanité requis.")
-    .required('Ce champ est obligatoire'),
+    .boolean(),
+    // .oneOf([true], "Aucun indice d'américanité requis."),
+    // .required('Ce champ est obligatoire'),
   hasOtherBank: yup
-    .boolean()
-    .oneOf([true], ' ?? ')
-    .required('Ce champ est obligatoire'),
+    .boolean(),
+    // .oneOf([true], ' ?? '),
+    // .required('Ce champ est obligatoire'),
   hasConfirmedForPersonalData: yup
     .boolean()
     .oneOf([true], 'La confirmation des données personnelles est requis')
