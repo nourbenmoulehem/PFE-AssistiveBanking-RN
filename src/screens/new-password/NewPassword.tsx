@@ -11,13 +11,13 @@ import React, {useRef, useState} from 'react';
 
 import {Formik} from 'formik';
 // yup validation schema
-import { NewPasswordSchema } from '../../constants/yupValidations';
+import {NewPasswordSchema} from '../../constants/yupValidations';
 
 // components
 import TextInput from '../../components/TextInput';
 import AuthButton from '../../components/AuthButton';
 import InputTitle from '../../components/InputTitle';
-import  Modal  from '../../components/Modal';
+import Modal from '../../components/Modal';
 
 // redux
 import {useSelector} from 'react-redux';
@@ -44,7 +44,7 @@ const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
 
   const onClose = () => setVisible(false);
-  
+
   const {mode} = useSelector((state: RootState) => state.global);
 
   const colors = tokens(mode);
@@ -70,15 +70,15 @@ const ForgotPassword = () => {
           token,
         },
       });
-      if(response.status === 200) {
+      if (response.status === 200) {
         setLoading(false);
         setVisible(true);
         setMessage(response.data);
       }
     } catch (error: any) {
       setLoading(false);
-        setMessage(error.response.data);
-        setVisible(true);
+      setMessage(error.response.data);
+      setVisible(true);
     }
   };
 
@@ -147,10 +147,7 @@ const ForgotPassword = () => {
                   showLabel
                 />
                 <AuthButton
-                  handleSubmit={() => {handleSubmit
-                    console.log(errors);
-                    
-                  }}
+                  handleSubmit={handleSubmit}
                   label="Envoyer"
                   accessibilityHint="envoyer votre nouveau mot de passe"
                 />
@@ -170,6 +167,3 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword;
-
-
-
