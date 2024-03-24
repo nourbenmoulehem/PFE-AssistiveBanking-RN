@@ -11,7 +11,7 @@ import React, {useRef, useState} from 'react';
 
 import {Formik} from 'formik';
 // yup validation schema
-import { ForgotPasswordSchema } from '../../constants/yupValidations';
+import { NewPasswordSchema } from '../../constants/yupValidations';
 
 // components
 import TextInput from '../../components/TextInput';
@@ -112,7 +112,7 @@ const ForgotPassword = () => {
         <InputTitle title="Creez un nouveau mot de passe" />
         <Formik
           initialValues={initialValues}
-          validationSchema={ForgotPasswordSchema}
+          validationSchema={NewPasswordSchema}
           validateOnChange={true}
           style={styles.container}
           onSubmit={values => {
@@ -147,7 +147,10 @@ const ForgotPassword = () => {
                   showLabel
                 />
                 <AuthButton
-                  handleSubmit={handleSubmit}
+                  handleSubmit={() => {handleSubmit
+                    console.log(errors);
+                    
+                  }}
                   label="Envoyer"
                   accessibilityHint="envoyer votre nouveau mot de passe"
                 />
