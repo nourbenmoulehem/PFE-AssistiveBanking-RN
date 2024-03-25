@@ -2,7 +2,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
 
 //React Native Paper
-import {PaperProvider} from 'react-native-paper';
+import {PaperProvider, DefaultTheme} from 'react-native-paper';
 
 //Navigation
 import {LinkingOptions, NavigationContainer} from '@react-navigation/native';
@@ -64,7 +64,7 @@ const linking: LinkingOptions<RootStackParamList> = {
 
 const App = () => {
   return (
-    <Provider store={store}>
+    <Provider store={store} >
       <PaperProvider>
         <NavigationContainer linking={linking}>
           <MainStack />

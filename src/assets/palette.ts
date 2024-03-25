@@ -64,6 +64,7 @@ export const tokens = (mode: string) => ({
         main: {
           backgroundColor: '#091B24',
           buttonColor: '#fb8500',
+          fontColor: 'white'
         }
       }
     : {
@@ -130,6 +131,7 @@ export const tokens = (mode: string) => ({
         main: {
           backgroundColor: '#E8F6FD',
           buttonColor: '#fb8500',
+          fontColor: 'black'
         }
       }
     )
