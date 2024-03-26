@@ -62,9 +62,10 @@ export const tokens = (mode: string) => ({
           900: '#ffe7cb'
         },
         main: {
-          backgroundColor: '#091B24',
+          backgroundColor: '#161A25',
           buttonColor: '#fb8500',
-          fontColor: 'white'
+          fontColor: 'white',
+          rectangleColor:'#242935'
         }
       }
     : {
@@ -129,9 +130,10 @@ export const tokens = (mode: string) => ({
           900: '#fff8f1'
         },
         main: {
-          backgroundColor: '#E8F6FD',
+          backgroundColor: '#ECEFF8',
           buttonColor: '#fb8500',
-          fontColor: 'black'
+          fontColor: 'black',
+          rectangleColor:'#D2D5DE'
         }
       }
     )
