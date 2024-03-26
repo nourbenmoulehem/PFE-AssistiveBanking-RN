@@ -325,7 +325,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
     confirmationText: {
       fontSize: 16,
       fontWeight: 'bold',
-      color: mode === 'dark' ? colors.secondary[900] : colors.secondary[100],
+      color: mode === 'dark' ? colors.secondary[600] : colors.secondary[100],
     },
     linkText: {
       color: colors.main.buttonColor,
@@ -830,8 +830,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
                     />
                     <Text style={styles.confirmationText}>
                       J'accepte les{' '}
-                      <TouchableOpacity
-                        onPress={() =>
+                      <TouchableOpacity onPressIn={() =>
                           Linking.openURL(
                             'https://www.webank.com.tn/fr/mentions-legales',
                           )
