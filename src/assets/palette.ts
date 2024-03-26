@@ -175,7 +175,7 @@ export const tokens = (mode: string) => ({
           500: '#a5a9f7',
           600: '#b8baf9',
         },
-        secondaryAccent: { // ut_orange
+        secondaryAccent: { // ut_orange updated to blue
           100: '#45cfee',
           200: '#65d4f0',
           300: '#7edaf2',
@@ -257,5 +257,5 @@ export const tokens = (mode: string) => ({
           rectangleColor:'#eeeeef'
         }
       }
-    )
+    ) 
   });
