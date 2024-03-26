@@ -67,7 +67,7 @@ const DatePickerInput: React.FC<DatePickerProps> = ({
       alignItems: 'center',
       justifyContent: 'space-around',
       gap: 10,
-      backgroundColor: colors.light_blue[400],
+      backgroundColor: colors.accent[400],
       height: 100,
       width: 210,
       borderRadius: 8,

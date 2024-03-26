@@ -36,7 +36,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({
     },
     button: {
       backgroundColor:
-        text === 'Valider' ? colors.yellow[300] : colors.orange[300],
+        text === 'Valider' ? colors.secondary[300] : colors.secondaryAccent[300],
       padding: 10,
       alignItems: 'center',
       justifyContent: 'center',
