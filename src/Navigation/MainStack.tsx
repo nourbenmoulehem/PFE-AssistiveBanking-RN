@@ -25,6 +25,9 @@ import {setMode, setInitialLogin, setLogout} from '../context/globalReducer';
 // storage
 import * as Keychain from 'react-native-keychain';
 
+// components
+import FloatingButton from '../components/FloatingButton';
+
 export type RootStackParamList = {
   Home: undefined;
   SignIn: undefined;
@@ -67,122 +70,129 @@ const MainStack = () => {
   };
 
   return (
-    <stack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: colors.main.backgroundColor,
-        },
-        headerTintColor: mode === 'dark' ? 'white' : 'black',
-        // headerBackTitleVisible: false,
-        headerShadowVisible: false, // to remove shadow from the header
-        headerTitle: () => (
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            accessible={true}
-            accessibilityRole="header"
-            accessibilityLabel="WeBank">
-            <Image
-              source={require('../assets/logo/logo-webank.png')}
-              style={{width: 68, height: 48, marginRight: 10}}
-              accessible={true}
-              accessibilityLabel="WeBank Logo"
-            />
-            <Text
+    <>
+      <stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: colors.main.backgroundColor,
+          },
+          headerTintColor: mode === 'dark' ? 'white' : 'black',
+          // headerBackTitleVisible: false,
+          headerShadowVisible: false, // to remove shadow from the header
+          headerTitle: () => (
+            <View
               style={{
-                color: mode == 'dark' ? 'white' : 'black',
-                fontSize: 20,
-                fontWeight: 'bold',
-              }}>
-              WeBank
-            </Text>
-          </View>
-        ),
-        headerRight: () => (
-          <>
-            <TouchableOpacity
-              onPressIn={toggleMode}
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
               accessible={true}
-              accessibilityRole="button"
-              accessibilityLabel={
-                mode == 'dark'
-                  ? 'Passer en mode clair'
-                  : 'Passer en mode sombre'
-              }>
-              <Icon
-                name={mode == 'dark' ? 'brightness-3' : 'white-balance-sunny'}
-                size={30}
-                color={colors.main.buttonColor}
-                style={{marginRight: 10}}
+              accessibilityRole="header"
+              accessibilityLabel="WeBank">
+              <Image
+                source={require('../assets/logo/logo-webank.png')}
+                style={{width: 68, height: 48, marginRight: 10}}
+                accessible={true}
+                accessibilityLabel="WeBank Logo"
               />
-            </TouchableOpacity>
-            {isLoggedIn ? (
-              loading ? (
-                <ActivityIndicator
-                  size="large"
+              <Text
+                style={{
+                  color: mode == 'dark' ? 'white' : 'black',
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                }}>
+                WeBank
+              </Text>
+            </View>
+          ),
+          headerRight: () => (
+            <>
+              <TouchableOpacity
+                onPressIn={toggleMode}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel={
+                  mode == 'dark'
+                    ? 'Passer en mode clair'
+                    : 'Passer en mode sombre'
+                }>
+                <Icon
+                  name={mode == 'dark' ? 'brightness-3' : 'white-balance-sunny'}
+                  size={30}
                   color={colors.main.buttonColor}
+                  style={{marginRight: 10}}
                 />
-              ) : (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: 15,
-                  }}>
-                  <Avatar.Text size={30} label="XD" />
-                  <TouchableOpacity
-                    onPressIn={handleLogout}
-                    accessible={true}
-                    accessibilityRole="button"
-                    accessibilityLabel="Logout">
-                    <Icon
-                      name="logout"
-                      size={30}
-                      color={colors.main.buttonColor}
-                      style={{marginRight: 10}}
-                    />
-                  </TouchableOpacity>
-                </View>
-              )
-            ) : null}
+              </TouchableOpacity>
+              {isLoggedIn ? (
+                loading ? (
+                  <ActivityIndicator
+                    size="large"
+                    color={colors.main.buttonColor}
+                  />
+                ) : (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      gap: 15,
+                    }}>
+                    <Avatar.Text size={30} label="XD" />
+                    <TouchableOpacity
+                      onPressIn={handleLogout}
+                      accessible={true}
+                      accessibilityRole="button"
+                      accessibilityLabel="Logout">
+                      <Icon
+                        name="logout"
+                        size={30}
+                        color={colors.main.buttonColor}
+                        style={{marginRight: 10}}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                )
+              ) : null}
+            </>
+          ),
+        }}
+        initialRouteName="SignIn">
+        {isLoggedIn ? (
+          <>
+            <stack.Screen
+              name="Home"
+              component={Home}
+              options={{
+                headerShown: true,
+                title: 'Home',
+              }}
+            />
+            <stack.Screen
+              name="Transactions"
+              component={Transactions}
+              options={{
+                headerShown: true,
+                title: 'Transactions',
+              }}
+            />
           </>
-        ),
-      }}
-      initialRouteName="SignIn">
-      {isLoggedIn ? (
-        <>
-          <stack.Screen
-            name="Home"
-            component={Home}
-            options={{
-              headerShown: true,
-              title: 'Home',
-            }}
-          />
-          <stack.Screen
-            name="Transactions"
-            component={Transactions}
-            options={{
-              headerShown: true,
-              title: 'Transactions',
-            }}
-          />
-          
-        </>
-      ) : (
-        <>
-          <stack.Screen name="SignIn" component={SignIn} />
-          <stack.Screen name="SignUp" component={SignUp} />
-          <stack.Screen name="ForgotPassword" component={ForgotPassword} />
-          <stack.Screen name="AccountActivation" component={AccountActivation} />
-          <stack.Screen name="NewPassword" component={NewPassword} />
-        </>
-      )}
-    </stack.Navigator>
+        ) : (
+          <>
+            <stack.Screen name="SignIn" component={SignIn} />
+            <stack.Screen name="SignUp" component={SignUp} />
+            <stack.Screen name="ForgotPassword" component={ForgotPassword} />
+            <stack.Screen
+              name="AccountActivation"
+              component={AccountActivation}
+            />
+            <stack.Screen name="NewPassword" component={NewPassword} />
+          </>
+        )}
+      </stack.Navigator>
+
+      {isLoggedIn ? <FloatingButton /> : null}
+      
+    </>
   );
 };
 
