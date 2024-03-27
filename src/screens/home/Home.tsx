@@ -15,10 +15,14 @@ import getApi from '../../API/APIManager';
 import { RootStackParamListSignedIn } from '../../../App';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { DarkTheme } from '@react-navigation/native';
+import { useGetClientsQuery } from '../../API/ClientApi';
 
 type HomeProps = NativeStackScreenProps<RootStackParamListSignedIn, 'Home'>;
 
 const Home = ({ navigation }: HomeProps) => {
+  const {data, isLoading, error} = useGetClientsQuery(1);
+  console.log("🚀 ~ home:", data , error)
+
   const dispatch = useDispatch();
   const { isLoggedIn, mode, user } = useSelector(
     (state: RootState) => state.global,
@@ -119,13 +123,13 @@ const Home = ({ navigation }: HomeProps) => {
 
 
       <View style={styles.rectangle}>
-        <Text style={styles.welcome}>Bienvenu, foulen </Text>
+        <Text style={styles.welcome}>Bienvenu, {data?.firstName} </Text>
         <Text style={styles.prompt}>Votre solde disponible </Text>
-        <Text style={styles.solde} >1000DT</Text>
+        <Text style={styles.solde} >{data?.compteBancaire.solde}DT</Text>
         <Divider style={styles.devider} />
         <View style={styles.miniContainer}>
-          <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' }}>Numero de compte</Text>
-          <Text style={{ color: mode === 'dark' ? colors.secondary[100] : colors.secondary[100], fontWeight: 'bold' }}>0012341234512345</Text>
+          <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' }}>Numero de carte</Text>
+          <Text style={{ color: mode === 'dark' ? colors.secondary[100] : colors.secondary[100], fontWeight: 'bold' }}>{data?.compteBancaire.carte.numero_carte}</Text>
         </View>
         <Divider style={styles.devider} />
         <View style={styles.miniContainer}>
