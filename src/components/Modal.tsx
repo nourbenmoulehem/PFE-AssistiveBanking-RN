@@ -25,7 +25,7 @@ interface ErrorModalProps {
   onClose: () => void;
   navigation?: NativeStackScreenProps<
     RootStackParamList,
-    'SignIn'
+    'SignUp'
   >['navigation'];
 }
 
