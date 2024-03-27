@@ -37,6 +37,8 @@ const TextInput: React.FC<TextInputProps> = ({
       {showLabel && <Text style={styles.label}>{placeholder}</Text>}
       <PaperTextInput
         placeholder={placeholder}
+        textColor='black'
+        
         mode={mode}
         value={field.value}
         onChangeText={field.onChange(name)}
@@ -74,6 +76,7 @@ const styles = StyleSheet.create({
   },
   contentStyle: {
     backgroundColor: 'white',
+    
   },
   label: {
     fontSize: 15,

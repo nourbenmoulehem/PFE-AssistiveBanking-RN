@@ -100,7 +100,7 @@ const Home = ({ navigation }: HomeProps) => {
     },
     devider: {
       width: wp('100%'),
-      backgroundColor: mode === 'dark' ? colors.background[500] : colors.background[0],
+      backgroundColor: mode === 'dark' ? colors.background[500] : colors.background[400],
     },
     icon: {
       width: hp(7),
