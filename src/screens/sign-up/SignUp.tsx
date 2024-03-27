@@ -59,9 +59,9 @@ import axios from 'axios';
 import PickerInput from '../../components/PickerInput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
 
-const SignUp: React.FC<Props> = ({ navigation }) => {
+const SignUp = ({ navigation }: Props) => {
   const {mode} = useSelector((state: RootState) => state.global);
   const colors = tokens(mode);
 
@@ -325,7 +325,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
     confirmationText: {
       fontSize: 16,
       fontWeight: 'bold',
-      color: mode === 'dark' ? colors.secondary[900] : colors.secondary[100],
+      color: mode === 'dark' ? colors.secondary[600] : colors.secondary[100],
     },
     linkText: {
       color: colors.main.buttonColor,
@@ -710,7 +710,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
                     title="Sélectionnez la date de délivrance de votre CIN"
                     name="date de délivration CIN"
                     field="dateDelivrationCin"
-                    placeholder="date de délivrance de votre CINe"
+                    placeholder="date de délivrance de votre CIN"
                     value={values.dateDelivrationCin}
                     handleChange={field => value => {
                       const event = {
@@ -830,8 +830,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
                     />
                     <Text style={styles.confirmationText}>
                       J'accepte les{' '}
-                      <TouchableOpacity
-                        onPress={() =>
+                      <TouchableOpacity onPress={() =>
                           Linking.openURL(
                             'https://www.webank.com.tn/fr/mentions-legales',
                           )
@@ -870,10 +869,10 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
                     errors={errors}
                     getFieldName={getFieldName}
                     step={step}
-                    disabled={getFieldName(step).some(
-                      fieldName =>
-                        values[fieldName] === '' || !!errors[fieldName],
-                    )}
+                    // disabled={getFieldName(step).some(
+                    //   fieldName =>
+                    //     values[fieldName] === '' || !!errors[fieldName],
+                    // )}
                   />
                 ) : (
                   <CustomButton
