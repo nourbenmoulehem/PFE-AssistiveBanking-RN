@@ -7,6 +7,7 @@ import {
   PorcupineErrors,
 } from '@picovoice/porcupine-react-native';
 import RNFS from 'react-native-fs';
+import Voice from '@react-native-community/voice';
 
 // redux
 import {useSelector} from 'react-redux';
@@ -21,7 +22,7 @@ const FloatingButton = () => {
   const {mode} = useSelector((state: RootState) => state.global);
   const colors = tokens(mode);
   let recordAudioRequest;
-  const ACCESS_KEY = "pfkjx/OKWZLZi4tC/3OSSr027rsRC0ToMGypPUMwUleYrqjjHfPmdA==";
+  const ACCESS_KEY = 'pfkjx/OKWZLZi4tC/3OSSr027rsRC0ToMGypPUMwUleYrqjjHfPmdA==';
   // let keywordName = 'hey_siri'; // we-bank_en_android_v3_0_0
   // let keywordFilename = `${keywordName}.ppn`;
   const keywordFilename = 'we-bank_en_android_v3_0_0.ppn';
@@ -37,10 +38,10 @@ const FloatingButton = () => {
         buttonNeutral: 'Ask Me Later',
         buttonNegative: 'Cancel',
         buttonPositive: 'OK',
-      }
+      },
     );
-    return (granted === PermissionsAndroid.RESULTS.GRANTED)
-  }
+    return granted === PermissionsAndroid.RESULTS.GRANTED;
+  };
 
   if (Platform.OS == 'android') {
     // For Android, we need to explicitly ask
@@ -52,25 +53,24 @@ const FloatingButton = () => {
     });
   }
 
-  recordAudioRequest.then(async (hasPermission) => {
-    if(hasPermission){
+  recordAudioRequest.then(async hasPermission => {
+    if (hasPermission) {
       // Code that uses Porcupine
       console.log('Permission granted');
 
       try {
         if (isAndroid) {
           console.log(RNFS.DocumentDirectoryPath);
-  
+
           keywordPath = `${RNFS.DocumentDirectoryPath}/${keywordFilename}`;
-  
+
           // let files = await RNFS.readDir(RNFS.DocumentDirectoryPath);
           // console.log("Files in directory:");
           // files.forEach(file => {
           //   console.log(file.name);
           // });;
-  
+
           await RNFS.copyFileAssets(keywordFilename, keywordPath);
-          
         } else {
           keywordPath = `${RNFS.MainBundlePath}/${keywordFilename}`;
         }
@@ -79,37 +79,63 @@ const FloatingButton = () => {
           console.log('Detection callback called');
 
           // setIsDetected(true);
-          
+
           console.log(`Keyword detected: ${keyword}`);
+          try {
+
+            Voice.start('en-US');
+
+            Voice.isAvailable().then(available => {
+              if (available) {
+                // Start voice recognition here
+                console.log('Voice recognition is available on this device');
+              } else {
+                console.log(
+                  'Voice recognition is not available on this device',
+                );
+              }
+            });
+
+            Voice.onSpeechStart = () => {
+              console.log('Speech has started');
+            };
+
+            Voice.onSpeechResults = result => {
+              console.log('test test test');
+          
+              console.log('Transcribed text:', result.value);
+            };
+
+          } catch (error) {
+            console.log('error', error);
+          }
         };
-  
+
+
         // let porcupineManager = await PorcupineManager.fromBuiltInKeywords(
         //   ACCESS_KEY,
         //   [BuiltInKeywords.BUMBLEBEE],
         //   detectionCallback
         // );
-        
+
         let porcupineManager = await PorcupineManager.fromKeywordPaths(
           ACCESS_KEY,
           [keywordPath],
-          detectionCallback
+          detectionCallback,
         );
 
         await porcupineManager.start();
         console.log('PorcupineManager started');
-        console.log("🚀 ~ recordAudioRequest.then ~ porcupineManager:", porcupineManager)
-        
-
+        console.log(
+          '🚀 ~ recordAudioRequest.then ~ porcupineManager:',
+          porcupineManager,
+        );
       } catch (error) {
         console.log('Error initializing Porcupine:', error);
-        
       }
-      
-      
     }
   });
 
-  
   const styles = StyleSheet.create({
     fab: {
       position: 'absolute',
@@ -119,16 +145,39 @@ const FloatingButton = () => {
       backgroundColor: colors.accent[400],
     },
   });
-  
+
+  function startVoiceRecognition(): void {
+    // THIS IS JUST FOR TESTING PURPOSES, speech recognition start when wake word is detected
+    try {
+      Voice.start('en-US');
+      Voice.isAvailable().then(available => {
+        if (available) {
+          // Start voice recognition here
+          console.log('Voice recognition is available on this device');
+        } else {
+          console.log('Voice recognition is not available on this device');
+        }
+      });
+
+      Voice.onSpeechStart = () => {
+        console.log('Speech has started');
+      };
+
+      Voice.onSpeechResults = result => {
+        console.log('Transcribed text:', result.value);
+      };
+    } catch (error) {
+      console.log('Error starting voice recognition:', error);
+    }
+  }
+
   return (
     <FAB
       icon="microphone"
       style={styles.fab}
-      onPress={() => console.log('Pressed')}
+      onPress={() => startVoiceRecognition()}
     />
   );
 };
 
 export default FloatingButton;
-
-
