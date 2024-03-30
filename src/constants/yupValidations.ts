@@ -32,10 +32,12 @@ const signUpSchema = yup.object().shape({
   lastName: yup.string().required('Ce champ est obligatoire'),
   email: yup
     .string()
+    .lowercase()
     .email('Adresse e-mail invalide')
     .required('Ce champ est obligatoire'),
   emailConfirm: yup
     .string()
+    .lowercase()
     .oneOf([yup.ref('email')], 'Les adresses e-mail doivent correspondre')
     .email('Adresse e-mail invalide')
     .required('Ce champ est obligatoire'),
