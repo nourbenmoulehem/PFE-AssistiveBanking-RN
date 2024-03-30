@@ -7,7 +7,7 @@ import {
   PorcupineErrors,
 } from '@picovoice/porcupine-react-native';
 import RNFS from 'react-native-fs';
-import Voice from '@react-native-community/voice';
+import Voice from '@react-native-voice/voice';
 
 // redux
 import {useSelector} from 'react-redux';
@@ -82,35 +82,29 @@ const FloatingButton = () => {
 
           console.log(`Keyword detected: ${keyword}`);
           try {
-
-            Voice.start('en-US');
-
-            Voice.isAvailable().then(available => {
-              if (available) {
-                // Start voice recognition here
-                console.log('Voice recognition is available on this device');
-              } else {
-                console.log(
-                  'Voice recognition is not available on this device',
-                );
-              }
-            });
+            console.log('About to start voice recognition');
 
             Voice.onSpeechStart = () => {
               console.log('Speech has started');
             };
 
-            Voice.onSpeechResults = result => {
-              console.log('test test test');
+            Voice.onSpeechEnd = () => {
+              console.log('Speech has ended');
+            };
           
+            Voice.onSpeechError = (error) => {
+              console.log('Speech error:', error);
+            };
+
+            Voice.onSpeechResults = result => {
               console.log('Transcribed text:', result.value);
             };
 
+            Voice.start('en_US');
           } catch (error) {
             console.log('error', error);
-          }
+          } 
         };
-
 
         // let porcupineManager = await PorcupineManager.fromBuiltInKeywords(
         //   ACCESS_KEY,
@@ -124,12 +118,7 @@ const FloatingButton = () => {
           detectionCallback,
         );
 
-        await porcupineManager.start();
-        console.log('PorcupineManager started');
-        console.log(
-          '🚀 ~ recordAudioRequest.then ~ porcupineManager:',
-          porcupineManager,
-        );
+        await porcupineManager.start();       
       } catch (error) {
         console.log('Error initializing Porcupine:', error);
       }
@@ -146,36 +135,36 @@ const FloatingButton = () => {
     },
   });
 
-  function startVoiceRecognition(): void {
-    // THIS IS JUST FOR TESTING PURPOSES, speech recognition start when wake word is detected
-    try {
-      Voice.start('en-US');
-      Voice.isAvailable().then(available => {
-        if (available) {
-          // Start voice recognition here
-          console.log('Voice recognition is available on this device');
-        } else {
-          console.log('Voice recognition is not available on this device');
-        }
-      });
+  // function startVoiceRecognition(): void {
+  //   // THIS IS JUST FOR TESTING PURPOSES, speech recognition start when wake word is detected
+  //   try {
+  //     Voice.start('en-US');
+  //     Voice.isAvailable().then(available => {
+  //       if (available) {
+  //         // Start voice recognition here
+  //         console.log('Voice recognition is available on this device');
+  //       } else {
+  //         console.log('Voice recognition is not available on this device');
+  //       }
+  //     });
 
-      Voice.onSpeechStart = () => {
-        console.log('Speech has started');
-      };
+  //     Voice.onSpeechStart = () => {
+  //       console.log('Speech has started');
+  //     };
 
-      Voice.onSpeechResults = result => {
-        console.log('Transcribed text:', result.value);
-      };
-    } catch (error) {
-      console.log('Error starting voice recognition:', error);
-    }
-  }
+  //     Voice.onSpeechResults = result => {
+  //       console.log('Transcribed text:', result.value);
+  //     };
+  //   } catch (error) {
+  //     console.log('Error starting voice recognition:', error);
+  //   }
+  // }
 
   return (
     <FAB
       icon="microphone"
       style={styles.fab}
-      onPress={() => startVoiceRecognition()}
+      onPress={() => console.log('FAB pressed')}
     />
   );
 };
