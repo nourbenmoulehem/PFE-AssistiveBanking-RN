@@ -164,7 +164,7 @@ const Home = ({ navigation }: HomeProps) => {
 
         </TouchableOpacity>
 
-        <TouchableOpacity onPressIn={() => navigation.navigate('Transactions')}
+        <TouchableOpacity onPressIn={() => navigation.navigate('Card')}
         accessibilityRole='button'
         accessibilityLabel='Votre Carte Webank'
         accessibilityHint='Appuyer pour naviguer vers la page qui vous permet de gerer votre carte webank'
