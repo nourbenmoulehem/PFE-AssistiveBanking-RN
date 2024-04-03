@@ -24,6 +24,7 @@ const Home = ({ navigation }: HomeProps) => {
     (state: RootState) => state.global,
   );
   console.log('🚀 ~ Home ~ isLoggedIn:', isLoggedIn);
+  console.log('🚀 ~ Home ~ user:', user);
   const colors = tokens(mode);
   const [clientDetails, setClientDetails] = useState<Object>({});
 

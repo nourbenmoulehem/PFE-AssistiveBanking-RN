@@ -4,16 +4,24 @@
   import Voice from '@react-native-voice/voice';
   import Tts from 'react-native-tts';
   // redux
-  import {useSelector} from 'react-redux';
+  import {useSelector, useDispatch} from 'react-redux';
   import {RootState} from '../context/store';
   import {useLazyGetIntentQuery} from '../API/ClientApi';
   import {tokens} from '../assets/palette';
 import axios from 'axios';
 
   const FloatingButton = () => {
+    const dispatch = useDispatch();
+    const {mode, user } = useSelector(
+      (state: RootState) => state.global,
+    );
+
+
+
     const [prompt, setPrompt] = useState('');
     const [spoken, setSpoken] = useState(false); // Flag to track if TTS has spoken
     const [response, setResponse] = useState('');
+    const [prompts, setPrompts] = useState<string[]>([]); 
 
     // const [trigger, { data, error, isLoading, isSuccess }] = useLazyGetIntentQuery();
     // console.log('🚀 ~ FloatingButton ~ data:', data);
@@ -23,8 +31,9 @@ import axios from 'axios';
     //   setResponse(data.assistantResponse);
     // }
 
-    const handleVocalCommand = (prompt: string) => {
-      axios.post('http://192.168.1.7:5001/api/v1/client/getIntent', {prompt: prompt})
+    //user?.clientId
+    const handleVocalCommand = (prompts: string[]) => {
+      axios.post('http://192.168.1.7:5001/api/v1/client/getIntent', {prompts: prompts, clientId: 1})
       .then((response) => {
         console.log("handleVocal", response.data);
         setResponse(response.data.assistantResponse);
@@ -36,7 +45,6 @@ import axios from 'axios';
         // Tts.speak(response);
         setSpoken(true);
     }
-    const {mode} = useSelector((state: RootState) => state.global);
     const colors = tokens(mode);
     const [isRecording, setIsRecording] = useState(false);
     const isAndroid = Platform.OS === 'android';
@@ -44,7 +52,7 @@ import axios from 'axios';
     useEffect(() => {
       if (prompt !== '') {
         // trigger({ prompt: prompt });
-        handleVocalCommand(prompt);
+        handleVocalCommand(prompts);
       }
 
       // to reset the prompt and spoken flag
@@ -115,7 +123,9 @@ import axios from 'axios';
 
         Voice.onSpeechResults = result => {
           console.log('Transcribed text:', result.value);
+          
           if (result.value && result.value.length > 0) {
+            setPrompts(result.value);
             console.log('Most likely transcription:', result.value[0]);
             const mostLikelyTranscription = result.value[0];
             setPrompt(mostLikelyTranscription);
