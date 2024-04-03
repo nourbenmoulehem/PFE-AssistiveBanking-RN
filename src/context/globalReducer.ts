@@ -1,10 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit' // to create reducers
 import type { PayloadAction } from '@reduxjs/toolkit' 
 
+
+interface User {
+  clientId: string;
+}
+
 export interface GlobalState { // to define the state, TypeScript
   mode: "dark" | "light",
   isLoggedIn: boolean,
-  user: Object | null
+  user: User | null
 }
 
 const initialState: GlobalState = {
@@ -24,7 +29,7 @@ export const globalSlice = createSlice({
     setMode: (state) => {
       state.mode = state.mode === "dark" ? "light" : "dark"
     },
-    setLogin: (state, action: PayloadAction<Object>) => {
+    setLogin: (state, action: PayloadAction<User>) => {
       state.isLoggedIn = true // if there is a token it's going to be true
       state.user = action.payload
     },
