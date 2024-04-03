@@ -82,6 +82,13 @@ const Card = () => {
             alignItems: 'center',
 
           },
+          status:{
+            width: wp(89),
+            padding: wp(1),
+            justifyContent: 'space-between',
+            backgroundColor:'green',
+            borderRadius: wp(4)
+          },
         text: {
             color: colors.main.fontColor,
         },
@@ -95,7 +102,7 @@ const Card = () => {
             </View>
 
             <View style={styles.midContainer}>
-                <View>
+                <View style={styles.status}>
                     <Text style={styles.text}>Status</Text>
                 </View>
                 <View>

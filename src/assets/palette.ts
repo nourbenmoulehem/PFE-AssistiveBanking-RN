@@ -412,7 +412,10 @@ export const tokens = (mode: string) => ({
           backgroundColor: '#EEEEEF',
           buttonColor: '#fb8500',
           fontColor: 'black',
-          rectangleColor: '#D8D8DA'
+          rectangleColor: '#D8D8DA',
+          warning: '',
+          danger: '',
+          pass: '',
         }
       }
       )
