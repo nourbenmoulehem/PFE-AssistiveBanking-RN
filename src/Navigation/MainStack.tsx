@@ -18,6 +18,7 @@ import Settings from '../screens/Settings/Settings';
 import ColorPreferences from '../screens/ColorPreferences/ColorPreferences';
 import Transactions from '../screens/transactions/Transactions';
 import NewPassword from '../screens/new-password/NewPassword';
+import Card from '../screens/Card/Card';
 
 // Redux
 import {useDispatch, useSelector} from 'react-redux';
@@ -27,9 +28,7 @@ import {setMode, setInitialLogin, setLogout} from '../context/globalReducer';
 // storage
 import * as Keychain from 'react-native-keychain';
 
-// components
-import FloatingButton from '../components/FloatingButton';
-import Drawer from '../components/Drawer';
+
 
 export type RootStackParamList = {
   Home: undefined;
@@ -42,6 +41,7 @@ export type RootStackParamList = {
   NewPassword: undefined;
   Settings: undefined;
   ColorPreferences: undefined;
+  Card: undefined;
   // Profile: { userId: string };
 };
 
@@ -196,6 +196,12 @@ const MainStack = () => {
                 title: 'ColorPreferences',
               }}
             />
+            <stack.Screen name="Card" component={Card}
+              options={{
+                headerShown: true,
+                title: 'Card',
+              }}
+            />
           </>
         ) : (
           <>
@@ -207,13 +213,10 @@ const MainStack = () => {
               component={AccountActivation}
             />
             <stack.Screen name="NewPassword" component={NewPassword} />
+
           </>
         )}
-      </stack.Navigator>
-
-      {/* {isLoggedIn ? <FloatingButton /> : null} */}
-      {/* {isLoggedIn ? <Drawer active={active} /> : null} */}
-      
+      </stack.Navigator>      
     </>
   );
 };

@@ -73,7 +73,7 @@ const SignIn = ({navigation}: SignInProps) => {
     try {
       const response = await axios({
         method: 'post',
-        url: `http://192.168.84.48:5001/api/v1/auth/authenticate`,
+        url: `http://192.168.1.7:5001/api/v1/auth/authenticate`,
         withCredentials: true,
         responseType: 'json',
         data: {

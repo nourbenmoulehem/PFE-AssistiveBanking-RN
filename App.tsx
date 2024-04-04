@@ -40,6 +40,7 @@ export type RootStackParamListSignedIn = {
   Transactions: undefined;
   Settings: undefined;
   ColorPreferences: undefined;
+  Card: undefined;
 };
 
 const stack = createNativeStackNavigator<RootStackParamList>();

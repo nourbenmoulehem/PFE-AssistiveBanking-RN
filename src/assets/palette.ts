@@ -11,6 +11,15 @@ export const tokens = (mode: string) => {
       buttonColor: string;
       fontColor: string;
       rectangleColor: string;
+      warning: string,
+          danger: string,
+          pass: string,
+          warningText: string,
+          dangerText: string,
+          passText: string,
+          old:string,
+        new:string,
+        gaugeBG:string,
     };
   };
 
@@ -88,6 +97,15 @@ export const tokens = (mode: string) => {
         buttonColor: '#fb8500',
         fontColor: 'white',
         rectangleColor: '#2b2f39',
+        warning: '#A45704',
+        danger: '#F6A68D',
+        pass: '#ADC7FA',
+        warningText: '#A45704',
+        dangerText: '#C92E13',
+        passText: '#0F2BA9',
+        old:'#EE8A58',
+      new:'#DC5318',
+      gaugeBG:'#999999',
       },
     },
     light: {
@@ -166,9 +184,19 @@ export const tokens = (mode: string) => {
       },
       main: {
         backgroundColor: '#EEEEEF',
-        buttonColor: '#fb8500',
-        fontColor: 'black',
-        rectangleColor: '#D8D8DA',
+          buttonColor: '#fb8500',
+          fontColor: 'black',
+          rectangleColor: '#D8D8DA',
+            warning: '#A45704',
+          danger: '#F6A68D',
+          pass: '#ADC7FA',
+          warningText: '#A45704',
+          dangerText: '#C92E13',
+          passText: '#0F2BA9',
+          old:'#EE8A58',
+        new:'#DC5318',
+        gaugeBG:'#999999',
+
       },
     },
     protanopia: {
@@ -244,6 +272,15 @@ export const tokens = (mode: string) => {
         buttonColor: '#fb8500',
         fontColor: 'white',
         rectangleColor: '#2b2f39',
+        warning: '#A45704',
+        danger: '#F6A68D',
+        pass: '#ADC7FA',
+        warningText: '#A45704',
+        dangerText: '#C92E13',
+        passText: '#0F2BA9',
+        old:'#EE8A58',
+      new:'#DC5318',
+      gaugeBG:'#999999',
       },
     },
   };
@@ -256,3 +293,5 @@ export const tokens = (mode: string) => {
     return colorSchemes['light'];
   }
 };
+
+    
