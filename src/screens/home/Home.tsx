@@ -242,9 +242,9 @@ const Home = ({ navigation }: HomeProps) => {
         <TouchableOpacity onPressIn={() => navigation.navigate('Settings')}>
           <View style={styles.btnContainer} >
             <View style={styles.icon}>
-            <Icon source="transfer-down" size={hp(5)} color={colors.accent[300]} />
+            <Icon source="cog" size={hp(5)} color={colors.accent[300]} />
             </View>
-            <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' , marginEnd:wp(3)}}>Historique Virements</Text>
+            <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' , marginEnd:wp(3)}}>Parametres</Text>
           </View>
         </TouchableOpacity>
 
