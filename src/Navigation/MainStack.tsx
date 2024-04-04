@@ -112,7 +112,7 @@ const MainStack = () => {
           ),
           headerRight: () => (
             <>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPressIn={toggleMode}
                 accessible={true}
                 accessibilityRole="button"
@@ -127,7 +127,7 @@ const MainStack = () => {
                   color={colors.main.buttonColor}
                   style={{marginRight: 10}}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               {isLoggedIn ? (
                 loading ? (
                   <ActivityIndicator
