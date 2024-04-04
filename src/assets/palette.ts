@@ -337,7 +337,16 @@ export const tokens = (mode: string) => ({
         backgroundColor: '#161A25',
         buttonColor: '#fb8500',
         fontColor: 'white',
-        rectangleColor: '#2b2f39'
+        rectangleColor: '#2b2f39',
+        warning: '#FAAA33',
+        danger: '#F6A68D',
+        pass: '#456AEE',
+        warningText: '#A45704',
+        dangerText: '#F6A68D',
+        passText: '#E1ECFE',
+        old:'#F8C2A0',
+        new:'#EE8A58',
+        gaugeBG:'#2C3344',
       },
     }
     : {
@@ -412,7 +421,16 @@ export const tokens = (mode: string) => ({
           backgroundColor: '#EEEEEF',
           buttonColor: '#fb8500',
           fontColor: 'black',
-          rectangleColor: '#D8D8DA'
+          rectangleColor: '#D8D8DA',
+          warning: '#A45704',
+          danger: '#F6A68D',
+          pass: '#ADC7FA',
+          warningText: '#A45704',
+          dangerText: '#C92E13',
+          passText: '#0F2BA9',
+          old:'#EE8A58',
+        new:'#DC5318',
+        gaugeBG:'#999999',
         }
       }
       )

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useDispatch, useSelector } from 'react-redux';
@@ -87,7 +87,7 @@ const Home = ({ navigation }: HomeProps) => {
       fontSize: hp('2%'),
       textAlign: 'center',
       color: colors.main.fontColor,
-      margin:hp(2)
+      margin: hp(2)
     },
     prompt: {
       fontSize: hp('2.5%'),
@@ -107,10 +107,10 @@ const Home = ({ navigation }: HomeProps) => {
       backgroundColor: mode === 'dark' ? colors.background[500] : colors.background[400],
     },
     icon: {
-      width: hp(7),
-      height: hp(7),
+      width: hp(6.5),
+      height: hp(6.5),
       borderRadius: hp(2),
-      backgroundColor: mode === 'dark' ? colors.background[300] : colors.background[500],
+      backgroundColor: mode === 'dark' ? colors.background[300] : colors.background[300],
       justifyContent: 'center',
       alignItems: 'center',
 
@@ -120,58 +120,125 @@ const Home = ({ navigation }: HomeProps) => {
   return (
     <View style={styles.container}>
 
-
-
       <View style={styles.rectangle}>
         <Text style={styles.welcome}>Bienvenu, {data?.firstName} </Text>
         <Text style={styles.prompt}>Votre solde disponible </Text>
         <Text style={styles.solde} >{data?.compteBancaire.solde}DT</Text>
         <Divider style={styles.devider} />
+
         <View style={styles.miniContainer}>
           <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' }}>Numero de carte</Text>
           <Text style={{ color: mode === 'dark' ? colors.secondary[100] : colors.secondary[100], fontWeight: 'bold' }}>{data?.compteBancaire.carte.numero_carte}</Text>
         </View>
+
         <Divider style={styles.devider} />
+
         <View style={styles.miniContainer}>
+
           <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' }}>Solde de compte</Text>
-          <Text style={{ color: mode === 'dark' ? colors.secondary[100] : colors.secondary[100], fontWeight: 'bold'  }}>3000DT</Text>
+          <Text style={{ color: mode === 'dark' ? colors.secondary[100] : colors.secondary[100], fontWeight: 'bold' }}>{data?.compteBancaire.solde}DT</Text>
+
         </View>
+
       </View>
+
+
+    <ScrollView>
       <View style={styles.midContainer}>
-        <TouchableOpacity onPressIn={() => navigation.navigate('Transactions')}>
+
+        <TouchableOpacity onPressIn={() => navigation.navigate('Transactions')}
+        accessibilityRole='button'
+        accessibilityLabel='Historique de mouvements'
+        accessibilityHint='Appuyer pour naviguer vers la page de votre historique de mouvements'
+
+        >
+
           <View style={styles.btnContainer} >
+
             <View style={styles.icon}>
               <Icon source="history" size={hp(5)} color={colors.accent[300]} />
             </View>
-            <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' , marginEnd:wp(3)}}>Historique Mouvements</Text>
+
+            <Text style={{ color: colors.main.fontColor, fontWeight: 'bold', marginEnd: wp(3) }}>Historique Mouvements</Text>
+
           </View>
+
         </TouchableOpacity>
-        <TouchableOpacity onPressIn={() => navigation.navigate('Transactions')}>
+
+        <TouchableOpacity onPressIn={() => navigation.navigate('Card')}
+        accessibilityRole='button'
+        accessibilityLabel='Votre Carte Webank'
+        accessibilityHint='Appuyer pour naviguer vers la page qui vous permet de gerer votre carte webank'
+        >
+
           <View style={styles.btnContainer} >
+
             <View style={styles.icon}>
-            <Icon source="card-text" size={hp(5)} color={colors.accent[300]} />
+              <Icon source="card-text" size={hp(5)} color={colors.accent[300]} />
             </View>
-            <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' , marginEnd:wp(3)}}>Votre Carte</Text>
+
+            <Text style={{ color: colors.main.fontColor, fontWeight: 'bold', marginEnd: wp(3) }}>Votre Carte</Text>
+
           </View>
+
         </TouchableOpacity>
-        <TouchableOpacity onPressIn={() => navigation.navigate('Transactions')}>
+
+        <TouchableOpacity onPressIn={() => navigation.navigate('Transactions')}
+        accessibilityRole='button'
+        accessibilityLabel='Effectuer un virement'
+        accessibilityHint='Appuyer pour naviguer vers la page qui vous permet d effectuer un virement'
+        >
+
           <View style={styles.btnContainer} >
+
             <View style={styles.icon}>
-            <Icon source="bank-transfer" size={hp(5)} color={colors.accent[300]} />
+              <Icon source="bank-transfer" size={hp(5)} color={colors.accent[300]} />
             </View>
-            <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' , marginEnd:wp(3)}}>Effectuer un virement</Text>
+
+            <Text style={{ color: colors.main.fontColor, fontWeight: 'bold', marginEnd: wp(3) }}>Effectuer un virement</Text>
+
           </View>
+
         </TouchableOpacity>
-        <TouchableOpacity onPressIn={() => navigation.navigate('Transactions')}>
+
+        <TouchableOpacity onPressIn={() => navigation.navigate('Transactions')}
+        accessibilityRole='button'
+        accessibilityLabel='Historique Virements'
+        accessibilityHint='Appuyer pour naviguer vers la page de votre historique de virements'
+        >
+
           <View style={styles.btnContainer} >
+
             <View style={styles.icon}>
-            <Icon source="transfer-down" size={hp(5)} color={colors.accent[300]} />
+              <Icon source="transfer-down" size={hp(5)} color={colors.accent[300]} />
             </View>
-            <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' , marginEnd:wp(3)}}>Historique Virements</Text>
+
+            <Text style={{ color: colors.main.fontColor, fontWeight: 'bold', marginEnd: wp(3) }}>Historique Virements</Text>
+
           </View>
+
         </TouchableOpacity>
-        
+        <TouchableOpacity onPressIn={() => navigation.navigate('Transactions')}
+                accessibilityRole='button'
+                accessibilityLabel='Reclamation'
+                accessibilityHint='Appuyer pour naviguer vers la page qui vous permet de effetuer une reclamation'
+                >
+
+                  <View style={styles.btnContainer} >
+
+                    <View style={styles.icon}>
+                      <Icon source="alert-box-outline" size={hp(5)} color={colors.accent[300]} />
+                    </View>
+
+                    <Text style={{ color: colors.main.fontColor, fontWeight: 'bold', marginEnd: wp(3) }}>Reclamation</Text>
+
+                  </View>
+
+                </TouchableOpacity>
+
       </View>
+    </ScrollView>
+
     </View>
   );
 };
