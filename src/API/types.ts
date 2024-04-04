@@ -71,4 +71,8 @@ interface GetClientsResponse {
   compteBancaire: CompteBancaire;
 }
 
-export type {GetClientsResponse, CompteBancaire, Carte, Transaction, Virement};
+interface GetIntentResponse {
+  feedback: string;
+}
+
+export type {GetClientsResponse, CompteBancaire, Carte, Transaction, Virement, GetIntentResponse};

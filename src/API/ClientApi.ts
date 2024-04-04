@@ -1,5 +1,5 @@
 import {createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { GetClientsResponse } from './types';
+import { GetClientsResponse, GetIntentResponse } from './types';
 
 interface FetchArgs {
   id: any;
@@ -24,8 +24,22 @@ export const clientApi = createApi({
       }),
       providesTags: ['Client']
     }),
+
+    getIntent: builder.query<{assistantResponse: string}, {prompt: string}>({
+      query: (prompt) => ({
+        url: `/api/v1/client/getIntent`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(prompt),
+      }),
+      providesTags: ['Client']
+    }),
   }),
+
+  
 });
 
-export const {useGetClientsQuery} = clientApi
+export const {useGetClientsQuery, useLazyGetIntentQuery} = clientApi
 

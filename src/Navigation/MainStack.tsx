@@ -28,7 +28,9 @@ import {setMode, setInitialLogin, setLogout} from '../context/globalReducer';
 // storage
 import * as Keychain from 'react-native-keychain';
 
-
+// components
+// import FloatingButton from '../components/FloatingButton';
+import Microphone from '../components/microphone';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -50,7 +52,7 @@ const MainStack = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const {mode, isLoggedIn} = useSelector((state: RootState) => state.global);
-  console.log('🚀 ~ MainStack ~ isLoggedIn:', isLoggedIn);
+  // console.log('🚀 ~ MainStack ~ isLoggedIn:', isLoggedIn);
   const toggleMode = () => {
     dispatch(setMode('dark'));
   };
@@ -73,6 +75,7 @@ const MainStack = () => {
     await Keychain.resetGenericPassword({service: 'refreshService'});
     dispatch(setLogout());
   };
+
 
   return (
     <>
@@ -216,7 +219,10 @@ const MainStack = () => {
 
           </>
         )}
-      </stack.Navigator>      
+      </stack.Navigator>
+
+      {isLoggedIn ? <Microphone /> : null}
+      
     </>
   );
 };

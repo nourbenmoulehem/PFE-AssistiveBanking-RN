@@ -70,10 +70,12 @@ const SignIn = ({navigation}: SignInProps) => {
   };
 
   const authenticate = async (values: FormValues) => {
+
+    
     try {
       const response = await axios({
         method: 'post',
-        url: `http://192.168.1.101:5001/api/v1/auth/authenticate`,
+        url: `http://192.168.1.7:5001/api/v1/auth/authenticate`,
         withCredentials: true,
         responseType: 'json',
         data: {
@@ -81,12 +83,15 @@ const SignIn = ({navigation}: SignInProps) => {
           password: values.password,
         },
       });
+    
       await Keychain.setGenericPassword(
         'accessToken',
         response.data.access_token,
         {service: 'accessService'},
       );
-
+      const clientId = response.data.clientId; // hardcoded for now
+      console.log('clientId', clientId);
+    
       await Keychain.setGenericPassword(
         'refreshToken',
         response.data.refresh_token,
@@ -98,9 +103,9 @@ const SignIn = ({navigation}: SignInProps) => {
       const refreshCredentials = await Keychain.getGenericPassword({
         service: 'refreshService',
       });
-
+    
       if (accessCredentials && refreshCredentials) {
-        dispatch(setLogin({name: 'mohamed'}));
+        dispatch(setLogin({clientId: response.data.client_id}));
       }
     } catch (error: any) {
       setVisible(true);
