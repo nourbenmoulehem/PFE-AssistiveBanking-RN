@@ -26,8 +26,7 @@ import {setMode, setInitialLogin, setLogout} from '../context/globalReducer';
 // storage
 import * as Keychain from 'react-native-keychain';
 
-// components
-import FloatingButton from '../components/FloatingButton';
+
 
 export type RootStackParamList = {
   Home: undefined;
@@ -197,10 +196,7 @@ const MainStack = () => {
 
           </>
         )}
-      </stack.Navigator>
-
-      {isLoggedIn ? <FloatingButton /> : null}
-      
+      </stack.Navigator>      
     </>
   );
 };
