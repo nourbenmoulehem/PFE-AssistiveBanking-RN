@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useDispatch, useSelector } from 'react-redux';
@@ -143,6 +143,7 @@ const Home = ({ navigation }: HomeProps) => {
       </View>
 
 
+    <ScrollView>
       <View style={styles.midContainer}>
 
         <TouchableOpacity onPressIn={() => navigation.navigate('Transactions')}
@@ -236,6 +237,7 @@ const Home = ({ navigation }: HomeProps) => {
                 </TouchableOpacity>
 
       </View>
+    </ScrollView>
 
     </View>
   );

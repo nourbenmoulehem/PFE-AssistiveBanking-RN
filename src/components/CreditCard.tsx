@@ -19,7 +19,7 @@ const CreditCard: React.FC<CreditCardProps> = ({ name, lastName, cardNumber }) =
 //   const year = String(expDate.getFullYear()).slice(-2); // slice(-2) gets the last 2 digits of the year
 //   const formattedExpirationDate = `${month}/${year}`;
   return (
-    <ImageBackground source={require('C:/Users/GAMER/Desktop/PFE/PFE-AssistiveBanking-RN/src/assets/Card/006.png')} resizeMode="contain" style={styles.card}>
+    <ImageBackground source={require('C:/Users/nbenm/PFE-frontend/WeBankAssistive/src/assets/Card/006.png')} resizeMode="contain" style={styles.card}>
       <Text style={styles.number}>{formattedCardNumber}</Text>
         <Text style={styles.date}>MONTH/YEAR</Text>
         <Text style={styles.name}>06/29</Text>
