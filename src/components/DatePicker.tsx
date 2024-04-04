@@ -35,7 +35,7 @@ const DatePickerInput: React.FC<DatePickerProps> = ({
   name
 }) => {
   const {mode} = useSelector((state: RootState) => state.global);
-  const colors = tokens(mode);
+  const colors:any = tokens(mode);
   // date picker related
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const showDatePicker = () => {

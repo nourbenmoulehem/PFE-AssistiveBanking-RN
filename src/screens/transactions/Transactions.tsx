@@ -42,7 +42,7 @@ const Transactions = () => {
   }, [numberOfItemsPerPage]);
 
   const {mode} = useSelector((state: RootState) => state.global);
-  const colors = tokens(mode);
+  const colors:any = tokens(mode);
 
   const {data, isLoading} = useGetClientsQuery(1);
   console.log("🚀 ~ Transactions ~ data transaction:", data?.compteBancaire.transactions)

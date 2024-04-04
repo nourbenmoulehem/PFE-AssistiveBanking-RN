@@ -61,7 +61,7 @@ const SignIn = ({navigation}: SignInProps) => {
   getCredentials();
   // testing purposes, need to be deleted later
 
-  const colors = tokens(mode); // get the color palette based on the mode
+  const colors:any = tokens(mode); // get the color palette based on the mode
   const dispatch = useDispatch();
 
   type FormValues = {

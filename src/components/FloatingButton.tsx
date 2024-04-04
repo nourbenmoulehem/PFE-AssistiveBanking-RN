@@ -20,7 +20,7 @@ const FloatingButton = () => {
   const [isDetected, setIsDetected] = React.useState(false);
 
   const {mode} = useSelector((state: RootState) => state.global);
-  const colors = tokens(mode);
+  const colors:any = tokens(mode);
   let recordAudioRequest;
   const ACCESS_KEY = 'pfkjx/OKWZLZi4tC/3OSSr027rsRC0ToMGypPUMwUleYrqjjHfPmdA==';
   // let keywordName = 'hey_siri'; // we-bank_en_android_v3_0_0

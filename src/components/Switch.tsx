@@ -15,7 +15,7 @@ interface CustomSwitchProps {
 
 const CustomSwitch: FC<CustomSwitchProps> = ({value, onValueChange, text}) => {
   const {mode} = useSelector((state: RootState) => state.global);
-  const colors = tokens(mode);
+  const colors:any = tokens(mode);
   const styles = StyleSheet.create({
     switchContainer: {
       flexDirection: 'row',

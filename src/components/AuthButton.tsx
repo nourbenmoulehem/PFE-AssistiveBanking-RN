@@ -14,7 +14,7 @@ interface SubmitButtonProps {
 
 const SubmitButton: React.FC<SubmitButtonProps> = ({ handleSubmit, label, accessibilityHint }) => {
   const {mode} = useSelector((state: RootState) => state.global);
-  const colors = tokens(mode);
+  const colors:any = tokens(mode);
   const styles = StyleSheet.create({
     submitButton: {
       backgroundColor: colors.main.buttonColor,

@@ -22,7 +22,7 @@ const GenderButton: React.FC<GenderButtonProps> = ({
   setGenderChanged,
 }) => {
   const {mode} = useSelector((state: RootState) => state.global);
-  const colors = tokens(mode);
+  const colors:any = tokens(mode);
 
   const styles = StyleSheet.create({
     checkedButton: {
