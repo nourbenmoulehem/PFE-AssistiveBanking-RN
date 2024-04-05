@@ -47,7 +47,7 @@ const ForgotPassword = () => {
 
   const {mode} = useSelector((state: RootState) => state.global);
 
-  const colors = tokens(mode);
+  const colors:any = tokens(mode);
 
   const route = useRoute();
   const {token} = route.params as {token?: string};

@@ -63,7 +63,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
 
 const SignUp = ({ navigation }: Props) => {
   const {mode} = useSelector((state: RootState) => state.global);
-  const colors = tokens(mode);
+  const colors:any = tokens(mode);
 
   const [step, setStep] = useState(1);
 

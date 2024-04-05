@@ -53,7 +53,7 @@ type FormValues = {
 const ForgotPassword = () => {
   const {mode} = useSelector((state: RootState) => state.global);
 
-  const colors = tokens(mode);
+  const colors:any = tokens(mode);
 
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');

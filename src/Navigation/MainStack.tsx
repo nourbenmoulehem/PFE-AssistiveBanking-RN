@@ -1,4 +1,4 @@
-import {View, Text, Image, Touchable, TouchableOpacity} from 'react-native';
+import {View, Text, Image, Touchable, TouchableOpacity, Settings as RNSettings} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {tokens} from '../assets/palette';
@@ -14,6 +14,8 @@ import SignUp from '../screens/sign-up/SignUp';
 import ForgotPassword from '../screens/forgot-password/ForgotPassword';
 import AccountActivation from '../screens/account-activation/AccountActivation';
 import Home from '../screens/home/Home';
+import Settings from '../screens/Settings/Settings';
+import ColorPreferences from '../screens/ColorPreferences/ColorPreferences';
 import Transactions from '../screens/transactions/Transactions';
 import NewPassword from '../screens/new-password/NewPassword';
 import Card from '../screens/Card/Card';
@@ -26,7 +28,9 @@ import {setMode, setInitialLogin, setLogout} from '../context/globalReducer';
 // storage
 import * as Keychain from 'react-native-keychain';
 
-
+// components
+// import FloatingButton from '../components/FloatingButton';
+import Microphone from '../components/microphone';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -37,6 +41,8 @@ export type RootStackParamList = {
   AccountActivation: undefined;
   Transactions: undefined;
   NewPassword: undefined;
+  Settings: undefined;
+  ColorPreferences: undefined;
   Card: undefined;
   // Profile: { userId: string };
 };
@@ -46,12 +52,12 @@ const MainStack = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const {mode, isLoggedIn} = useSelector((state: RootState) => state.global);
-  console.log('🚀 ~ MainStack ~ isLoggedIn:', isLoggedIn);
+  // console.log('🚀 ~ MainStack ~ isLoggedIn:', isLoggedIn);
   const toggleMode = () => {
-    dispatch(setMode());
+    dispatch(setMode('dark'));
   };
-  const colors = tokens(mode);
-
+  const colors:any = tokens(mode);
+  const [active, setActive] = useState(false);
   // to check if the user is logged in or not and update the initial state
   useEffect(() => {
     const checkKeychain = async () => {
@@ -69,6 +75,7 @@ const MainStack = () => {
     await Keychain.resetGenericPassword({service: 'refreshService'});
     dispatch(setLogout());
   };
+
 
   return (
     <>
@@ -108,7 +115,7 @@ const MainStack = () => {
           ),
           headerRight: () => (
             <>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPressIn={toggleMode}
                 accessible={true}
                 accessibilityRole="button"
@@ -123,7 +130,7 @@ const MainStack = () => {
                   color={colors.main.buttonColor}
                   style={{marginRight: 10}}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               {isLoggedIn ? (
                 loading ? (
                   <ActivityIndicator
@@ -176,6 +183,22 @@ const MainStack = () => {
                 title: 'Transactions',
               }}
             />
+            <stack.Screen
+              name="Settings"
+              component={Settings}
+              options={{
+                headerShown: true,
+                title: 'Settings',
+              }}
+            />
+            <stack.Screen
+              name="ColorPreferences"
+              component={ColorPreferences}
+              options={{
+                headerShown: true,
+                title: 'ColorPreferences',
+              }}
+            />
             <stack.Screen name="Card" component={Card}
               options={{
                 headerShown: true,
@@ -196,7 +219,10 @@ const MainStack = () => {
 
           </>
         )}
-      </stack.Navigator>      
+      </stack.Navigator>
+
+      {isLoggedIn ? <Microphone /> : null}
+      
     </>
   );
 };

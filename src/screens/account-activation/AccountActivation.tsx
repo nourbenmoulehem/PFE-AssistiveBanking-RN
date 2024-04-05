@@ -14,7 +14,7 @@ import {tokens} from '../../assets/palette';
 
 const AccountActivation = () => {
   const {mode} = useSelector((state: RootState) => state.global);
-  const colors = tokens(mode);
+  const colors:any = tokens(mode);
 
   const route = useRoute();
   const {activationToken} = route.params as {activationToken?: string};

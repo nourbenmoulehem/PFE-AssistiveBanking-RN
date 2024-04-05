@@ -116,7 +116,7 @@ import { Icon } from 'react-native-paper';
 
 const Transactions = () => {
   const {mode} = useSelector((state: RootState) => state.global);
-  const colors = tokens(mode);
+  const colors:any = tokens(mode);
 
   const {data, isLoading} = useGetClientsQuery(1);
   const transaction = data?.compteBancaire.transactions;

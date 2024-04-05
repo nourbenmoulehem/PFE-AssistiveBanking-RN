@@ -15,7 +15,7 @@ type InputTitleProps = {
 const InputTitle = (props: InputTitleProps) => {
 
   const {mode} = useSelector((state: RootState) => state.global);
-  const colors = tokens(mode);
+  const colors:any = tokens(mode);
 
   const styles = StyleSheet.create({
     container: {

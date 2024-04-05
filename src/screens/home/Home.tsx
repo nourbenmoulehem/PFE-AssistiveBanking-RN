@@ -1,10 +1,14 @@
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { Divider, List, Icon } from 'react-native-paper';
+
+// redux
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../context/store';
 import { tokens } from '../../assets/palette';
-import { Divider, List, Icon } from 'react-native-paper';
+
+
 // storage
 import * as Keychain from 'react-native-keychain';
 
@@ -28,7 +32,7 @@ const Home = ({ navigation }: HomeProps) => {
     (state: RootState) => state.global,
   );
   console.log('🚀 ~ Home ~ isLoggedIn:', isLoggedIn);
-  const colors = tokens(mode);
+  const colors:any = tokens(mode);
   const [clientDetails, setClientDetails] = useState<Object>({});
 
 
@@ -235,6 +239,14 @@ const Home = ({ navigation }: HomeProps) => {
                   </View>
 
                 </TouchableOpacity>
+        <TouchableOpacity onPressIn={() => navigation.navigate('Settings')}>
+          <View style={styles.btnContainer} >
+            <View style={styles.icon}>
+            <Icon source="cog" size={hp(5)} color={colors.accent[300]} />
+            </View>
+            <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' , marginEnd:wp(3)}}>Parametres</Text>
+          </View>
+        </TouchableOpacity>
 
       </View>
     </ScrollView>

@@ -45,7 +45,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
   name
 }) => {
   const {mode} = useSelector((state: RootState) => state.global);
-  const colors = tokens(mode);
+  const colors:any = tokens(mode);
   const formikContext = useFormikContext();
   const handleChange = (imageUri: string | undefined) => {
     const {setFieldValue} = formikContext;
