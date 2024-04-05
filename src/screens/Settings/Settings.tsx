@@ -15,7 +15,6 @@ const Settings = () => {
   );
   const colors:any = tokens(mode);
   
-  console.log(colors);
   
 
   const styles = StyleSheet.create({
