@@ -1,11 +1,11 @@
-interface Transaction {
-  tran_id: number;
+interface Operation {
+  op_id: number;
   date_valeur: string;
   date_operation: string;
-  tran_type: string;
-  tran_canal: string;
-  tran_marchant: string;
-  tran_emplacement: string;
+  op_type: string;
+  op_canal: string;
+  op_marchant: string;
+  op_emplacement: string;
   montant: number;
   compteBancaire: number;
 }
@@ -38,7 +38,7 @@ interface CompteBancaire {
   date_ouverture: string;
   client: number;
   carte: Carte;
-  transactions: Transaction[];
+  operations: Operation[];
   virements: Virement[];
   rib: string;
 }
@@ -75,4 +75,4 @@ interface GetIntentResponse {
   feedback: string;
 }
 
-export type {GetClientsResponse, CompteBancaire, Carte, Transaction, Virement, GetIntentResponse};
+export type {GetClientsResponse, CompteBancaire, Carte, Operation, Virement, GetIntentResponse};
