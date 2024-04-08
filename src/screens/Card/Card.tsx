@@ -163,7 +163,7 @@ const Card = () => {
   }
   const statusStyles: StatusStyles = {
     'desactivee': [styles.statusDanger, styles.statusTextD],
-    'activee': [styles.statusPass, styles.statusTextP],
+    'Activee': [styles.statusPass, styles.statusTextP],
     'encours de personnalisation': [styles.statusWarning, styles.statusTextW],
   };
 
@@ -260,12 +260,12 @@ const Card = () => {
             <Switch
               style={{ transform: [{ scaleX: 1.5 }, { scaleY: 1.5}] }}
               accessibilityRole="switch"
-              accessibilityLabel={data?.compteBancaire?.carte?.status === 'activee' ? 'Carte activée' : 'Carte désactivée'}
+              accessibilityLabel={data?.compteBancaire?.carte?.status === 'Activee' ? 'Carte activée' : 'Carte désactivée'}
               trackColor={{ false: 'gray', true: colors.secondary[400] }}
-              thumbColor={data?.compteBancaire?.carte?.status === 'activee' ? colors.secondary[500] : 'gray'}
-              value={data?.compteBancaire?.carte?.status === 'activee'}
+              thumbColor={data?.compteBancaire?.carte?.status === 'Activee' ? colors.secondary[500] : 'gray'}
+              value={data?.compteBancaire?.carte?.status === 'Activee'}
               onValueChange={(value) => {
-                const newStatus = value ? 'activee' : 'desactivee';
+                const newStatus = value ? 'Activee' : 'desactivee';
                 setModalVisible(true);
               }}
             />
