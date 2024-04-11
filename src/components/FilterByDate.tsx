@@ -11,13 +11,12 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {useSelector} from 'react-redux';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 //forms
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import AuthButton from './AuthButton';
+
 
 const initialValues = {
   startDate: '',
@@ -26,60 +25,56 @@ const initialValues = {
 
 interface FilterByDateProps {
   onDatesSelected: (startDate: string, endDate: string) => void;
+  resetOperations: () => void;
 }
 
-const FilterByDate: React.FC<FilterByDateProps> = ({onDatesSelected}) => {
+const FilterByDate: React.FC<FilterByDateProps> = ({
+  onDatesSelected,
+  resetOperations,
+}) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [currentField, setCurrentField] = useState<string>('');
 
-  // Show date picker when TextInput is pressed
   const showDatePicker = (field: string) => {
     setCurrentField(field);
     setDatePickerVisibility(true);
   };
 
-  // Hide date picker
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
 
-  // Handle selected date
   const handleConfirm = (date: Date) => {
-    console.log('Selected Date: ', date);
     hideDatePicker();
-    // Do something with the selected date
+  };
+
+  const reset = () => {
+    resetOperations();
   };
 
   return (
     <View>
-      <Text>Filrage</Text>
+      <Text style={styles.filterByDate}>Filrage</Text>
       <Formik
         initialValues={initialValues}
         onSubmit={values => {
-          console.log('hiiii');
-
-          console.log(values);
           onDatesSelected(values.startDate, values.endDate);
         }}
         validationSchema={validationSchema}>
         {({
-          values, // where we're getting all the value of the input fields
+          values,
           errors,
           touched,
-          isValid,
-          handleChange,
-          handleBlur,
           handleSubmit,
           handleReset,
-          isSubmitting,
           setFieldValue,
-          /* and other goodies */
         }) => (
           <>
             <TouchableWithoutFeedback
               onPress={() => showDatePicker('startDate')}>
               <View>
                 <TextInput
+                  style={styles.inputField}
                   value={values.startDate}
                   placeholder="Date de début"
                   editable={false}
@@ -88,7 +83,7 @@ const FilterByDate: React.FC<FilterByDateProps> = ({onDatesSelected}) => {
                   }}
                 />
                 {touched.startDate && errors.startDate && (
-                  <Text>{errors.startDate}</Text>
+                  <Text style={styles.errorText}>{errors.startDate}</Text>
                 )}
               </View>
             </TouchableWithoutFeedback>
@@ -96,6 +91,7 @@ const FilterByDate: React.FC<FilterByDateProps> = ({onDatesSelected}) => {
             <TouchableWithoutFeedback onPress={() => showDatePicker('endDate')}>
               <View>
                 <TextInput
+                  style={styles.inputField}
                   value={values.endDate}
                   placeholder="Date de fin"
                   editable={false}
@@ -105,7 +101,7 @@ const FilterByDate: React.FC<FilterByDateProps> = ({onDatesSelected}) => {
                 />
 
                 {touched.endDate && errors.endDate && (
-                  <Text>{errors.endDate}</Text>
+                  <Text style={styles.errorText}>{errors.endDate}</Text>
                 )}
               </View>
             </TouchableWithoutFeedback>
@@ -120,11 +116,22 @@ const FilterByDate: React.FC<FilterByDateProps> = ({onDatesSelected}) => {
               onCancel={hideDatePicker}
             />
 
-            <AuthButton
-              handleSubmit={handleSubmit}
-              label="Envoyer"
-              accessibilityHint={'filter'}
-            />
+            <View style={styles.buttonsContainer}>
+              <TouchableOpacity
+                style={styles.resetButton}
+                onPress={() => {
+                  handleReset();
+                  reset();
+                }}>
+                <Text style={styles.textButton}>Reset</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.submitButton}
+                onPress={() => handleSubmit()}>
+                <Text style={styles.textButton}>Submit</Text>
+              </TouchableOpacity>
+            </View>
           </>
         )}
       </Formik>
@@ -141,4 +148,56 @@ const validationSchema = Yup.object().shape({
   endDate: Yup.date()
     .required('Required')
     .min(Yup.ref('startDate'), 'End date must be after start date'),
+});
+
+const styles = StyleSheet.create({
+  inputField: {
+    width: wp(80),
+    height: hp(7),
+    backgroundColor: 'white',
+    marginBottom: hp(2),
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'black',
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  submitButton: {
+    width: wp(40),
+    height: hp(7),
+    backgroundColor: '#A45704',
+    marginBottom: hp(2),
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+  },
+  resetButton: {
+    width: wp(40),
+    height: hp(7),
+    backgroundColor: '#999999',
+    marginBottom: hp(2),
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: wp(2),
+  },
+  errorText: {
+    color: 'red',
+  },
+  textButton: {
+    fontSize: 18,
+    color: 'black',
+  },
+  filterByDate: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: hp(2),
+  }
 });
