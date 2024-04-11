@@ -16,7 +16,7 @@ import AccountActivation from '../screens/account-activation/AccountActivation';
 import Home from '../screens/home/Home';
 import Settings from '../screens/Settings/Settings';
 import ColorPreferences from '../screens/ColorPreferences/ColorPreferences';
-import Transactions from '../screens/transactions/Transactions';
+import Operations from '../screens/operations/Operations';
 import NewPassword from '../screens/new-password/NewPassword';
 import Card from '../screens/Card/Card';
 
@@ -39,7 +39,7 @@ export type RootStackParamList = {
   ForgotPassword: undefined;
   MultiStepForm: undefined;
   AccountActivation: undefined;
-  Transactions: undefined;
+  Operations: undefined;
   NewPassword: undefined;
   Settings: undefined;
   ColorPreferences: undefined;
@@ -115,7 +115,7 @@ const MainStack = () => {
           ),
           headerRight: () => (
             <>
-              {/* <TouchableOpacity
+              {/* dark and light switcher <TouchableOpacity
                 onPressIn={toggleMode}
                 accessible={true}
                 accessibilityRole="button"
@@ -176,11 +176,11 @@ const MainStack = () => {
               }}
             />
             <stack.Screen
-              name="Transactions"
-              component={Transactions}
+              name="Operations"
+              component={Operations}
               options={{
                 headerShown: true,
-                title: 'Transactions',
+                title: 'Operations',
               }}
             />
             <stack.Screen

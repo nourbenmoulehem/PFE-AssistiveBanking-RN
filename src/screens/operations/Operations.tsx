@@ -5,17 +5,21 @@ import {
   View,
   FlatList,
   TouchableWithoutFeedback,
+  ScrollView,
 } from 'react-native';
-import {TextInput} from 'react-native-paper';
+import {TextInput, TouchableRipple, Icon} from 'react-native-paper';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../context/store';
-import {useGetOperationsQuery, useGetOperationsBetweenDatesQuery} from '../../API/ClientApi';
+import {
+  useGetOperationsQuery,
+  useGetOperationsBetweenDatesQuery,
+} from '../../API/ClientApi';
 import {tokens} from '../../assets/palette';
-import {Icon} from 'react-native-paper';
+import axios from 'axios';
 
 // components
 import FilterByDate from '../../components/FilterByDate';
@@ -23,17 +27,16 @@ import FilterByDate from '../../components/FilterByDate';
 const Operations = () => {
   const {mode} = useSelector((state: RootState) => state.global);
   const colors: any = tokens(mode);
-  
 
   const {data, isLoading, error} = useGetOperationsQuery(1);
-  const operation = data ? data : [];
+  const [operations, setOperations] = useState([]);
+  const [resetFlag, setResetFlag] = useState(false);
 
-  const [dates, setDates] = useState({ startDate: '', endDate: '' });
-  const { data: dataBetweenDates, isLoading: isLoadingBetweenDates, error: errorBetweenDates } = useGetOperationsBetweenDatesQuery({ startDate: "2023-03-24", endDate: "2023-03-25" });
-  console.log("🚀 ~ Operations ~ errorBetweenDates:", errorBetweenDates)
-  console.log("🚀 ~ Operations ~ isLoadingBetweenDates:", isLoadingBetweenDates)
-  console.log("🚀 ~ Operations ~ dataBetweenDates:", dataBetweenDates)
-
+  useEffect(() => {
+    if (data) {
+      setOperations(data);
+    }
+  }, [data, resetFlag]);
 
   const styles = StyleSheet.create({
     container: {
@@ -87,25 +90,15 @@ const Operations = () => {
       marginBottom: wp(2),
       color: colors.main.fontColor,
     },
+    reset: {
+      width: wp(90),
+      height: hp(7),
+      backgroundColor: colors.main.backgroundColor,
+      borderRadius: wp(4),
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   });
-
-  if (operation.length === 0) {
-    // typescript error ill will see it later
-    return (
-      <View style={styles.container}>
-        <Text
-          style={[
-            styles.libelle,
-            {textAlign: 'left', fontSize: wp(6), marginBottom: wp(3)},
-          ]}>
-          Historique de Mouvements
-        </Text>
-        <Text style={[styles.libelle, {fontSize: wp(4)}]}>
-          Aucun mouvement n'est disponible
-        </Text>
-      </View>
-    );
-  }
 
   const renderItem = ({item}: {item: any}) => (
     <TouchableWithoutFeedback
@@ -174,13 +167,50 @@ const Operations = () => {
     </TouchableWithoutFeedback>
   );
 
-  
-
-  function fetchData(startDate: string, endDate: string): void {
+  const fetchData = async (startDate: string, endDate: string) => {
     console.log('fetching data');
-    
+
     console.log('start date', startDate, 'end date', endDate);
-    setDates({ startDate: "2023-03-24", endDate: "2023-03-25" });
+
+    const data = await axios.get(
+      `${process.env.API_BASE_URL}/api/v1/operation/mouvement/byDate?startDate=${startDate}&endDate=${endDate}`,
+    );
+
+    console.log('data', data.data);
+
+    if (data.status === 200) {
+      setOperations(data.data);
+    } else {
+      console.log('error', data);
+    }
+  };
+
+  const reset = async () => {
+    console.log('resetting data');
+
+    setResetFlag(prev => !prev);
+  };
+
+  if (operations.length === 0) {
+    return (
+      <View style={styles.container}>
+        <Text
+          style={[
+            styles.libelle,
+            {textAlign: 'left', fontSize: wp(6), marginBottom: wp(3)},
+          ]}>
+          Historique de Mouvements
+        </Text>
+        <View style={styles.reset}>
+          <TouchableRipple onPress={() => reset()}>
+            <Icon source="autorenew" size={hp(5)} color="#A45704" />
+          </TouchableRipple>
+          <Text style={[styles.libelle, {fontSize: wp(4)}]}>
+            Aucun mouvement disponible
+          </Text>
+        </View>
+      </View>
+    );
   }
 
   return (
@@ -192,14 +222,19 @@ const Operations = () => {
         ]}>
         Historique de Mouvements
       </Text>
-      <FilterByDate onDatesSelected={fetchData} />
-      <FlatList
-        data={operation} // typescript error
-        renderItem={renderItem}
-        keyExtractor={item => item.op_id.toString()}
-        // accessibilityRole='list'
-        // accessibilityLabel='historiques de vos mouvements'
-      />
+      <FilterByDate onDatesSelected={fetchData} resetOperations={reset} />
+
+      {isLoading ? (
+        <Text>en cours...</Text>
+      ) : (
+        <FlatList
+          data={operations}
+          renderItem={renderItem}
+          keyExtractor={item => item.op_id.toString()}
+          // accessibilityRole='list'
+          // accessibilityLabel='historiques de vos mouvements'
+        />
+      )}
     </View>
   );
 };

@@ -25,7 +25,6 @@ type HomeProps = NativeStackScreenProps<RootStackParamListSignedIn, 'Home'>;
 
 const Home = ({ navigation }: HomeProps) => {
   const {data, isLoading, error} = useGetClientsQuery(1);
-  console.log("🚀 ~ home:", data , error)
 
   const dispatch = useDispatch();
   const { isLoggedIn, mode, user } = useSelector(
@@ -35,23 +34,6 @@ const Home = ({ navigation }: HomeProps) => {
   const colors:any = tokens(mode);
   const [clientDetails, setClientDetails] = useState<Object>({});
 
-
-  // useEffect(() => {
-  //   getClientDetails();
-  // }, []);
-
-  // const getClientDetails = async () => {
-  //   const api = await getApi();
-  //   if (api) {
-  //     let response = await api.get('/api/v1/client/get-by-cin?cin=123456789');
-  //     console.log('🚀 ~ getClientDetails ~ response.data:', response.data);
-  //     if (response.status === 200) {
-  //       setClientDetails(response.data);
-  //     }
-  //   } else {
-  //     // Handle the case where there is no API (e.g., show an error message)
-  //   }
-  // };
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -150,7 +132,7 @@ const Home = ({ navigation }: HomeProps) => {
     <ScrollView>
       <View style={styles.midContainer}>
 
-        <TouchableOpacity onPressIn={() => navigation.navigate('Transactions')}
+        <TouchableOpacity onPress={() => navigation.navigate('Operations')}
         accessibilityRole='button'
         accessibilityLabel='Historique de mouvements'
         accessibilityHint='Appuyer pour naviguer vers la page de votre historique de mouvements'
@@ -169,7 +151,7 @@ const Home = ({ navigation }: HomeProps) => {
 
         </TouchableOpacity>
 
-        <TouchableOpacity onPressIn={() => navigation.navigate('Card')}
+        <TouchableOpacity onPress={() => navigation.navigate('Card')}
         accessibilityRole='button'
         accessibilityLabel='Votre Carte Webank'
         accessibilityHint='Appuyer pour naviguer vers la page qui vous permet de gerer votre carte webank'
@@ -187,7 +169,7 @@ const Home = ({ navigation }: HomeProps) => {
 
         </TouchableOpacity>
 
-        <TouchableOpacity onPressIn={() => navigation.navigate('Transactions')}
+        <TouchableOpacity onPress={() => navigation.navigate('Operations')}
         accessibilityRole='button'
         accessibilityLabel='Effectuer un virement'
         accessibilityHint='Appuyer pour naviguer vers la page qui vous permet d effectuer un virement'
@@ -205,7 +187,7 @@ const Home = ({ navigation }: HomeProps) => {
 
         </TouchableOpacity>
 
-        <TouchableOpacity onPressIn={() => navigation.navigate('Transactions')}
+        <TouchableOpacity onPress={() => navigation.navigate('Operations')}
         accessibilityRole='button'
         accessibilityLabel='Historique Virements'
         accessibilityHint='Appuyer pour naviguer vers la page de votre historique de virements'
@@ -222,7 +204,7 @@ const Home = ({ navigation }: HomeProps) => {
           </View>
 
         </TouchableOpacity>
-        <TouchableOpacity onPressIn={() => navigation.navigate('Transactions')}
+        <TouchableOpacity onPress={() => navigation.navigate('Operations')}
                 accessibilityRole='button'
                 accessibilityLabel='Reclamation'
                 accessibilityHint='Appuyer pour naviguer vers la page qui vous permet de effetuer une reclamation'
@@ -239,7 +221,7 @@ const Home = ({ navigation }: HomeProps) => {
                   </View>
 
                 </TouchableOpacity>
-        <TouchableOpacity onPressIn={() => navigation.navigate('Settings')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
           <View style={styles.btnContainer} >
             <View style={styles.icon}>
             <Icon source="cog" size={hp(5)} color={colors.accent[300]} />
