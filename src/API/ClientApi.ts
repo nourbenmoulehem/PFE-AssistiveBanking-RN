@@ -26,7 +26,7 @@ export const clientApi = createApi({
       providesTags: ['Client']
     }),
 
-    getOperations: builder.query<GetClientsResponse, number>({
+    getOperations: builder.query({ // <GetClientsResponse, number>
       query: (id) => ({
         url: `/api/v1/operation/mouvement/all`,
         method: 'POST',
@@ -35,7 +35,7 @@ export const clientApi = createApi({
       providesTags: ['Operation']
     }),
 
-    getOperationsBetweenDates: builder.query<GetClientsResponse, { startDate: string, endDate: string }>({
+    getOperationsBetweenDates: builder.query<GetClientsResponse, { startDate: string, endDate: string }>({ // not used
       query: ({ startDate, endDate }) => ({
         url: `/api/v1/operation/mouvement/?startDate=${startDate}&endDate=${endDate}`,
         method: 'GET',
@@ -43,7 +43,7 @@ export const clientApi = createApi({
       providesTags: ['Operation']
     }),
 
-    getIntent: builder.query<{assistantResponse: string}, {prompt: string}>({
+    getIntent: builder.query<{assistantResponse: string}, {prompt: string}>({ // not used
       query: (prompt) => ({
         url: `/api/v1/client/getIntent`,
         method: 'POST',
