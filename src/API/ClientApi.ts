@@ -11,6 +11,7 @@ export const clientApi = createApi({
   baseQuery: fetchBaseQuery({baseUrl: `${process.env.API_BASE_URL}`}), // http://192.168.1.101:5001
   tagTypes: [
     "Client",
+    "Operation"
   ],
   refetchOnFocus: true,
   refetchOnReconnect: true,
@@ -23,6 +24,23 @@ export const clientApi = createApi({
         method: 'POST',
       }),
       providesTags: ['Client']
+    }),
+
+    getOperations: builder.query<GetClientsResponse, number>({
+      query: (id) => ({
+        url: `/api/v1/operation/mouvement/all`,
+        method: 'POST',
+        body: { clientId: id }
+      }),
+      providesTags: ['Operation']
+    }),
+
+    getOperationsBetweenDates: builder.query<GetClientsResponse, { startDate: string, endDate: string }>({
+      query: ({ startDate, endDate }) => ({
+        url: `/api/v1/operation/mouvement/?startDate=${startDate}&endDate=${endDate}`,
+        method: 'GET',
+      }),
+      providesTags: ['Operation']
     }),
 
     getIntent: builder.query<{assistantResponse: string}, {prompt: string}>({
@@ -41,5 +59,5 @@ export const clientApi = createApi({
   
 });
 
-export const {useGetClientsQuery, useLazyGetIntentQuery} = clientApi
+export const {useGetClientsQuery, useLazyGetIntentQuery, useGetOperationsQuery, useGetOperationsBetweenDatesQuery} = clientApi
 
