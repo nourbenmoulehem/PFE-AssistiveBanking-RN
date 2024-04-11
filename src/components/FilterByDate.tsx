@@ -54,7 +54,7 @@ const FilterByDate: React.FC<FilterByDateProps> = ({
 
   return (
     <View>
-      <Text style={styles.filterByDate}>Filrage</Text>
+      <Text style={styles.filterByDate}>Filtrer par date</Text>
       <Formik
         initialValues={initialValues}
         onSubmit={values => {
@@ -123,13 +123,13 @@ const FilterByDate: React.FC<FilterByDateProps> = ({
                   handleReset();
                   reset();
                 }}>
-                <Text style={styles.textButton}>Reset</Text>
+                <Text style={styles.textButton}>réinitialiser</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={() => handleSubmit()}>
-                <Text style={styles.textButton}>Submit</Text>
+                <Text style={styles.textButton}>Envoyer</Text>
               </TouchableOpacity>
             </View>
           </>
@@ -143,11 +143,13 @@ export default FilterByDate;
 
 const validationSchema = Yup.object().shape({
   startDate: Yup.date()
-    .required('Required')
-    .max(Yup.ref('endDate'), 'Start date must be before end date'),
+    .required('Requis')
+    .max(Yup.ref('endDate'), 'La date de début doit être avant la date de fin')
+    .max(new Date(), 'La date de début ne peut pas être dans le futur'),
   endDate: Yup.date()
-    .required('Required')
-    .min(Yup.ref('startDate'), 'End date must be after start date'),
+    .required('Requis')
+    .min(Yup.ref('startDate'), 'La date de fin doit être après la date de début')
+    .max(new Date(), 'La date de fin ne peut pas être dans le futur'),
 });
 
 const styles = StyleSheet.create({
@@ -198,6 +200,7 @@ const styles = StyleSheet.create({
   filterByDate: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: "#A45704",
     marginBottom: hp(2),
   }
 });
