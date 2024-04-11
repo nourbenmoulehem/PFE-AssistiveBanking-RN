@@ -187,7 +187,7 @@ const Home = ({ navigation }: HomeProps) => {
 
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate('Operations')}
+        <TouchableOpacity onPress={() => navigation.navigate('Transfers')}
         accessibilityRole='button'
         accessibilityLabel='Historique Virements'
         accessibilityHint='Appuyer pour naviguer vers la page de votre historique de virements'

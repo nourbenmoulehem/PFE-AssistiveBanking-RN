@@ -17,6 +17,7 @@ import Home from '../screens/home/Home';
 import Settings from '../screens/Settings/Settings';
 import ColorPreferences from '../screens/ColorPreferences/ColorPreferences';
 import Operations from '../screens/operations/Operations';
+import Transfers from '../screens/transfers/Transfers';
 import NewPassword from '../screens/new-password/NewPassword';
 import Card from '../screens/Card/Card';
 
@@ -44,6 +45,7 @@ export type RootStackParamList = {
   Settings: undefined;
   ColorPreferences: undefined;
   Card: undefined;
+  Transfers: undefined;
   // Profile: { userId: string };
 };
 
@@ -181,6 +183,14 @@ const MainStack = () => {
               options={{
                 headerShown: true,
                 title: 'Operations',
+              }}
+            />
+            <stack.Screen
+              name="Transfers"
+              component={Transfers}
+              options={{
+                headerShown: true,
+                title: 'Transfers',
               }}
             />
             <stack.Screen

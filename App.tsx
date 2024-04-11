@@ -38,6 +38,7 @@ export type RootStackParamList = {
 export type RootStackParamListSignedIn = {
   Home: undefined;
   Operations: undefined;
+  Transfers: undefined;
   Settings: undefined;
   ColorPreferences: undefined;
   Card: undefined;
