@@ -167,13 +167,12 @@ const Operations = () => {
     </TouchableWithoutFeedback>
   );
 
-  const fetchData = async (startDate: string, endDate: string) => {
+  const fetchData = async (startDate: string, endDate: string, clientId = 1) => {
+    console.log("🚀 ~ fetchData ~ clientId:", clientId)
     console.log('fetching data');
 
-    console.log('start date', startDate, 'end date', endDate);
-
     const data = await axios.get(
-      `${process.env.API_BASE_URL}/api/v1/operation/mouvement/byDate?startDate=${startDate}&endDate=${endDate}`,
+      `${process.env.API_BASE_URL}/api/v1/operation/mouvement/byDate?startDate=${startDate}&endDate=${endDate}&clientId=${clientId}`,
     );
 
     console.log('data', data.data);

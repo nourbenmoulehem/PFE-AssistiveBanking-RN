@@ -35,9 +35,9 @@ export const clientApi = createApi({
       providesTags: ['Operation']
     }),
 
-    getOperationsBetweenDates: builder.query<GetClientsResponse, { startDate: string, endDate: string }>({ // not used
-      query: ({ startDate, endDate }) => ({
-        url: `/api/v1/operation/mouvement/?startDate=${startDate}&endDate=${endDate}`,
+    getOperationsBetweenDates: builder.query<GetClientsResponse, { startDate: string, endDate: string, clientId: number }>({ // not used
+      query: ({ startDate, endDate, clientId }) => ({
+        url: `/api/v1/operation/mouvement/?startDate=${startDate}&endDate=${endDate}&clientId=${clientId}`,
         method: 'GET',
       }),
       providesTags: ['Operation']
