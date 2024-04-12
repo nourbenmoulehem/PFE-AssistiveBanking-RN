@@ -18,6 +18,9 @@ import Settings from '../screens/Settings/Settings';
 import ColorPreferences from '../screens/ColorPreferences/ColorPreferences';
 import Operations from '../screens/operations/Operations';
 import Transfers from '../screens/transfers/Transfers';
+import Beneficiaire from '../screens/beneficiaire/Beneficiaire';
+import Reclamation from '../screens/reclamation/Reclamation';
+import Notification from '../screens/notification/Notification';
 import NewPassword from '../screens/new-password/NewPassword';
 import Card from '../screens/Card/Card';
 
@@ -46,6 +49,9 @@ export type RootStackParamList = {
   ColorPreferences: undefined;
   Card: undefined;
   Transfers: undefined;
+  Beneficiaire: undefined;
+  Reclamation: undefined;
+  Notification: undefined;
   // Profile: { userId: string };
 };
 
@@ -191,6 +197,30 @@ const MainStack = () => {
               options={{
                 headerShown: true,
                 title: 'Transfers',
+              }}
+            />
+            <stack.Screen
+              name="Beneficiaire"
+              component={Beneficiaire}
+              options={{
+                headerShown: true,
+                title: 'Beneficiaire',
+              }}
+            />
+            <stack.Screen
+              name="Reclamation"
+              component={Reclamation}
+              options={{
+                headerShown: true,
+                title: 'Reclamation',
+              }}
+            />
+            <stack.Screen
+              name="Notification"
+              component={Notification}
+              options={{
+                headerShown: true,
+                title: 'Notification',
               }}
             />
             <stack.Screen
