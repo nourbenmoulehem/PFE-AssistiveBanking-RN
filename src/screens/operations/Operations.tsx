@@ -167,15 +167,14 @@ const Operations = () => {
     </TouchableWithoutFeedback>
   );
 
-  const fetchData = async (startDate: string, endDate: string, clientId = 1) => {
-    console.log("🚀 ~ fetchData ~ clientId:", clientId)
-    console.log('fetching data');
-
+  const fetchData = async (
+    startDate: string,
+    endDate: string,
+    clientId = 1,
+  ) => {
     const data = await axios.get(
       `${process.env.API_BASE_URL}/api/v1/operation/mouvement/byDate?startDate=${startDate}&endDate=${endDate}&clientId=${clientId}`,
     );
-
-    console.log('data', data.data);
 
     if (data.status === 200) {
       setOperations(data.data);
@@ -185,8 +184,6 @@ const Operations = () => {
   };
 
   const reset = async () => {
-    console.log('resetting data');
-
     setResetFlag(prev => !prev);
   };
 
