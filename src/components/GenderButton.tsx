@@ -57,7 +57,6 @@ const GenderButton: React.FC<GenderButtonProps> = ({
         handleChange('gender')(gender);
         setCheckedGender(gender);
         setGenderChanged(true);
-        console.log('🚀 ~ gender:', gender);
       }}
       style={
         checkedGender === gender ? styles.checkedButton : styles.uncheckedButton
