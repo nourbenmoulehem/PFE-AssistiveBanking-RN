@@ -14,9 +14,7 @@ import {
 } from 'react-native-responsive-screen';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../context/store';
-import {
-  useGetTransfersQuery,
-} from '../../API/ClientApi';
+import {useGetTransfersQuery} from '../../API/ClientApi';
 import {tokens} from '../../assets/palette';
 import axios from 'axios';
 
@@ -24,7 +22,7 @@ import axios from 'axios';
 import FilterByDate from '../../components/FilterByDate';
 
 const Transfers = () => {
-  const {mode} = useSelector((state: RootState) => state.global);
+  const {mode, user} = useSelector((state: RootState) => state.global);
   const colors: any = tokens(mode);
 
   const {data, isLoading, error} = useGetTransfersQuery(1);
@@ -101,64 +99,48 @@ const Transfers = () => {
 
   const renderItem = ({item}: {item: any}) => (
     <TouchableWithoutFeedback
-      accessibilityLabel={`operation ${
-        item.op_id
-      }, operation ${item.op_canal.replace(/_/g, ' ')}, operation effectuee a ${
-        item.op_marchant
-      }, ${item.op_emplacement}, la date de l'operation est ${
-        item.date_operation
-      }, son montant est de ${item.op_type === 'Credit' ? '' : '-'}${
-        item.montant
-      } dinars`}
+      accessibilityLabel={`virement ${item.vir_id}, son montant est de ${item.montant} dinars`}
       onPress={() => {
         // Handle item click
       }}>
-      <View style={styles.item} accessibilityHint={`operation ${item.op_id}`}>
-        {/* <View style={styles.icon} accessibilityLabel='icone'>
-          <Icon source={item.op_type === 'Credit' ? 'download-outline' : 'upload-outline'} size={hp(5)} color={item.op_type === 'Credit' ? colors.main.passText : colors.main.dangerText}  />
-
-        </View> */}
-
+      <View style={styles.item} accessibilityHint={`virement ${item.vir_id}`}>
         <View style={styles.left}>
-          <Text
+          {/* <Text
             style={styles.libelle}
             accessibilityRole="text"
-            accessibilityLabel={`operation ${item.op_canal.replace(
+            accessibilityLabel={`virement ${item.op_canal.replace(
               /_/g,
               ' ',
             )}`}>
             {item.op_canal.replace(/_/g, ' ')}
-          </Text>
+          </Text> */}
+
           <Text
-            style={styles.text}
+            style={styles.libelle}
             accessibilityRole="text"
-            accessibilityLabel={`operation effectuee a ${item.op_marchant}`}>
-            {item.op_marchant}
+            accessibilityLabel={`Motif de virement est ${item.motif}`}>
+            Motif: {item.motif}
           </Text>
-          <Text
-            style={styles.text}
-            accessibilityRole="text"
-            accessibilityLabel={`emplacement de l'operation est ${item.op_emplacement}`}>
-            {item.op_emplacement}
+          <Text style={styles.libelle}>
+            {' '}
+            Beneficiare: {item.beneficiaire.nom}
           </Text>
+
+          <Text style={styles.libelle}> Etat: {item.etat}</Text>
         </View>
 
         <Text
           style={[styles.text, {width: wp(12)}]}
           accessibilityRole="text"
-          accessibilityLabel={`la date de l'operation est ${item.date_operation}`}>
+          accessibilityLabel={`la date de virement est ${item.date_operation}`}>
           {item.date_operation}
         </Text>
         <View style={styles.icon}>
           <Text
-            style={
-              item.op_type === 'Credit' ? styles.montant : styles.montantCredit
-            }
+            style={styles.montantCredit}
             accessibilityRole="text"
-            accessibilityLabel={`le montant de l'operation est ${
-              item.op_type === 'Credit' ? '' : '-'
-            }${item.montant} dinars`}>
-            {item.op_type === 'Credit' ? '' : '-'}
+            accessibilityLabel={`le beneficiare est ${item.beneficiaire.nom}`}>
+            {/* {item.op_type === 'Credit' ? '' : '-'} */}
             {item.montant}DT
           </Text>
         </View>
@@ -166,15 +148,14 @@ const Transfers = () => {
     </TouchableWithoutFeedback>
   );
 
-  const fetchData = async (startDate: string, endDate: string, clientId = 1) => {
-    console.log("🚀 ~ fetchData ~ clientId:", clientId)
-    console.log('fetching data');
-
+  const fetchData = async (
+    startDate: string,
+    endDate: string,
+    clientId = 1,
+  ) => {
     const data = await axios.get(
-      `${process.env.API_BASE_URL}/api/v1/operation/mouvement/byDate?startDate=${startDate}&endDate=${endDate}&clientId=${clientId}`,
+      `${process.env.API_BASE_URL}/api/v1/operation/virement/byDate?startDate=${startDate}&endDate=${endDate}&clientId=${clientId}`,
     );
-
-    console.log('data', data.data);
 
     if (data.status === 200) {
       setTransfers(data.data);
@@ -184,8 +165,6 @@ const Transfers = () => {
   };
 
   const reset = async () => {
-    console.log('resetting data');
-
     setResetFlag(prev => !prev);
   };
 
@@ -197,14 +176,14 @@ const Transfers = () => {
             styles.libelle,
             {textAlign: 'left', fontSize: wp(6), marginBottom: wp(3)},
           ]}>
-          Historique de Mouvements
+          Historique de virements
         </Text>
         <View style={styles.reset}>
           <TouchableRipple onPress={() => reset()}>
             <Icon source="autorenew" size={hp(5)} color="#A45704" />
           </TouchableRipple>
           <Text style={[styles.libelle, {fontSize: wp(4)}]}>
-            Aucun mouvement disponible
+            Aucun virement disponible
           </Text>
         </View>
       </View>
@@ -228,7 +207,7 @@ const Transfers = () => {
         <FlatList
           data={transfers}
           renderItem={renderItem}
-          keyExtractor={item => item.op_id.toString()}
+          keyExtractor={item => item.vir_id.toString()}
           // accessibilityRole='list'
           // accessibilityLabel='historiques de vos mouvements'
         />
