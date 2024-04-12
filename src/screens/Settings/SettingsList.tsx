@@ -37,7 +37,7 @@ const SettingsList = () => {
 
       
       <ListItemComponent title="Modifier les préférences de couleur" iconName="theme-light-dark" onPressIn={() => navigation.navigate('ColorPreferences')} />
-      <ListItemComponent title="Modifier le mot de passe" iconName="key" onPressIn={() => console.log('hello')} />
+      <ListItemComponent title="Modifier le mot de passe" iconName="key" onPressIn={() => navigation.navigate('ChangePassword')} />
     </List.Section>
   );
 
