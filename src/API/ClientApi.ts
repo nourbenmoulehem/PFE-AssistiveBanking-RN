@@ -15,7 +15,7 @@ export const clientApi = createApi({
   refetchOnReconnect: true,
   endpoints: builder => ({
     // A function that takes a builder object and returns an object containing all the     query and mutation endpoints for our API.
-    getClients: builder.query<GetClientsResponse, number>({
+    getClients: builder.query({ //<GetClientsResponse, number>
       // a way to define a query endpoint with RTK Query. defient the query endpoint (url) and HTTP method? builder.query() returns a hook that can be used to call the endpoint
       query: id => ({
         url: `/api/v1/client/getById/${id}`,

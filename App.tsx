@@ -45,6 +45,7 @@ export type RootStackParamListSignedIn = {
   Beneficiaire: undefined;
   Reclamation: undefined;
   Notification: undefined;
+  ChangePassword: undefined;
 };
 
 const stack = createNativeStackNavigator<RootStackParamList>();

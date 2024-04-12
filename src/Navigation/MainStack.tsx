@@ -1,4 +1,11 @@
-import {View, Text, Image, Touchable, TouchableOpacity, Settings as RNSettings} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  Touchable,
+  TouchableOpacity,
+  Settings as RNSettings,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {tokens} from '../assets/palette';
@@ -21,6 +28,7 @@ import Transfers from '../screens/transfers/Transfers';
 import Beneficiaire from '../screens/beneficiaire/Beneficiaire';
 import Reclamation from '../screens/reclamation/Reclamation';
 import Notification from '../screens/notification/Notification';
+import ChangePassword from '../screens/change-password/ChangePassword';
 import NewPassword from '../screens/new-password/NewPassword';
 import Card from '../screens/Card/Card';
 
@@ -53,6 +61,7 @@ export type RootStackParamList = {
   Beneficiaire: undefined;
   Reclamation: undefined;
   Notification: undefined;
+  ChangePassword: undefined;
   // Profile: { userId: string };
 };
 
@@ -65,18 +74,16 @@ const MainStack = () => {
   const toggleMode = () => {
     dispatch(setMode('dark'));
   };
-  const colors:any = tokens(mode);
+  const colors: any = tokens(mode);
   const [active, setActive] = useState(false);
 
   // to check if the user is logged in or not and update the initial state
   useEffect(() => {
     const checkKeychain = async () => {
-
       const credentials = await Keychain.getGenericPassword({
         service: 'accessService',
       });
       if (credentials !== false) {
-        
         // TODO SEND THE ACCESS TOKEN TO THE SERVER TO CHECK IF IT'S VALID
         const accessCredentials = await Keychain.getGenericPassword({
           service: 'accessService',
@@ -85,14 +92,14 @@ const MainStack = () => {
         const refreshCredentials = await Keychain.getGenericPassword({
           service: 'refreshService',
         });
-        
-        if(accessCredentials !== false) {
+
+        if (accessCredentials !== false) {
           console.log('accessCredentials', accessCredentials.password);
-          
+
           try {
             const response = await axios({
               method: 'post',
-              url: `http://192.168.1.7:5001/api/v1/auth/verifyToken`,
+              url: `${process.env.API_BASE_URL}/api/v1/auth/verifyToken`,
               withCredentials: true,
               responseType: 'json',
               data: {
@@ -100,8 +107,11 @@ const MainStack = () => {
               },
             });
             console.log('response', response.data);
-            dispatch(setInitialLogin(true));
+            let user = {
+              clientId: response.data.clientId,
+            };
             
+            dispatch(setInitialLogin({isLoggedIn: true, user: user}));
           } catch (error: any) {
             if (error.response && error.response.status === 500) {
               console.log('Server error occurred');
@@ -111,20 +121,18 @@ const MainStack = () => {
               setIsTokenValid(false);
               // Handle the error here
             } else {
-              dispatch(setInitialLogin(false));
+              console.log('Token expired');
+
+              dispatch(setInitialLogin({isLoggedIn: false, user: null}));
               dispatch(setLogout());
             }
-              
-            
           }
         }
-        
       }
       // console.log(credentials !== false);
       // console.log("hana houni");
-      
+
       // dispatch(setInitialLogin(credentials !== false));
-      
     };
 
     checkKeychain();
@@ -134,13 +142,13 @@ const MainStack = () => {
     await Keychain.resetGenericPassword({service: 'accessService'});
     await Keychain.resetGenericPassword({service: 'refreshService'});
     dispatch(setLogout());
-    console.log("🚀 ~ handleLogout ~ dispatch(setLogout());:", dispatch(setLogout()))
+    console.log(
+      '🚀 ~ handleLogout ~ dispatch(setLogout());:',
+      dispatch(setLogout()),
+    );
   };
 
   console.log('🚀 ~ MainStack ~ isLoggedIn:', isLoggedIn);
-  
-    
-
 
   return (
     <>
@@ -296,7 +304,17 @@ const MainStack = () => {
                 title: 'ColorPreferences',
               }}
             />
-            <stack.Screen name="Card" component={Card}
+            <stack.Screen
+              name="ChangePassword"
+              component={ChangePassword}
+              options={{
+                headerShown: true,
+                title: 'ChangePassword',
+              }}
+            />
+            <stack.Screen
+              name="Card"
+              component={Card}
               options={{
                 headerShown: true,
                 title: 'Card',
@@ -313,13 +331,11 @@ const MainStack = () => {
               component={AccountActivation}
             />
             <stack.Screen name="NewPassword" component={NewPassword} />
-
           </>
         )}
       </stack.Navigator>
 
       {isLoggedIn ? <Microphone /> : null}
-      
     </>
   );
 };

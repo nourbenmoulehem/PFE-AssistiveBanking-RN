@@ -24,17 +24,20 @@ import { useGetClientsQuery } from '../../API/ClientApi';
 type HomeProps = NativeStackScreenProps<RootStackParamListSignedIn, 'Home'>;
 
 const Home = ({ navigation }: HomeProps) => {
-  const {data, isLoading, error} = useGetClientsQuery(1);
-
-  const dispatch = useDispatch();
   const { isLoggedIn, mode, user } = useSelector(
     (state: RootState) => state.global,
   );
+  //const {data, isLoading, error} = useGetClientsQuery(1);
+
+  
   console.log('🚀 ~ Home ~ isLoggedIn:', isLoggedIn);
   const colors:any = tokens(mode);
   const [clientDetails, setClientDetails] = useState<Object>({});
-
+  console.log("🚀 ~ Home ~ user:", user?.clientId)
+  let client = user?.clientId;
+  const {data, isLoading, error} = useGetClientsQuery(client);
   const styles = StyleSheet.create({
+    
     container: {
       flex: 1,
       //justifyContent: 'center',
