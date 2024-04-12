@@ -35,6 +35,7 @@ import * as Keychain from 'react-native-keychain';
 // components
 // import FloatingButton from '../components/FloatingButton';
 import Microphone from '../components/microphone';
+import axios from 'axios';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -60,19 +61,70 @@ const MainStack = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const {mode, isLoggedIn} = useSelector((state: RootState) => state.global);
-  // console.log('🚀 ~ MainStack ~ isLoggedIn:', isLoggedIn);
+  const [isTokenValid, setIsTokenValid] = useState(false);
   const toggleMode = () => {
     dispatch(setMode('dark'));
   };
   const colors:any = tokens(mode);
   const [active, setActive] = useState(false);
+
   // to check if the user is logged in or not and update the initial state
   useEffect(() => {
     const checkKeychain = async () => {
+
       const credentials = await Keychain.getGenericPassword({
         service: 'accessService',
       });
-      dispatch(setInitialLogin(credentials !== false));
+      if (credentials !== false) {
+        
+        // TODO SEND THE ACCESS TOKEN TO THE SERVER TO CHECK IF IT'S VALID
+        const accessCredentials = await Keychain.getGenericPassword({
+          service: 'accessService',
+        });
+
+        const refreshCredentials = await Keychain.getGenericPassword({
+          service: 'refreshService',
+        });
+        
+        if(accessCredentials !== false) {
+          console.log('accessCredentials', accessCredentials.password);
+          
+          try {
+            const response = await axios({
+              method: 'post',
+              url: `http://192.168.1.7:5001/api/v1/auth/verifyToken`,
+              withCredentials: true,
+              responseType: 'json',
+              data: {
+                access_token: accessCredentials.password,
+              },
+            });
+            console.log('response', response.data);
+            dispatch(setInitialLogin(true));
+            
+          } catch (error: any) {
+            if (error.response && error.response.status === 500) {
+              console.log('Server error occurred');
+              await Keychain.resetGenericPassword({service: 'accessService'});
+              await Keychain.resetGenericPassword({service: 'refreshService'});
+              dispatch(setLogout());
+              setIsTokenValid(false);
+              // Handle the error here
+            } else {
+              dispatch(setInitialLogin(false));
+              dispatch(setLogout());
+            }
+              
+            
+          }
+        }
+        
+      }
+      // console.log(credentials !== false);
+      // console.log("hana houni");
+      
+      // dispatch(setInitialLogin(credentials !== false));
+      
     };
 
     checkKeychain();
@@ -82,7 +134,12 @@ const MainStack = () => {
     await Keychain.resetGenericPassword({service: 'accessService'});
     await Keychain.resetGenericPassword({service: 'refreshService'});
     dispatch(setLogout());
+    console.log("🚀 ~ handleLogout ~ dispatch(setLogout());:", dispatch(setLogout()))
   };
+
+  console.log('🚀 ~ MainStack ~ isLoggedIn:', isLoggedIn);
+  
+    
 
 
   return (
