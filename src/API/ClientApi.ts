@@ -1,5 +1,6 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {GetClientsResponse, GetIntentResponse} from './types';
+import {API_BASE_URL} from '@env';
 
 interface FetchArgs {
   id: any;
@@ -8,7 +9,7 @@ interface FetchArgs {
 export const clientApi = createApi({
   // creating a new API instance with the createApi function, takes object as argument
   reducerPath: 'clientApi',
-  baseQuery: fetchBaseQuery({baseUrl: `${process.env.API_BASE_URL}`}), // http://192.168.1.101:5001
+  baseQuery: fetchBaseQuery({baseUrl: `${API_BASE_URL}`}), // http://192.168.1.101:5001
   tagTypes: ['Client', 'Operation', 'Virement'],
   refetchOnFocus: true,
   refetchOnReconnect: true,
