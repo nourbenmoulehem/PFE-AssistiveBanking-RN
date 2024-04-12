@@ -17,7 +17,6 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
-
 const initialValues = {
   startDate: '',
   endDate: '',
@@ -148,7 +147,10 @@ const validationSchema = Yup.object().shape({
     .max(new Date(), 'La date de début ne peut pas être dans le futur'),
   endDate: Yup.date()
     .required('Requis')
-    .min(Yup.ref('startDate'), 'La date de fin doit être après la date de début')
+    .min(
+      Yup.ref('startDate'),
+      'La date de fin doit être après la date de début',
+    )
     .max(new Date(), 'La date de fin ne peut pas être dans le futur'),
 });
 
@@ -176,7 +178,6 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     justifyContent: 'center',
     alignItems: 'center',
-
   },
   resetButton: {
     width: wp(40),
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
   filterByDate: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: "#A45704",
+    color: '#A45704',
     marginBottom: hp(2),
-  }
+  },
 });
