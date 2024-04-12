@@ -168,6 +168,23 @@ const Home = ({ navigation }: HomeProps) => {
           </View>
 
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Beneficiaire')}
+                accessibilityRole='button'
+                accessibilityLabel='Beneficiaire'
+                accessibilityHint='Appuyer pour naviguer vers la page qui vous permet de gérer vos beneficiaires'
+                >
+
+                  <View style={styles.btnContainer} >
+
+                    <View style={styles.icon}>
+                      <Icon source="account-convert" size={hp(5)} color={colors.accent[300]} />
+                    </View>
+
+                    <Text style={{ color: colors.main.fontColor, fontWeight: 'bold', marginEnd: wp(3) }}>Beneficiaires</Text>
+
+                  </View>
+
+                </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.navigate('Operations')}
         accessibilityRole='button'
@@ -204,7 +221,7 @@ const Home = ({ navigation }: HomeProps) => {
           </View>
 
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Operations')}
+        <TouchableOpacity onPress={() => navigation.navigate('Reclamation')}
                 accessibilityRole='button'
                 accessibilityLabel='Reclamation'
                 accessibilityHint='Appuyer pour naviguer vers la page qui vous permet de effetuer une reclamation'
