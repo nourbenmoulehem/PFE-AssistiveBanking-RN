@@ -1,4 +1,11 @@
-import {View, Text, Image, Touchable, TouchableOpacity, Settings as RNSettings} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  Touchable,
+  TouchableOpacity,
+  Settings as RNSettings,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {tokens} from '../assets/palette';
@@ -16,7 +23,13 @@ import AccountActivation from '../screens/account-activation/AccountActivation';
 import Home from '../screens/home/Home';
 import Settings from '../screens/Settings/Settings';
 import ColorPreferences from '../screens/ColorPreferences/ColorPreferences';
-import Transactions from '../screens/transactions/Transactions';
+import Operations from '../screens/operations/Operations';
+import Transfers from '../screens/transfers/Transfers';
+import Transfer from '../screens/transfer-money/Transfer';
+import Beneficiaire from '../screens/beneficiaire/Beneficiaire';
+import Reclamation from '../screens/reclamation/Reclamation';
+import Notification from '../screens/notification/Notification';
+import ChangePassword from '../screens/change-password/ChangePassword';
 import NewPassword from '../screens/new-password/NewPassword';
 import Card from '../screens/Card/Card';
 
@@ -31,6 +44,7 @@ import * as Keychain from 'react-native-keychain';
 // components
 // import FloatingButton from '../components/FloatingButton';
 import Microphone from '../components/microphone';
+import axios from 'axios';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -39,11 +53,17 @@ export type RootStackParamList = {
   ForgotPassword: undefined;
   MultiStepForm: undefined;
   AccountActivation: undefined;
-  Transactions: undefined;
+  Operations: undefined;
   NewPassword: undefined;
   Settings: undefined;
   ColorPreferences: undefined;
   Card: undefined;
+  Transfers: undefined;
+  Transfer: undefined;
+  Beneficiaire: undefined;
+  Reclamation: undefined;
+  Notification: undefined;
+  ChangePassword: undefined;
   // Profile: { userId: string };
 };
 
@@ -52,19 +72,67 @@ const MainStack = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const {mode, isLoggedIn} = useSelector((state: RootState) => state.global);
-  // console.log('🚀 ~ MainStack ~ isLoggedIn:', isLoggedIn);
+  const [isTokenValid, setIsTokenValid] = useState(false);
   const toggleMode = () => {
     dispatch(setMode('dark'));
   };
-  const colors:any = tokens(mode);
+  const colors: any = tokens(mode);
   const [active, setActive] = useState(false);
+
   // to check if the user is logged in or not and update the initial state
   useEffect(() => {
     const checkKeychain = async () => {
       const credentials = await Keychain.getGenericPassword({
         service: 'accessService',
       });
-      dispatch(setInitialLogin(credentials !== false));
+      if (credentials !== false) {
+        // TODO SEND THE ACCESS TOKEN TO THE SERVER TO CHECK IF IT'S VALID
+        const accessCredentials = await Keychain.getGenericPassword({
+          service: 'accessService',
+        });
+
+        const refreshCredentials = await Keychain.getGenericPassword({
+          service: 'refreshService',
+        });
+
+        if (accessCredentials !== false) {
+          try {
+            const response = await axios({
+              method: 'post',
+              url: `${process.env.API_BASE_URL}/api/v1/auth/verifyToken`,
+              withCredentials: true,
+              responseType: 'json',
+              data: {
+                access_token: accessCredentials.password,
+              },
+            });
+
+            let user = {
+              clientId: response.data.clientId,
+            };
+            
+            dispatch(setInitialLogin({isLoggedIn: true, user: user}));
+          } catch (error: any) {
+            if (error.response && error.response.status === 500) {
+              console.log('Server error occurred');
+              await Keychain.resetGenericPassword({service: 'accessService'});
+              await Keychain.resetGenericPassword({service: 'refreshService'});
+              dispatch(setInitialLogin({isLoggedIn: false, user: null}));
+              dispatch(setLogout());
+              setIsTokenValid(false);
+              // Handle the error here
+            } else {
+              console.log('Token expired');
+              dispatch(setInitialLogin({isLoggedIn: false, user: null}));
+              dispatch(setLogout());
+            }
+          }
+        }
+      }
+      // console.log(credentials !== false);
+      // console.log("hana houni");
+
+      // dispatch(setInitialLogin(credentials !== false));
     };
 
     checkKeychain();
@@ -73,9 +141,12 @@ const MainStack = () => {
   const handleLogout = async () => {
     await Keychain.resetGenericPassword({service: 'accessService'});
     await Keychain.resetGenericPassword({service: 'refreshService'});
+    dispatch(setInitialLogin({isLoggedIn: false, user: null}));
     dispatch(setLogout());
+    
   };
 
+  console.log('🚀 ~ MainStack ~ isLoggedIn:', isLoggedIn);
 
   return (
     <>
@@ -115,7 +186,7 @@ const MainStack = () => {
           ),
           headerRight: () => (
             <>
-              {/* <TouchableOpacity
+              {/* dark and light switcher <TouchableOpacity
                 onPressIn={toggleMode}
                 accessible={true}
                 accessibilityRole="button"
@@ -176,11 +247,51 @@ const MainStack = () => {
               }}
             />
             <stack.Screen
-              name="Transactions"
-              component={Transactions}
+              name="Operations"
+              component={Operations}
               options={{
                 headerShown: true,
-                title: 'Transactions',
+                title: 'Operations',
+              }}
+            />
+            <stack.Screen
+              name="Transfer"
+              component={Transfer}
+              options={{
+                headerShown: true,
+                title: 'Transfer',
+              }}
+            />
+            <stack.Screen
+              name="Transfers"
+              component={Transfers}
+              options={{
+                headerShown: true,
+                title: 'Transfers',
+              }}
+            />
+            <stack.Screen
+              name="Beneficiaire"
+              component={Beneficiaire}
+              options={{
+                headerShown: true,
+                title: 'Beneficiaire',
+              }}
+            />
+            <stack.Screen
+              name="Reclamation"
+              component={Reclamation}
+              options={{
+                headerShown: true,
+                title: 'Reclamation',
+              }}
+            />
+            <stack.Screen
+              name="Notification"
+              component={Notification}
+              options={{
+                headerShown: true,
+                title: 'Notification',
               }}
             />
             <stack.Screen
@@ -199,7 +310,17 @@ const MainStack = () => {
                 title: 'ColorPreferences',
               }}
             />
-            <stack.Screen name="Card" component={Card}
+            <stack.Screen
+              name="ChangePassword"
+              component={ChangePassword}
+              options={{
+                headerShown: true,
+                title: 'ChangePassword',
+              }}
+            />
+            <stack.Screen
+              name="Card"
+              component={Card}
               options={{
                 headerShown: true,
                 title: 'Card',
@@ -216,13 +337,11 @@ const MainStack = () => {
               component={AccountActivation}
             />
             <stack.Screen name="NewPassword" component={NewPassword} />
-
           </>
         )}
       </stack.Navigator>
 
       {isLoggedIn ? <Microphone /> : null}
-      
     </>
   );
 };

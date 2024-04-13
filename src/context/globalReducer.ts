@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 
 interface User {
-  clientId: string;
+  clientId: number;
 }
 
 export interface GlobalState { // to define the state, TypeScript
@@ -14,6 +14,10 @@ export interface GlobalState { // to define the state, TypeScript
 
 type mode = "dark" | "light" | "protanopia" | "deuteranopia" | "tritanopia" | "achromatopsia" | "protanomaly" | "deuteranomaly" | "tritanomaly" | "achromatomaly"
 
+type SetInitials = {
+  isLoggedIn: boolean
+  user: User | null
+}
 const initialState: GlobalState = {
   mode: 'dark',
   isLoggedIn: false, // if the token isn't there or expired it's going to be false
@@ -25,8 +29,10 @@ export const globalSlice = createSlice({
   initialState,
   reducers: { // reducers to update the state
     //Actions:
-    setInitialLogin: (state, action: PayloadAction<boolean>) => {
-      state.isLoggedIn = action.payload;
+    setInitialLogin: (state, action: PayloadAction<SetInitials>) => {
+      console.log("setInitialLogin", action.payload);
+      state.isLoggedIn = action.payload.isLoggedIn;
+      state.user = action.payload.user;
     },
     setMode: (state, action: PayloadAction<mode>) => {
       // state.mode = state.mode === "dark" ? "light" : "dark"*

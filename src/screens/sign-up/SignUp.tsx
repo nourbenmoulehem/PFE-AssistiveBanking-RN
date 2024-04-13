@@ -11,7 +11,11 @@ import {
   Linking,
   ActivityIndicator,
 } from 'react-native';
-import {Switch} from 'react-native-paper';
+import {Switch, ProgressBar, MD3Colors } from 'react-native-paper';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 // import ProgressBar from 'react-native-progress/Bar';
 
@@ -37,7 +41,7 @@ import {
   gouvernoratsOptions,
   nature_activite,
   nationalite,
-  agenceItems
+  agenceItems,
 } from '../../constants/items';
 
 import {signUpSchema} from '../../constants/yupValidations';
@@ -47,7 +51,7 @@ import {Formik} from 'formik';
 
 // navigation
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../../App';
+import {RootStackParamList} from '../../../App';
 
 // redux
 import {useSelector} from 'react-redux';
@@ -61,9 +65,9 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
 
-const SignUp = ({ navigation }: Props) => {
+const SignUp = ({navigation}: Props) => {
   const {mode} = useSelector((state: RootState) => state.global);
-  const colors:any = tokens(mode);
+  const colors: any = tokens(mode);
 
   const [step, setStep] = useState(1);
 
@@ -165,7 +169,6 @@ const SignUp = ({ navigation }: Props) => {
           gouvernorat: values.gouvernorat,
           adresse: values.adresse,
           agence: values.agence,
-      
         },
         {
           headers: {
@@ -175,7 +178,7 @@ const SignUp = ({ navigation }: Props) => {
       )
       .catch(err => {
         setVisible(true);
-        setIsRedirectSignIn(false)
+        setIsRedirectSignIn(false);
         setLoading(false);
         setMessage(err.response.data);
       });
@@ -373,7 +376,7 @@ const SignUp = ({ navigation }: Props) => {
         }) => (
           <>
             <View style={styles.container}>
-              {/* <ProgressBar progress={(step / 24)} width={300} color={colors.orange[200]} /> */}
+              <ProgressBar animatedValue={(step / 25)} style={{ height: hp(0.7), width: wp(80) }} color={MD3Colors.primary50} />
 
               {step === 1 && ( // offre
                 <>
@@ -502,17 +505,17 @@ const SignUp = ({ navigation }: Props) => {
               )}
               {step === 7 && ( // AGENCE
                 <>
-                <PickerInput
-                  title="Sélectionnez l'agence la plus proche de vous"
-                  name="Agence"
-                  items={agenceItems}
-                  value={values.agence}
-                  onValueChange={value => handleChange('agence')(value)}
-                />
-                {errors.agence && (
-                  <Text style={styles.error}>{errors.agence}</Text>
-                )}
-              </>
+                  <PickerInput
+                    title="Sélectionnez l'agence la plus proche de vous"
+                    name="Agence"
+                    items={agenceItems}
+                    value={values.agence}
+                    onValueChange={value => handleChange('agence')(value)}
+                  />
+                  {errors.agence && (
+                    <Text style={styles.error}>{errors.agence}</Text>
+                  )}
+                </>
               )}
               {step === 8 && ( // birthday
                 <>
@@ -830,7 +833,8 @@ const SignUp = ({ navigation }: Props) => {
                     />
                     <Text style={styles.confirmationText}>
                       J'accepte les{' '}
-                      <TouchableOpacity onPress={() =>
+                      <TouchableOpacity
+                        onPress={() =>
                           Linking.openURL(
                             'https://www.webank.com.tn/fr/mentions-legales',
                           )
@@ -843,16 +847,15 @@ const SignUp = ({ navigation }: Props) => {
                     </Text>
                   </View>
                   {errors.hasAmericanityIndex && (
-                      <Text style={styles.error}>
-                        <Text>{errors.hasAmericanityIndex}</Text>
-                      </Text>
-                    )}
-                  {
-                    errors.hasConfirmedForPersonalData && (
-                      <Text style={styles.error}>
-                        {errors.hasConfirmedForPersonalData}
-                      </Text>
-                    )}
+                    <Text style={styles.error}>
+                      <Text>{errors.hasAmericanityIndex}</Text>
+                    </Text>
+                  )}
+                  {errors.hasConfirmedForPersonalData && (
+                    <Text style={styles.error}>
+                      {errors.hasConfirmedForPersonalData}
+                    </Text>
+                  )}
                 </>
               )}
               <View style={styles.prevNextButtonsContainer}>
@@ -877,8 +880,7 @@ const SignUp = ({ navigation }: Props) => {
                 ) : (
                   <CustomButton
                     onPress={() => {
-                      console.log('VALUES:', values);
-                      console.log('ERRORS', errors);
+                      // console.log('ERRORS', errors);
                       handleSubmit();
                     }}
                     text="Valider"

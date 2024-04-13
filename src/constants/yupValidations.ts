@@ -18,7 +18,6 @@ const loginSchema = yup.object().shape({
   password: yup.string().required('Ce champ est obligatoire'),
 });
 
-
 const signUpSchema = yup.object().shape({
   offer: yup
     .string()
@@ -57,7 +56,11 @@ const signUpSchema = yup.object().shape({
     .date()
     .required('Ce champ est obligatoire')
     .max(
-      new Date(new Date().getFullYear() - 18, new Date().getMonth(), new Date().getDate() + 1),
+      new Date(
+        new Date().getFullYear() - 18,
+        new Date().getMonth(),
+        new Date().getDate() + 1,
+      ),
       'Vous devez avoir au moins 18 ans pour vous inscrire',
     ),
   adresse: yup.string().required('Ce champ est obligatoire'),
@@ -98,14 +101,12 @@ const signUpSchema = yup.object().shape({
     )
     .min(5, 'Le mot de passe doit avoir exactement 5 caractères')
     .required('Ce champ est obligatoire'),
-  hasAmericanityIndex: yup
-    .boolean(),
-    // .oneOf([true], "Aucun indice d'américanité requis."),
-    // .required('Ce champ est obligatoire'),
-  hasOtherBank: yup
-    .boolean(),
-    // .oneOf([true], ' ?? '),
-    // .required('Ce champ est obligatoire'),
+  hasAmericanityIndex: yup.boolean(),
+  // .oneOf([true], "Aucun indice d'américanité requis."),
+  // .required('Ce champ est obligatoire'),
+  hasOtherBank: yup.boolean(),
+  // .oneOf([true], ' ?? '),
+  // .required('Ce champ est obligatoire'),
   hasConfirmedForPersonalData: yup
     .boolean()
     .oneOf([true], 'La confirmation des données personnelles est requis')
@@ -170,4 +171,31 @@ const NewPasswordSchema = yup.object().shape({
     .required('Ce champ est obligatoire'),
 });
 
-export {signUpSchema, loginSchema, ForgotPasswordSchema, NewPasswordSchema};
+const ChangePasswordSchema = yup.object().shape({
+  currentPassword: yup.string().required('Ce champ est obligatoire'),
+  newPassword: yup
+    .string()
+    .matches(
+      passwordRegExp,
+      'Le mot de passe doit contenir au moins 5 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial',
+    )
+    .min(5, 'Le mot de passe doit avoir exactement 5 caractères')
+    .required('Ce champ est obligatoire'),
+  passwordConfirm: yup
+    .string()
+    .oneOf([yup.ref('newPassword')], 'Les mots de passe doivent correspondre')
+    .matches(
+      passwordRegExp,
+      'Le mot de passe doit contenir au moins 5 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial',
+    )
+    .min(5, 'Le mot de passe doit avoir exactement 5 caractères')
+    .required('Ce champ est obligatoire'),
+});
+
+export {
+  signUpSchema,
+  loginSchema,
+  ForgotPasswordSchema,
+  NewPasswordSchema,
+  ChangePasswordSchema,
+};

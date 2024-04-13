@@ -13,7 +13,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MainStack from './src/Navigation/MainStack';
 
 // Redux
-import {RootState, store} from './src/context/store';
+import {RootState, store, persistor} from './src/context/store';
+import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 
 // screens
@@ -37,10 +38,16 @@ export type RootStackParamList = {
 
 export type RootStackParamListSignedIn = {
   Home: undefined;
-  Transactions: undefined;
+  Operations: undefined;
+  Transfers: undefined;
+  Transfer: undefined;
   Settings: undefined;
   ColorPreferences: undefined;
   Card: undefined;
+  Beneficiaire: undefined;
+  Reclamation: undefined;
+  Notification: undefined;
+  ChangePassword: undefined;
 };
 
 const stack = createNativeStackNavigator<RootStackParamList>();
@@ -68,11 +75,13 @@ const linking: LinkingOptions<RootStackParamList> = {
 const App = () => {
   return (
     <Provider store={store} >
+      <PersistGate loading={null} persistor={persistor}>
       <PaperProvider>
         <NavigationContainer linking={linking}>
           <MainStack />
         </NavigationContainer>
       </PaperProvider>
+      </PersistGate>
     </Provider>
   );
 };

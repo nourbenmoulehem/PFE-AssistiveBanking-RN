@@ -61,7 +61,7 @@ const SignIn = ({navigation}: SignInProps) => {
   getCredentials();
   // testing purposes, need to be deleted later
 
-  const colors:any = tokens(mode); // get the color palette based on the mode
+  const colors: any = tokens(mode); // get the color palette based on the mode
   const dispatch = useDispatch();
 
   type FormValues = {
@@ -70,12 +70,10 @@ const SignIn = ({navigation}: SignInProps) => {
   };
 
   const authenticate = async (values: FormValues) => {
-
-    
     try {
       const response = await axios({
         method: 'post',
-        url: `http://192.168.1.101:5001/api/v1/auth/authenticate`,
+        url: `${process.env.API_BASE_URL}/api/v1/auth/authenticate`,
         withCredentials: true,
         responseType: 'json',
         data: {
@@ -83,15 +81,14 @@ const SignIn = ({navigation}: SignInProps) => {
           password: values.password,
         },
       });
-    
+
       await Keychain.setGenericPassword(
         'accessToken',
         response.data.access_token,
         {service: 'accessService'},
       );
       const clientId = response.data.clientId; // hardcoded for now
-      console.log('clientId', clientId);
-    
+
       await Keychain.setGenericPassword(
         'refreshToken',
         response.data.refresh_token,
@@ -103,7 +100,7 @@ const SignIn = ({navigation}: SignInProps) => {
       const refreshCredentials = await Keychain.getGenericPassword({
         service: 'refreshService',
       });
-    
+
       if (accessCredentials && refreshCredentials) {
         dispatch(setLogin({clientId: response.data.client_id}));
       }
