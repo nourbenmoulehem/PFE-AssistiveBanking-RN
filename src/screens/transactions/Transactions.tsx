@@ -44,7 +44,7 @@ const Transactions = () => {
       height: hp(8),
       margin: wp(2),
       borderRadius: hp(2),
-      backgroundColor: mode === 'dark' ? colors.background[300] : colors.background[300],
+      backgroundColor: colors.background[300],
       justifyContent: 'center',
       alignItems: 'center',
 

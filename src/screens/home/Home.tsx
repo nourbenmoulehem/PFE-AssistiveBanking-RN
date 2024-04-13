@@ -104,17 +104,17 @@ const Home = ({ navigation }: HomeProps) => {
       fontSize: hp('10%'),
       fontWeight: 'bold',
       textAlign: 'center',
-      color: mode === 'dark' ? colors.secondaryAccent[200] : colors.accent[100],
+      color: colors.secondaryAccent[400]
     },
     devider: {
       width: wp('100%'),
-      backgroundColor: mode === 'dark' ? colors.background[500] : colors.background[400],
+      backgroundColor: colors.background[400],
     },
     icon: {
       width: hp(6.5),
       height: hp(6.5),
       borderRadius: hp(2),
-      backgroundColor: mode === 'dark' ? colors.background[300] : colors.background[300],
+      backgroundColor: colors.background[300],
       justifyContent: 'center',
       alignItems: 'center',
 
@@ -132,7 +132,7 @@ const Home = ({ navigation }: HomeProps) => {
 
         <View style={styles.miniContainer}>
           <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' }}>Numero de carte</Text>
-          <Text style={{ color: mode === 'dark' ? colors.secondary[100] : colors.secondary[100], fontWeight: 'bold' }}>{data?.compteBancaire.carte.numero_carte}</Text>
+          <Text style={{ color: colors.secondary[100], fontWeight: 'bold' }}>{data?.compteBancaire.carte.numero_carte}</Text>
         </View>
 
         <Divider style={styles.devider} />
@@ -140,7 +140,7 @@ const Home = ({ navigation }: HomeProps) => {
         <View style={styles.miniContainer}>
 
           <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' }}>Solde de compte</Text>
-          <Text style={{ color: mode === 'dark' ? colors.secondary[100] : colors.secondary[100], fontWeight: 'bold' }}>{data?.compteBancaire.solde}DT</Text>
+          <Text style={{ color:colors.secondary[100], fontWeight: 'bold' }}>{data?.compteBancaire.solde}DT</Text>
 
         </View>
 
