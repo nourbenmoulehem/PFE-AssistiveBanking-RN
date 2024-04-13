@@ -1,6 +1,7 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {GetClientsResponse, GetIntentResponse} from './types';
 import {API_BASE_URL} from '@env';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 interface FetchArgs {
   id: any;
@@ -10,7 +11,7 @@ export const clientApi = createApi({
   // creating a new API instance with the createApi function, takes object as argument
   reducerPath: 'clientApi',
   baseQuery: fetchBaseQuery({baseUrl: `${API_BASE_URL}`}), // http://192.168.1.101:5001
-  tagTypes: ['Client', 'Operation', 'Virement'],
+  tagTypes: ['Client', 'Operation', 'Virement', 'beneficiaire'],
   refetchOnFocus: true,
   refetchOnReconnect: true,
   endpoints: builder => ({
@@ -67,6 +68,26 @@ export const clientApi = createApi({
       }),
       providesTags: ['Client'],
     }),
+
+    getBeneficiaires: builder.query({ //<{nom: string, rib: string, id: number}, {clientId: number}>
+      query: clientId => ({
+        url: `/api/v1/client/beneficiaire/beneficiaires/${clientId}`,
+        method: 'GET',
+      }),
+      providesTags: ['beneficiaire'],
+    }),
+
+    addBeneficiaire: builder.mutation({ 
+      query: ({clientId, beneficiaire} :{clientId: number, beneficiaire: {nom: string, rib: string}}) => ({
+        url: `/api/v1/client/beneficiaire/insert-beneficiaire/${clientId}`,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: {"nom": beneficiaire.nom, "rib": beneficiaire.rib},
+        method: 'POST',
+      }),
+      invalidatesTags: ['beneficiaire'],
+    }),
   }),
 });
 
@@ -75,5 +96,7 @@ export const {
   useLazyGetIntentQuery,
   useGetOperationsQuery,
   useGetTransfersQuery,
+  useGetBeneficiairesQuery,
+  useAddBeneficiaireMutation,
   useGetOperationsBetweenDatesQuery,
 } = clientApi;
