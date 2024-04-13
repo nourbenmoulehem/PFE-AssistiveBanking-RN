@@ -1,6 +1,16 @@
 import {configureStore} from '@reduxjs/toolkit';
 import globalReducer from './globalReducer';
 import {clientApi} from '../API/ClientApi';
+import {persistStore, persistReducer} from 'redux-persist';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const persistConfig = {
+  key: 'root',
+  storage: AsyncStorage,
+};
+
+const persistedReducer = persistReducer(persistConfig, globalReducer);
+
 export const store = configureStore({
   reducer: {
     global: globalReducer, // global is the name of the reducer
