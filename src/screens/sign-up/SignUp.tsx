@@ -11,7 +11,11 @@ import {
   Linking,
   ActivityIndicator,
 } from 'react-native';
-import {Switch} from 'react-native-paper';
+import {Switch, ProgressBar, MD3Colors } from 'react-native-paper';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 // import ProgressBar from 'react-native-progress/Bar';
 
@@ -372,7 +376,7 @@ const SignUp = ({navigation}: Props) => {
         }) => (
           <>
             <View style={styles.container}>
-              {/* <ProgressBar progress={(step / 24)} width={300} color={colors.orange[200]} /> */}
+              <ProgressBar animatedValue={(step / 25)} style={{ height: hp(0.7), width: wp(80) }} color={MD3Colors.primary50} />
 
               {step === 1 && ( // offre
                 <>
