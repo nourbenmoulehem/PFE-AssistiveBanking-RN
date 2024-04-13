@@ -7,8 +7,8 @@ interface FetchArgs {
 
 export const clientApi = createApi({
   // creating a new API instance with the createApi function, takes object as argument
-  reducerPath: 'clientApi', // a unique string that will be used as the key for the slice of state that will be added to the Redux store
-  baseQuery: fetchBaseQuery({baseUrl: `http://192.168.1.101:5001`}),
+  reducerPath: 'clientApi',
+  baseQuery: fetchBaseQuery({baseUrl: `${process.env.API_BASE_URL}`}), // http://192.168.1.101:5001
   tagTypes: [
     "Client",
   ],
