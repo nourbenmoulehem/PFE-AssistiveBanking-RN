@@ -25,6 +25,7 @@ import Settings from '../screens/Settings/Settings';
 import ColorPreferences from '../screens/ColorPreferences/ColorPreferences';
 import Operations from '../screens/operations/Operations';
 import Transfers from '../screens/transfers/Transfers';
+import Transfer from '../screens/transfer-money/Transfer';
 import Beneficiaire from '../screens/beneficiaire/Beneficiaire';
 import Reclamation from '../screens/reclamation/Reclamation';
 import Notification from '../screens/notification/Notification';
@@ -58,6 +59,7 @@ export type RootStackParamList = {
   ColorPreferences: undefined;
   Card: undefined;
   Transfers: undefined;
+  Transfer: undefined;
   Beneficiaire: undefined;
   Reclamation: undefined;
   Notification: undefined;
@@ -250,6 +252,14 @@ const MainStack = () => {
               options={{
                 headerShown: true,
                 title: 'Operations',
+              }}
+            />
+            <stack.Screen
+              name="Transfer"
+              component={Transfer}
+              options={{
+                headerShown: true,
+                title: 'Transfer',
               }}
             />
             <stack.Screen

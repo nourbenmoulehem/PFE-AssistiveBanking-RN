@@ -40,6 +40,7 @@ export type RootStackParamListSignedIn = {
   Home: undefined;
   Operations: undefined;
   Transfers: undefined;
+  Transfer: undefined;
   Settings: undefined;
   ColorPreferences: undefined;
   Card: undefined;

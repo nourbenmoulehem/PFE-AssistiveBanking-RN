@@ -225,7 +225,7 @@ const Home = ({navigation}: HomeProps) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => navigation.navigate('Operations')}
+            onPress={() => navigation.navigate('Transfer')}
             accessibilityRole="button"
             accessibilityLabel="Effectuer un virement"
             accessibilityHint="Appuyer pour naviguer vers la page qui vous permet d effectuer un virement">
