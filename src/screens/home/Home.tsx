@@ -38,7 +38,6 @@ const Home = ({navigation}: HomeProps) => {
 
   const colors: any = tokens(mode);
   const [clientDetails, setClientDetails] = useState<Object>({});
-  console.log('🚀 ~ Home ~ user:', user?.clientId);
   let client = user?.clientId;
   const {data, isLoading, error} = useGetClientsQuery(client);
   const styles = StyleSheet.create({

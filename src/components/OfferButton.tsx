@@ -57,7 +57,6 @@ const OfferButton: React.FC<OfferButtonProps> = ({
         handleChange('offer')(offer);
         setCheckedOffer(offer);
         setOffreChanged(true);
-        console.log('🚀 ~ offer:', offer);
       }}
       style={
         checkedGender === offer ? styles.checkedButton : styles.uncheckedButton
