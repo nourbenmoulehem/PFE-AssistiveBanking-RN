@@ -116,7 +116,6 @@ const ForgotPassword = () => {
           validateOnChange={true}
           style={styles.container}
           onSubmit={values => {
-            console.log(values);
             resetPassword(values);
           }}>
           {({

@@ -25,7 +25,7 @@ const Transfers = () => {
   const {mode, user} = useSelector((state: RootState) => state.global);
   const colors: any = tokens(mode);
 
-  const {data, isLoading, error} = useGetTransfersQuery(1);
+  const {data, isLoading, error} = useGetTransfersQuery(user?.clientId);
   const [transfers, setTransfers] = useState([]);
   const [resetFlag, setResetFlag] = useState(false);
 

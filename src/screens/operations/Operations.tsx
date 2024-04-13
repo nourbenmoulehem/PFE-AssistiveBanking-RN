@@ -25,10 +25,10 @@ import axios from 'axios';
 import FilterByDate from '../../components/FilterByDate';
 
 const Operations = () => {
-  const {mode} = useSelector((state: RootState) => state.global);
+  const {mode, user} = useSelector((state: RootState) => state.global);
   const colors: any = tokens(mode);
 
-  const {data, isLoading, error} = useGetOperationsQuery(1);
+  const {data, isLoading, error} = useGetOperationsQuery(user?.clientId);
   const [operations, setOperations] = useState([]);
   const [resetFlag, setResetFlag] = useState(false);
 

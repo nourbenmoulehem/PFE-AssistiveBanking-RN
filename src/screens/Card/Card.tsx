@@ -26,12 +26,13 @@ import CreditCard from '../../components/CreditCard';
 // ...
 
 const Card = () => {
-  const {data, isLoading, error} = useGetClientsQuery(1);
-
-  const dispatch = useDispatch();
   const {isLoggedIn, mode, user} = useSelector(
     (state: RootState) => state.global,
-  );
+  ); 
+  const {data, isLoading, error} = useGetClientsQuery(user?.clientId);
+
+  const dispatch = useDispatch();
+  
   const colors = tokens(mode);
   const [modalVisible, setModalVisible] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);

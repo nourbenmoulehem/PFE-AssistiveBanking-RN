@@ -49,7 +49,7 @@ const Notification = () => {
 
   const onClose = () => setVisible(false);
 
-  const {mode} = useSelector((state: RootState) => state.global);
+  const {mode, user} = useSelector((state: RootState) => state.global);
   const colors: any = tokens(mode);
 
   type FormValues = {
@@ -69,7 +69,7 @@ const Notification = () => {
           currentPassword: values.currentPassword,
           newPassword: values.newPassword,
           confirmPassword: values.passwordConfirm,
-          clientId: 1,
+          clientId: user?.clientId,
         },
       });
       if (response.status === 200) {

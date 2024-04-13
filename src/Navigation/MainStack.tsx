@@ -94,8 +94,6 @@ const MainStack = () => {
         });
 
         if (accessCredentials !== false) {
-          console.log('accessCredentials', accessCredentials.password);
-
           try {
             const response = await axios({
               method: 'post',
@@ -106,7 +104,7 @@ const MainStack = () => {
                 access_token: accessCredentials.password,
               },
             });
-            console.log('response', response.data);
+
             let user = {
               clientId: response.data.clientId,
             };
@@ -117,12 +115,12 @@ const MainStack = () => {
               console.log('Server error occurred');
               await Keychain.resetGenericPassword({service: 'accessService'});
               await Keychain.resetGenericPassword({service: 'refreshService'});
+              dispatch(setInitialLogin({isLoggedIn: false, user: null}));
               dispatch(setLogout());
               setIsTokenValid(false);
               // Handle the error here
             } else {
               console.log('Token expired');
-
               dispatch(setInitialLogin({isLoggedIn: false, user: null}));
               dispatch(setLogout());
             }
@@ -141,11 +139,9 @@ const MainStack = () => {
   const handleLogout = async () => {
     await Keychain.resetGenericPassword({service: 'accessService'});
     await Keychain.resetGenericPassword({service: 'refreshService'});
+    dispatch(setInitialLogin({isLoggedIn: false, user: null}));
     dispatch(setLogout());
-    console.log(
-      '🚀 ~ handleLogout ~ dispatch(setLogout());:',
-      dispatch(setLogout()),
-    );
+    
   };
 
   console.log('🚀 ~ MainStack ~ isLoggedIn:', isLoggedIn);
