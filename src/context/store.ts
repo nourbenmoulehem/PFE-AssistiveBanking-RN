@@ -13,14 +13,16 @@ const persistedReducer = persistReducer(persistConfig, globalReducer);
 
 export const store = configureStore({
   reducer: {
-    global: globalReducer, // global is the name of the reducer
+    global: persistedReducer, // global is the name of the reducer
     [clientApi.reducerPath]: clientApi.reducer,
   },
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware().concat(clientApi.middleware),
+    getDefaultMiddleware({ serializableCheck: false }).concat(clientApi.middleware),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
+// persistor is used to persist the store
+export const persistor = persistStore(store);
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;

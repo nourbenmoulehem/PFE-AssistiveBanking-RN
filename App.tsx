@@ -13,7 +13,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MainStack from './src/Navigation/MainStack';
 
 // Redux
-import {RootState, store} from './src/context/store';
+import {RootState, store, persistor} from './src/context/store';
+import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 
 // screens
@@ -73,11 +74,13 @@ const linking: LinkingOptions<RootStackParamList> = {
 const App = () => {
   return (
     <Provider store={store} >
+      <PersistGate loading={null} persistor={persistor}>
       <PaperProvider>
         <NavigationContainer linking={linking}>
           <MainStack />
         </NavigationContainer>
       </PaperProvider>
+      </PersistGate>
     </Provider>
   );
 };
