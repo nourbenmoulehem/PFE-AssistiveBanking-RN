@@ -6,6 +6,10 @@ import {
 } from 'react-native-paper';
 import {useField} from 'formik';
 import {View, StyleSheet} from 'react-native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 interface TextInputProps {
   name: string;
@@ -37,8 +41,7 @@ const TextInput: React.FC<TextInputProps> = ({
       {showLabel && <Text style={styles.label}>{placeholder}</Text>}
       <PaperTextInput
         placeholder={placeholder}
-        textColor='black'
-        
+        textColor="black"
         mode={mode}
         value={field.value}
         onChangeText={field.onChange(name)}
@@ -50,7 +53,6 @@ const TextInput: React.FC<TextInputProps> = ({
         accessible={true}
         accessibilityLabel={`Champ de saisie ${placeholder}`}
         accessibilityRole="text"
-        
       />
       {meta.error ? (
         <HelperText style={styles.error} type="error">
@@ -63,7 +65,7 @@ const TextInput: React.FC<TextInputProps> = ({
 
 const styles = StyleSheet.create({
   inputWrapper: {
-    width: 340,
+    width: wp('80%'),
     marginBottom: 20,
   },
   error: {
@@ -76,7 +78,6 @@ const styles = StyleSheet.create({
   },
   contentStyle: {
     backgroundColor: 'white',
-    
   },
   label: {
     fontSize: 15,

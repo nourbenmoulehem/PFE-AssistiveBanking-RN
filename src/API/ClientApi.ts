@@ -1,7 +1,7 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {GetClientsResponse, GetIntentResponse} from './types';
 import {API_BASE_URL} from '@env';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import {get} from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 interface FetchArgs {
   id: any;
@@ -16,7 +16,8 @@ export const clientApi = createApi({
   refetchOnReconnect: true,
   endpoints: builder => ({
     // A function that takes a builder object and returns an object containing all the     query and mutation endpoints for our API.
-    getClients: builder.query({ //<GetClientsResponse, number>
+    getClients: builder.query({
+      //<GetClientsResponse, number>
       // a way to define a query endpoint with RTK Query. defient the query endpoint (url) and HTTP method? builder.query() returns a hook that can be used to call the endpoint
       query: id => ({
         url: `/api/v1/client/getById/${id}`,
@@ -69,7 +70,8 @@ export const clientApi = createApi({
       providesTags: ['Client'],
     }),
 
-    getBeneficiaires: builder.query({ //<{nom: string, rib: string, id: number}, {clientId: number}>
+    getBeneficiaires: builder.query({
+      //<{nom: string, rib: string, id: number}, {clientId: number}>
       query: clientId => ({
         url: `/api/v1/client/beneficiaire/beneficiaires/${clientId}`,
         method: 'GET',
@@ -77,14 +79,64 @@ export const clientApi = createApi({
       providesTags: ['beneficiaire'],
     }),
 
-    addBeneficiaire: builder.mutation({ 
-      query: ({clientId, beneficiaire} :{clientId: number, beneficiaire: {nom: string, rib: string}}) => ({
+    addBeneficiaire: builder.mutation({
+      query: ({
+        clientId,
+        beneficiaire,
+      }: {
+        clientId: number;
+        beneficiaire: {nom: string; rib: string};
+      }) => ({
         url: `/api/v1/client/beneficiaire/insert-beneficiaire/${clientId}`,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: {"nom": beneficiaire.nom, "rib": beneficiaire.rib},
+        body: {nom: beneficiaire.nom, rib: beneficiaire.rib},
         method: 'POST',
+      }),
+      invalidatesTags: ['beneficiaire'],
+    }),
+
+    updateBeneficiaire: builder.mutation({
+      query: ({
+        clientId,
+        beneficiaire,
+      }: {
+        clientId: number;
+        beneficiaire: {nom: string; rib: string; id: number};
+      }) => ({
+        url: `/api/v1/client/beneficiaire/update-beneficiaire/${clientId}`,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: {
+          id: beneficiaire.id,
+          nom: beneficiaire.nom,
+          rib: beneficiaire.rib,
+        },
+        method: 'POST',
+      }),
+      invalidatesTags: ['beneficiaire'],
+    }),
+
+    deleteBeneficiaire: builder.mutation({
+      query: ({
+        clientId,
+        beneficiaire,
+      }: {
+        clientId: number;
+        beneficiaire: {nom: string; rib: string; id: number};
+      }) => ({
+        url: `/api/v1/client/beneficiaire/delete-beneficiaire/${clientId}`,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: {
+          id: beneficiaire.id,
+          nom: beneficiaire.nom,
+          rib: beneficiaire.rib,
+        },
+        method: 'DELETE',
       }),
       invalidatesTags: ['beneficiaire'],
     }),
@@ -98,5 +150,7 @@ export const {
   useGetTransfersQuery,
   useGetBeneficiairesQuery,
   useAddBeneficiaireMutation,
+  useUpdateBeneficiaireMutation,
+  useDeleteBeneficiaireMutation,
   useGetOperationsBetweenDatesQuery,
 } = clientApi;
