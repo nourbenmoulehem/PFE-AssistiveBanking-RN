@@ -5,17 +5,17 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {Divider, List, Icon} from 'react-native-paper';
+import { Divider, List, Icon } from 'react-native-paper';
 
 // redux
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../context/store';
-import {tokens} from '../../assets/palette';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../context/store';
+import { tokens } from '../../assets/palette';
 
 // storage
 import * as Keychain from 'react-native-keychain';
@@ -24,22 +24,22 @@ import * as Keychain from 'react-native-keychain';
 import getApi from '../../API/APIManager';
 
 // navigation
-import {RootStackParamListSignedIn} from '../../../App';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {DarkTheme} from '@react-navigation/native';
-import {useGetClientsQuery} from '../../API/ClientApi';
+import { RootStackParamListSignedIn } from '../../../App';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { DarkTheme } from '@react-navigation/native';
+import { useGetClientsQuery } from '../../API/ClientApi';
 
 type HomeProps = NativeStackScreenProps<RootStackParamListSignedIn, 'Home'>;
 
-const Home = ({navigation}: HomeProps) => {
-  const {isLoggedIn, mode, user} = useSelector(
+const Home = ({ navigation }: HomeProps) => {
+  const { isLoggedIn, mode, user } = useSelector(
     (state: RootState) => state.global,
   );
 
   const colors: any = tokens(mode);
   const [clientDetails, setClientDetails] = useState<Object>({});
   let client = user?.clientId;
-  const {data, isLoading, error} = useGetClientsQuery(client);
+  const { data, isLoading, error } = useGetClientsQuery(client);
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -92,7 +92,7 @@ const Home = ({navigation}: HomeProps) => {
       fontSize: hp('10%'),
       fontWeight: 'bold',
       textAlign: 'center',
-      color: colors.secondaryAccent[400]
+      color: colors.secondaryAccent[400],
     },
     devider: {
       width: wp('100%'),
@@ -116,7 +116,7 @@ const Home = ({navigation}: HomeProps) => {
         <Divider style={styles.devider} />
 
         <View style={styles.miniContainer}>
-          <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' }}>Numero de carte</Text>
+          <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' }}>Numéro de carte</Text>
           <Text style={{ color: colors.secondary[100], fontWeight: 'bold' }}>{data?.compteBancaire.carte.numero_carte}</Text>
         </View>
 
@@ -125,7 +125,7 @@ const Home = ({navigation}: HomeProps) => {
         <View style={styles.miniContainer}>
 
           <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' }}>Solde de compte</Text>
-          <Text style={{ color:colors.secondary[100], fontWeight: 'bold' }}>{data?.compteBancaire.solde}DT</Text>
+          <Text style={{ color: colors.secondary[100], fontWeight: 'bold' }}>{data?.compteBancaire.solde}DT</Text>
 
         </View>
       </View>
@@ -149,6 +149,7 @@ const Home = ({navigation}: HomeProps) => {
               <Text
                 style={{
                   color: colors.main.fontColor,
+                  fontSize: wp(4),
                   fontWeight: 'bold',
                   marginEnd: wp(3),
                 }}>
@@ -161,7 +162,7 @@ const Home = ({navigation}: HomeProps) => {
             onPress={() => navigation.navigate('Card')}
             accessibilityRole="button"
             accessibilityLabel="Votre Carte Webank"
-            accessibilityHint="Appuyer pour naviguer vers la page qui vous permet de gerer votre carte webank">
+            accessibilityHint="Appuyer pour naviguer vers la page qui vous permet de gérer votre carte webank">
             <View style={styles.btnContainer}>
               <View style={styles.icon}>
                 <Icon
@@ -174,6 +175,7 @@ const Home = ({navigation}: HomeProps) => {
               <Text
                 style={{
                   color: colors.main.fontColor,
+                  fontSize: wp(4),
                   fontWeight: 'bold',
                   marginEnd: wp(3),
                 }}>
@@ -184,8 +186,8 @@ const Home = ({navigation}: HomeProps) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('Beneficiaire')}
             accessibilityRole="button"
-            accessibilityLabel="Beneficiaire"
-            accessibilityHint="Appuyer pour naviguer vers la page qui vous permet de gérer vos beneficiaires">
+            accessibilityLabel="Bénéficiaire"
+            accessibilityHint="Appuyer pour naviguer vers la page qui vous permet de gérer vos bénéficiaires">
             <View style={styles.btnContainer}>
               <View style={styles.icon}>
                 <Icon
@@ -198,10 +200,11 @@ const Home = ({navigation}: HomeProps) => {
               <Text
                 style={{
                   color: colors.main.fontColor,
+                  fontSize: wp(4),
                   fontWeight: 'bold',
                   marginEnd: wp(3),
                 }}>
-                Beneficiaires
+                Bénéficiaires
               </Text>
             </View>
           </TouchableOpacity>
@@ -210,7 +213,7 @@ const Home = ({navigation}: HomeProps) => {
             onPress={() => navigation.navigate('Transfer')}
             accessibilityRole="button"
             accessibilityLabel="Effectuer un virement"
-            accessibilityHint="Appuyer pour naviguer vers la page qui vous permet d effectuer un virement">
+            accessibilityHint="Appuyer pour naviguer vers la page qui vous permet d'effectuer un virement">
             <View style={styles.btnContainer}>
               <View style={styles.icon}>
                 <Icon
@@ -223,6 +226,7 @@ const Home = ({navigation}: HomeProps) => {
               <Text
                 style={{
                   color: colors.main.fontColor,
+                  fontSize: wp(4),
                   fontWeight: 'bold',
                   marginEnd: wp(3),
                 }}>
@@ -248,6 +252,7 @@ const Home = ({navigation}: HomeProps) => {
               <Text
                 style={{
                   color: colors.main.fontColor,
+                  fontSize: wp(4),
                   fontWeight: 'bold',
                   marginEnd: wp(3),
                 }}>
@@ -258,8 +263,8 @@ const Home = ({navigation}: HomeProps) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('Reclamation')}
             accessibilityRole="button"
-            accessibilityLabel="Reclamation"
-            accessibilityHint="Appuyer pour naviguer vers la page qui vous permet de effetuer une reclamation">
+            accessibilityLabel="Réclamation"
+            accessibilityHint="Appuyer pour naviguer vers la page qui vous permet de effectuer une réclamation">
             <View style={styles.btnContainer}>
               <View style={styles.icon}>
                 <Icon
@@ -272,10 +277,11 @@ const Home = ({navigation}: HomeProps) => {
               <Text
                 style={{
                   color: colors.main.fontColor,
+                  fontSize: wp(4),
                   fontWeight: 'bold',
                   marginEnd: wp(3),
                 }}>
-                Reclamation
+                Réclamation
               </Text>
             </View>
           </TouchableOpacity>
@@ -287,10 +293,11 @@ const Home = ({navigation}: HomeProps) => {
               <Text
                 style={{
                   color: colors.main.fontColor,
+                  fontSize: wp(4),
                   fontWeight: 'bold',
                   marginEnd: wp(3),
                 }}>
-                Parametres
+                Paramètres
               </Text>
             </View>
           </TouchableOpacity>
