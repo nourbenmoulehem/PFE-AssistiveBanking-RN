@@ -21,7 +21,7 @@ import { tokens } from '../../assets/palette';
 import * as Keychain from 'react-native-keychain';
 
 // api manage (custom hook)
-import getApi from '../../API/APIManager';
+import getApi from '../../API/Interceptor';
 
 // navigation
 import { RootStackParamListSignedIn } from '../../../App';
