@@ -41,6 +41,7 @@ export type RootStackParamListSignedIn = {
   Operations: undefined;
   Transfers: undefined;
   Transfer: undefined;
+  VerifiedTransfer: undefined;
   Settings: undefined;
   ColorPreferences: undefined;
   Card: undefined;
@@ -67,10 +68,14 @@ const linking: LinkingOptions<RootStackParamList> = {
       },
       NewPassword: {
         path: 'create-new-password/:token' 
-      }
+      },
+      // VerifiedTransfer: {
+      //           path: 'create-new-password/:token' 
+      //          },
     }
   }
 };
+
 
 const App = () => {
   return (

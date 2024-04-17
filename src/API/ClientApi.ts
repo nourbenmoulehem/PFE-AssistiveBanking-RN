@@ -4,13 +4,16 @@ import {API_BASE_URL} from '@env';
 
 interface FetchArgs {
   id: any;
+  rib: any;
+  motif: any;
+  montant: any;
 }
 
 export const clientApi = createApi({
   // creating a new API instance with the createApi function, takes object as argument
   reducerPath: 'clientApi',
   baseQuery: fetchBaseQuery({baseUrl: `${API_BASE_URL}`}), // http://192.168.1.101:5001
-  tagTypes: ['Client', 'Operation', 'Virement'],
+  tagTypes: ['Client', 'Operation', 'Virement', 'Transferer'],
   refetchOnFocus: true,
   refetchOnReconnect: true,
   endpoints: builder => ({
@@ -54,6 +57,15 @@ export const clientApi = createApi({
       }),
       providesTags: ['Virement'],
     }),
+    sendTransfer:builder.query({
+      query: ({id, rib, motif, montant}) => ({
+        url: `/api/v1/operation/virement/initiation-virement`,
+        method: 'POST',
+        body: {clientId: id, rib: rib, motif: motif, montant: montant},
+      }),
+      providesTags: ['Transferer'],
+    }
+    ),
 
     getIntent: builder.query<{assistantResponse: string}, {prompt: string}>({
       // not used
@@ -67,13 +79,16 @@ export const clientApi = createApi({
       }),
       providesTags: ['Client'],
     }),
+    
   }),
 });
 
 export const {
+  
   useGetClientsQuery,
   useLazyGetIntentQuery,
   useGetOperationsQuery,
   useGetTransfersQuery,
+  useSendTransferQuery,
   useGetOperationsBetweenDatesQuery,
 } = clientApi;
