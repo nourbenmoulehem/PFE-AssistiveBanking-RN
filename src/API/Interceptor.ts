@@ -1,9 +1,10 @@
-import axios, {AxiosInstance} from 'axios';
+import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
 import * as Keychain from 'react-native-keychain';
 import {jwtDecode} from 'jwt-decode';
 import dayjs from 'dayjs';
 import base64 from 'base-64';
 import { API_BASE_URL } from '@env';
+import { StringSchema } from 'yup';
 
 // import { setLogout } from '../context/globalReducer';
 // import { useDispatch } from 'react-redux';
@@ -35,7 +36,6 @@ const getApi = async (): Promise<AxiosInstance | undefined> => {
         
         // check if access token is expired
         const user = jwtDecode(accessToken.password);
-        console.log('🚀 ~ getApi ~ user:', user);
         const isExpired = dayjs.unix(user.exp as number).diff(dayjs()) < 1;
         // isExpired true then token has expired if false then token is still valid
         console.log('🚀 ~ getApi ~ isExpired:', isExpired);
@@ -47,8 +47,6 @@ const getApi = async (): Promise<AxiosInstance | undefined> => {
         const response = await axios.post(`${API_BASE_URL}/api/v1/auth/refresh-token`, {}, {
           headers: {Authorization: `Bearer ${refreshToken.password}`},
         });
-        console.log('🚀 ~ getApi ~ response access_token:', response.data.access_token);
-        console.log('🚀 ~ getApi ~ response refersh:', response.data.refresh_token);
 
         // save new access token
         await Keychain.setGenericPassword('accessToken', response.data.access_token, {service: 'accessService'});
@@ -61,6 +59,7 @@ const getApi = async (): Promise<AxiosInstance | undefined> => {
       
 
       return axiosInstance ;
+
     } else {
       console.log('log out!!!');
 
@@ -73,4 +72,17 @@ const getApi = async (): Promise<AxiosInstance | undefined> => {
   }
 };
 
-export default getApi;
+export const baseQuery = async ({ url, method, body }: { url: string, method: string, body?: any }) => {
+  const axios = await getApi();
+  if (!axios) {
+    return { error: { message: 'Not authenticated' } };
+  }
+  try {
+    const response = await axios( url,{ method, data: body });
+    return { data: response.data };
+  } catch (axiosError: any) {
+    return { error: { message: axiosError.message } };
+  }
+};
+
+export default baseQuery;

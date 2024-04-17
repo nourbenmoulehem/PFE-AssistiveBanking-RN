@@ -3,6 +3,10 @@ import {GetClientsResponse, GetIntentResponse} from './types';
 import {API_BASE_URL} from '@env';
 import {get} from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
+// import axiosInstance from "./interceptor";
+
+import baseQuery from './Interceptor';
+
 interface FetchArgs {
   id: any;
 }
@@ -10,7 +14,7 @@ interface FetchArgs {
 export const clientApi = createApi({
   // creating a new API instance with the createApi function, takes object as argument
   reducerPath: 'clientApi',
-  baseQuery: fetchBaseQuery({baseUrl: `${API_BASE_URL}`}), // http://192.168.1.101:5001
+  baseQuery: baseQuery, //  fetchBaseQuery({baseUrl: `${API_BASE_URL}`})
   tagTypes: ['Client', 'Operation', 'Virement', 'beneficiaire'],
   refetchOnFocus: true,
   refetchOnReconnect: true,
