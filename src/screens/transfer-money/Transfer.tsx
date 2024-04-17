@@ -55,6 +55,7 @@ const Transfer = () => {
         Effectuer un virement
       </Text>
       
+      
     </View>
   );
 };

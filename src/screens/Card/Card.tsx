@@ -169,13 +169,15 @@ const Card = () => {
         {data &&
           data.firstName &&
           data.lastName &&
-          data.compteBancaire.carte.numero_carte && (
-            /*  data.compteBancaire.carte.date_expiration && */ <CreditCard
+          data.compteBancaire.carte.numero_carte && 
+          data.compteBancaire.carte.date_expiration &&(
+            <CreditCard
               name={data.firstName}
               lastName={data.lastName}
               cardNumber={
                 data.compteBancaire.carte.numero_carte
-              } /* expirationDate={data.compteBancaire.carte.date_expiration} */
+              }  
+              expirationDate={data.compteBancaire.carte.date_expiration} 
             />
           )}
       </View>
