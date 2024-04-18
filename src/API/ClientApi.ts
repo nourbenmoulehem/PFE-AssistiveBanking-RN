@@ -63,15 +63,16 @@ export const clientApi = createApi({
       }),
       providesTags: ['Virement'],
     }),
-    sendTransfer:builder.query({
-      query: ({id, rib, motif, montant}) => ({
+    sendTransfer: builder.mutation({
+      query: ({ id, rib, motif, montant }) => ({
         url: `/api/v1/operation/virement/initiation-virement`,
         method: 'POST',
-        body: {clientId: id, rib: rib, motif: motif, montant: montant},
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: { clientId: id, rib: rib, motif: motif, montant: montant },
       }),
-      providesTags: ['Transferer'],
-    }
-    ),
+    }),
 
     getIntent: builder.query<{assistantResponse: string}, {prompt: string}>({
       // not used
@@ -169,6 +170,6 @@ export const {
   useAddBeneficiaireMutation,
   useUpdateBeneficiaireMutation,
   useDeleteBeneficiaireMutation,
-  useSendTransferQuery,
+  useSendTransferMutation,
   useGetOperationsBetweenDatesQuery,
 } = clientApi;

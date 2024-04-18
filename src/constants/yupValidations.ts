@@ -191,6 +191,17 @@ const ChangePasswordSchema = yup.object().shape({
     .min(5, 'Le mot de passe doit avoir exactement 5 caractères')
     .required('Ce champ est obligatoire'),
 });
+const transferMoneySchema = yup.object().shape({
+  montant: yup
+    .number()
+    .typeError('Le montant doit être un nombre')
+    .positive('Le montant doit être positif')
+    .required('Ce champ est obligatoire'),
+  rib: yup
+    .string()
+    .required('Ce champ est obligatoire'),
+  motif: yup.string(),
+});
 
 export {
   signUpSchema,
@@ -198,4 +209,5 @@ export {
   ForgotPasswordSchema,
   NewPasswordSchema,
   ChangePasswordSchema,
+  transferMoneySchema,
 };

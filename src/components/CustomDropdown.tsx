@@ -12,17 +12,39 @@ interface CustomDropdownProps {
   data: { label: string; value: string }[];
   bgColor: string;
   iconColor: string;
+  textColor: string;
+  searchColor: string;
+  onValueChange?: (value: string) => void;
 }
-const CustomDropdownComponent : React.FC<CustomDropdownProps> = ( {data , bgColor, iconColor}) => {
+const CustomDropdownComponent : React.FC<CustomDropdownProps> = ( {data , bgColor, iconColor, textColor, searchColor, onValueChange}) => {
   const [value, setValue] = useState<string | null>(null);
 
   const styles = StyleSheet.create({
     dropdown: {
-      margin: 16,
-      height: 50,
+      marginTop: wp(0),
+      margin: wp(3),
+      height: hp(9),
+      width: wp(89),
       backgroundColor: bgColor,
-      borderRadius: 12,
-      padding: 12,
+      borderRadius: wp(4),
+      padding: wp(4),
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.2,
+      shadowRadius: 1.41,
+  
+      elevation: 2,
+    },
+    dropdownContainer: {
+      
+      width: wp(89),
+      padding: wp(4),
+      backgroundColor: bgColor,
+      borderRadius: wp(4),
+      borderColor: 'transparent',
       shadowColor: '#000',
       shadowOffset: {
         width: 0,
@@ -34,31 +56,45 @@ const CustomDropdownComponent : React.FC<CustomDropdownProps> = ( {data , bgColo
       elevation: 2,
     },
     icon: {
-      marginRight: 5,
+      marginRight: wp(2),
     },
     item: {
-      padding: 17,
+      padding: wp(5),
+      borderRadius: wp(4),
+      margin: wp(2),
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+      backgroundColor: searchColor,
     },
     textItem: {
       flex: 1,
-      fontSize: 16,
+      color: textColor,
+      fontSize: wp(5),
+      fontWeight: 'bold',
     },
     placeholderStyle: {
-      fontSize: 16,
+      color: textColor,
+      fontSize: wp(5),
+      fontWeight: 'bold',
     },
     selectedTextStyle: {
-      fontSize: 16,
+      color: textColor,
+      fontSize: wp(5),
+      fontWeight: 'bold',
     },
     iconStyle: {
-      width: 20,
-      height: 20,
+      width: wp(6),
+      height: wp(6),
     },
     inputSearchStyle: {
-      height: 40,
-      fontSize: 16,
+      borderRadius: wp(4),
+      backgroundColor: searchColor,
+      borderColor: 'transparent',
+      height: hp(9),
+      color: textColor,
+      fontSize: wp(5),
+      fontWeight: 'bold',
     },
   });
   const renderItem = (item: { label: string; value: string }) => {
@@ -68,8 +104,8 @@ const CustomDropdownComponent : React.FC<CustomDropdownProps> = ( {data , bgColo
         {item.value === value && (
           <View style={styles.icon}>
             <Icon
-              source="history"
-              size={hp(5)}
+              source="check-circle-outline"
+              size={hp(3)}
               color={iconColor}
             />
           </View>
@@ -77,34 +113,41 @@ const CustomDropdownComponent : React.FC<CustomDropdownProps> = ( {data , bgColo
       </View>
     );
   };
+  
   return (
     <Dropdown
       style={styles.dropdown}
+      containerStyle={styles.dropdownContainer}
       placeholderStyle={styles.placeholderStyle}
       selectedTextStyle={styles.selectedTextStyle}
       inputSearchStyle={styles.inputSearchStyle}
       iconStyle={styles.iconStyle}
       data={data}
       search
-      maxHeight={300}
+      maxHeight={hp(50)}
       labelField="label"
       valueField="value"
-      placeholder="Select item"
-      searchPlaceholder="Search..."
+      placeholder="Selectionner un bénéficiaire"
+      searchPlaceholder="Rechercher..."
       value={value}
       onChange={item => {
         setValue(item.value as string | null);
+        if (onValueChange) {
+          onValueChange(item.value);
+        }
       }}
       renderLeftIcon={() => (
         <View style={styles.icon}>
           <Icon
-            source="history"
-            size={hp(5)}
+            source="account-convert"
+            size={hp(3)}
             color={iconColor}
           />
         </View>
       )}
       renderItem={renderItem}
+      accessibilityLabel='Selectionner un bénéficiaire'
+      itemAccessibilityLabelField="itemAccessibilityLabelField"
     />
   );
 };
