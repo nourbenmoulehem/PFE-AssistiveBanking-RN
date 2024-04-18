@@ -174,14 +174,14 @@ const MainStack = () => {
                 accessible={true}
                 accessibilityLabel="WeBank Logo"
               />
-              <Text
+              {/* <Text
                 style={{
                   color: mode == 'dark' ? 'white' : 'black',
                   fontSize: 20,
                   fontWeight: 'bold',
                 }}>
                 WeBank
-              </Text>
+              </Text> */}
             </View>
           ),
           headerRight: () => (
