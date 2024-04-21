@@ -96,6 +96,7 @@ const Home = ({ navigation }: HomeProps) => {
     },
     devider: {
       width: wp('100%'),
+      height: hp(0.2),
       backgroundColor: colors.background[400],
     },
     icon: {
