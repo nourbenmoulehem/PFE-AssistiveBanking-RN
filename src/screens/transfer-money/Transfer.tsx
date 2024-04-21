@@ -150,9 +150,12 @@ const Transfer = () => {
               <CustomDropdownComponent
                 data={transformedData}
                 bgColor={colors.main.rectangleColor}
+                iconSource='account-circle'
                 iconColor={colors.primary[200]}
                 textColor={colors.main.fontColor}
                 searchColor={colors.background[300]}
+                placeholder='Selectionnez le beneficiaire'
+                accessibilityLabel='choisir le beneficiaire'
                 onValueChange={(value) => {
                   console.log('Dropdown value:', value); 
                   setFieldValue('rib', value);
