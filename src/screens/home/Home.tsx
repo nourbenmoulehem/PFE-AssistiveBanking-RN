@@ -10,7 +10,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { Divider, List, Icon } from 'react-native-paper';
+import { Divider,  Icon } from 'react-native-paper';
 
 // redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -111,9 +111,9 @@ const Home = ({ navigation }: HomeProps) => {
       left: wp(3),
       top: hp(1.5),
       backgroundColor: colors.background[300],
-      borderRadius: wp(7),
-      width: wp(14),
-      height: wp(14),
+      borderRadius: wp(6),
+      width: wp(12),
+      height: wp(12),
       justifyContent: 'center',
       alignItems: 'center',
       shadowColor: 'black',
@@ -148,7 +148,7 @@ const Home = ({ navigation }: HomeProps) => {
           accessibilityLabel='Notifications'
         >
 
-          <Icon source="bell" size={wp(11)} color={colors.accent[300]} />
+          <Icon source="bell" size={wp(9)} color={colors.accent[300]} />
           {/* {unreadCount > 0 && (
                 <View style={styles.notifBadge}>
                   <Text style={{ color: 'white', fontWeight:'bold'}}>2</Text>
