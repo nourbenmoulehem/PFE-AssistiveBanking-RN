@@ -11,12 +11,26 @@ import {
 interface CustomDropdownProps {
   data: { label: string; value: string }[];
   bgColor: string;
-  iconColor: string;
+  iconSource?: string;
+  iconColor?: string;
   textColor: string;
-  searchColor: string;
+  searchColor?: string;
   onValueChange?: (value: string) => void;
+  placeholder?: string;
+  showSearch?: boolean;
+  accessibilityLabel?: string;
 }
-const CustomDropdownComponent : React.FC<CustomDropdownProps> = ( {data , bgColor, iconColor, textColor, searchColor, onValueChange}) => {
+const CustomDropdownComponent : React.FC<CustomDropdownProps> = ( {
+  data , 
+  bgColor,
+  iconSource,
+  iconColor, 
+  textColor, 
+  searchColor, 
+  accessibilityLabel,
+  placeholder,
+  showSearch = true,
+  onValueChange}) => {
   const [value, setValue] = useState<string | null>(null);
 
   const styles = StyleSheet.create({
@@ -67,6 +81,7 @@ const CustomDropdownComponent : React.FC<CustomDropdownProps> = ( {data , bgColo
       alignItems: 'center',
       backgroundColor: searchColor,
     },
+    
     textItem: {
       flex: 1,
       color: textColor,
@@ -82,6 +97,7 @@ const CustomDropdownComponent : React.FC<CustomDropdownProps> = ( {data , bgColo
       color: textColor,
       fontSize: wp(5),
       fontWeight: 'bold',
+      
     },
     iconStyle: {
       width: wp(6),
@@ -104,7 +120,7 @@ const CustomDropdownComponent : React.FC<CustomDropdownProps> = ( {data , bgColo
         {item.value === value && (
           <View style={styles.icon}>
             <Icon
-              source="check-circle-outline"
+              source='check'
               size={hp(3)}
               color={iconColor}
             />
@@ -120,14 +136,15 @@ const CustomDropdownComponent : React.FC<CustomDropdownProps> = ( {data , bgColo
       containerStyle={styles.dropdownContainer}
       placeholderStyle={styles.placeholderStyle}
       selectedTextStyle={styles.selectedTextStyle}
+      activeColor='transparent'
       inputSearchStyle={styles.inputSearchStyle}
       iconStyle={styles.iconStyle}
       data={data}
-      search
+      search={showSearch} // Add a prop to control whether to show the search option or not
       maxHeight={hp(50)}
       labelField="label"
       valueField="value"
-      placeholder="Selectionner un bénéficiaire"
+      placeholder={placeholder || 'Sélectionner'}
       searchPlaceholder="Rechercher..."
       value={value}
       onChange={item => {
@@ -139,14 +156,14 @@ const CustomDropdownComponent : React.FC<CustomDropdownProps> = ( {data , bgColo
       renderLeftIcon={() => (
         <View style={styles.icon}>
           <Icon
-            source="account-convert"
+            source={iconSource || 'chevron-down'}
             size={hp(3)}
             color={iconColor}
           />
         </View>
       )}
       renderItem={renderItem}
-      accessibilityLabel='Selectionner un bénéficiaire'
+      accessibilityLabel={accessibilityLabel}
       itemAccessibilityLabelField="itemAccessibilityLabelField"
     />
   );
