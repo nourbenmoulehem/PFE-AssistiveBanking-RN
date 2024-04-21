@@ -202,7 +202,10 @@ const transferMoneySchema = yup.object().shape({
     .required('Ce champ est obligatoire'),
   motif: yup.string(),
 });
-
+const reclamationSchema = yup.object().shape({
+  libelle: yup.string().required('Ce champ est obligatoire'),
+  description: yup.string().required('Ce champ est obligatoire')
+});
 export {
   signUpSchema,
   loginSchema,
@@ -210,4 +213,5 @@ export {
   NewPasswordSchema,
   ChangePasswordSchema,
   transferMoneySchema,
+  reclamationSchema,
 };
