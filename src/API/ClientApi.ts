@@ -73,6 +73,16 @@ export const clientApi = createApi({
         body: { clientId: id, rib: rib, motif: motif, montant: montant },
       }),
     }),
+    sendReclamation: builder.mutation({
+      query: ({ id, objet, description}) => ({
+        url: `/api/v1/client/reclamation/add/${id}`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: { clientId: id, objet: objet, descriptionClient: description},
+      }),
+    }),
 
     getIntent: builder.query<{assistantResponse: string}, {prompt: string}>({
       // not used
@@ -171,5 +181,6 @@ export const {
   useUpdateBeneficiaireMutation,
   useDeleteBeneficiaireMutation,
   useSendTransferMutation,
+  useSendReclamationMutation,
   useGetOperationsBetweenDatesQuery,
 } = clientApi;

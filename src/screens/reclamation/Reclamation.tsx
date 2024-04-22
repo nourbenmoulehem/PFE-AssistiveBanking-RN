@@ -3,11 +3,10 @@ import {
   StyleSheet,
   Text,
   View,
-  FlatList,
   TouchableOpacity,
-  ScrollView,
+  Modal
 } from 'react-native';
-import { TextInput, TouchableRipple, Icon } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -15,10 +14,9 @@ import {
 import { useSelector } from 'react-redux';
 import { RootState } from '../../context/store';
 import {
-  useGetOperationsQuery,
+  useSendReclamationMutation,
 } from '../../API/ClientApi';
 import { tokens } from '../../assets/palette';
-import axios from 'axios';
 import { Formik } from 'formik';
 import { reclamationSchema } from '../../constants/yupValidations';
 import CustomDropdownComponent from '../../components/CustomDropdown';
@@ -29,6 +27,9 @@ const Reclamation = () => {
   const { mode, user } = useSelector((state: RootState) => state.global);
   const colors: any = tokens(mode);
   const initialValues = { id: user?.clientId, libelle: '', description: '' };
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [sendReclamation] = useSendReclamationMutation();
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -39,7 +40,6 @@ const Reclamation = () => {
       flex: 1,
       borderRadius: wp(4),
       // backgroundColor: colors.background[400],
-
     },
     libelle: {
       color: colors.main.fontColor,
@@ -60,7 +60,6 @@ const Reclamation = () => {
       paddingTop: wp(1),
       paddingHorizontal: wp(5),
       backgroundColor: colors.main.rectangleColor,
-
     },
     title: {
       fontSize: wp(6),
@@ -83,13 +82,55 @@ const Reclamation = () => {
       backgroundColor: colors.accent[500],
       borderRadius: wp(4),
     },
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: hp('3%')
+    },
+    modalView: {
+      margin: wp('5%'),
+      backgroundColor: colors.main.backgroundColor,
+      borderRadius: wp('5%'),
+      padding: wp('4%'),
+      alignItems: "center",
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: wp('1%'),
+      elevation: 5
+    },
+    button: {
+      borderRadius: wp('5%'),
+      padding: wp('2.5%'),
+      elevation: 2
+    },
+    buttonClose: {
+      backgroundColor: colors.primary[500],
+    },
+    textStyle: {
+      color: colors.main.fontColor,
+      fontWeight: "bold",
+      textAlign: "center"
+    },
+    modalText: {
+      marginBottom: wp('4%'),
+      textAlign: "center",
+      fontSize: wp(4),
+      fontWeight: 'bold',
+    },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      justifyContent: 'center',
+      alignItems: 'center',
+      
+    },
 
   });
-
-
-
-
-
 
   return (
     <View style={styles.container}>
@@ -102,7 +143,17 @@ const Reclamation = () => {
         validationSchema={reclamationSchema}
         onSubmit={(values) => {
           console.log(values);
-          
+          sendReclamation({ id: initialValues.id, objet: values.libelle, description: values.description })
+            .then((response) => {
+              // This function will be called when the mutation completes successfully
+              setModalMessage('Reclamation envoyqée avec succès!');
+              setModalVisible(true);
+            })
+            .catch((error) => {
+              // This function will be called if there was an error sending the reclamation
+              setModalMessage('Erreur: ' + error.message);
+              setModalVisible(true);
+            });
         }}
       >
         {({
@@ -167,6 +218,29 @@ const Reclamation = () => {
                 </Text>
               </View>
             </TouchableOpacity>
+            <Modal
+  animationType="slide"
+  transparent={true}
+  visible={modalVisible}
+  onRequestClose={() => {
+    setModalVisible(!modalVisible);
+  }}
+>
+  <View style={styles.modalOverlay}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>{modalMessage}</Text>
+
+            <TouchableOpacity
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>Fermer</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+      </Modal>
           </View>
         )}
       </Formik>
@@ -176,3 +250,5 @@ const Reclamation = () => {
 };
 
 export default Reclamation;
+
+
