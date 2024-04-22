@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../context/store';
 import { tokens } from '../../assets/palette';
 import { Divider, Icon } from 'react-native-paper';
+import { useGetClientsQuery, useGetNotificationsQuery } from '../../API/ClientApi';
 
 const Notification = () => {
   const navigation = useNavigation();
@@ -17,18 +18,18 @@ const Notification = () => {
     (state: RootState) => state.global,
   );
   const colors: any = tokens(mode);
+  const { data: notifications, error, isLoading } = useGetNotificationsQuery(user?.clientId);
+  // const [notifications] = useState(data?.notifications);
 
-  const [notifications, setNotifications] = useState<{ notifId: number; notif: string; notifDate: string; type: string; }[]>([]);
+  // useEffect(() => {
+  //   // Placeholder notifications
+  //   const placeholderNotifications = [
+  //     { notifId: 1, notif: 'Virement exécuté', notifDate: '2022-01-01', type: 'virement' },
+  //     { notifId: 2, notif: 'Réponse réclamation', notifDate: '2022-01-02', type: 'assistant' },
+  //   ];
 
-  useEffect(() => {
-    // Placeholder notifications
-    const placeholderNotifications = [
-      { notifId: 1, notif: 'Virement exécuté', notifDate: '2022-01-01', type: 'virement' },
-      { notifId: 2, notif: 'Réponse réclamation', notifDate: '2022-01-02', type: 'assistant' },
-    ];
-
-    setNotifications(placeholderNotifications);
-  }, []);
+  //   setNotifications(placeholderNotifications);
+  // }, []);
 
   const styles = StyleSheet.create({
     container: {
@@ -74,7 +75,8 @@ const Notification = () => {
     },
     empty: {
       fontSize: wp(4),
-      color: colors.main.warningText,
+      fontWeight: 'bold',
+      color: colors.main.warning,
       textAlign: 'center',
       marginTop: wp(10),
     },
@@ -110,7 +112,7 @@ const Notification = () => {
     <View style={styles.container}>
       <Text style={styles.libelle}>Vos notifications</Text>
       <Divider style={styles.devider} />
-      {notifications.length === 0 ? (
+      {(!notifications || notifications.length === 0) ? (
         <Text style={styles.empty}>Aucune notification à afficher</Text>
       ) : (
         <FlatList

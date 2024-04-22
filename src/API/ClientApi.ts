@@ -18,7 +18,7 @@ export const clientApi = createApi({
   // creating a new API instance with the createApi function, takes object as argument
   reducerPath: 'clientApi',
   baseQuery: baseQuery, //  fetchBaseQuery({baseUrl: `${API_BASE_URL}`})
-  tagTypes: ['Client', 'Operation', 'Virement', 'beneficiaire', 'Transferer'],
+  tagTypes: ['Client', 'Operation', 'Virement', 'beneficiaire', 'Transferer', 'Notification'],
   refetchOnFocus: true,
   refetchOnReconnect: true,
   endpoints: builder => ({
@@ -62,6 +62,13 @@ export const clientApi = createApi({
         body: {clientId: id},
       }),
       providesTags: ['Virement'],
+    }),
+    getNotifications: builder.query({
+      query: id => ({
+        url: `api/v1/client/${id}/notifications`,
+        method: 'GET',
+      }),
+      providesTags: ['Notification'],
     }),
     sendTransfer: builder.mutation({
       query: ({ id, rib, motif, montant }) => ({
@@ -176,6 +183,7 @@ export const {
   useLazyGetIntentQuery,
   useGetOperationsQuery,
   useGetTransfersQuery,
+  useGetNotificationsQuery,
   useGetBeneficiairesQuery,
   useAddBeneficiaireMutation,
   useUpdateBeneficiaireMutation,
