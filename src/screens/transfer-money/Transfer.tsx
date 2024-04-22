@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Modal, Button, Pressable } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Modal, Button } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../context/store';
@@ -25,8 +25,9 @@ const Transfer = () => {
     }
   }, [data]);
 
-  //const [sendTransfer, {data, error}] = useSendTransferMutation();
-  const [sendTransfer] = useSendTransferMutation();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [sendTransfer,{ error }] = useSendTransferMutation();
   const transformedData = beneficiaires.map(item => ({ label: item.nom, value: item.rib, itemAccessibilityLabelField: `Beneficiary ${item.nom} with RIB ${item.rib}`, }));
   const initialValues = { id: user?.clientId, rib: '', montant: '', motif: '', };
   
@@ -44,22 +45,50 @@ const Transfer = () => {
     },
     centeredView: {
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: hp('3%')
     },
     modalView: {
-      width: wp(89),
-      borderRadius: wp(4),
-      backgroundColor: colors.background[200],
-      justifyContent: 'center',
-      alignItems: 'center',
+      margin: wp('5%'),
+      backgroundColor: colors.main.backgroundColor,
+      borderRadius: wp('5%'),
+      padding: wp('4%'),
+      alignItems: "center",
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: wp('1%'),
+      elevation: 5
+    },
+    button: {
+      borderRadius: wp('5%'),
+      padding: wp('2.5%'),
+      elevation: 2
+    },
+    buttonClose: {
+      backgroundColor: colors.primary[500],
+    },
+    textStyle: {
+      color: colors.main.fontColor,
+      fontWeight: "bold",
+      textAlign: "center"
     },
     modalText: {
-      marginBottom: wp(5),
-      fontSize: wp(6),
+      marginBottom: wp('4%'),
+      textAlign: "center",
+      fontSize: wp(4),
       fontWeight: 'bold',
-      color: colors.main.fontColor,
-      justifyContent: 'space-between',
+    },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      justifyContent: 'center',
+      alignItems: 'center',
+
     },
     libelle: {
       color: colors.main.fontColor,
@@ -115,20 +144,24 @@ const Transfer = () => {
         initialValues={initialValues}
         validationSchema={transferMoneySchema}
         onSubmit={(values,errors) => {
-          console.log(values);
-          console.log('errors', errors);
+          
           sendTransfer({
             id: initialValues.id,
             rib: values.rib,
             motif: values.motif,
             montant: values.montant
-          }).then(response => {
-            console.log('API response:', response);
-          })
-          .catch(error => {
-            console.log('API error:', error);
+          }).then((response: any) => {
+            console.log('Response:', response); 
+            if ('error' in response) {
+            setModalMessage(response.error.message);
+            setModalVisible(true);}
+            else {
+              setModalMessage('Virement effectue avec succes');
+              setModalVisible(true);
+            }
           });
-          ;
+          
+          
         }}>
         {({
           values, // where we're getting all the value of the input fields
@@ -196,18 +229,12 @@ const Transfer = () => {
                 value={values.motif}
               />
               {errors.motif && <Text>{errors.motif}</Text>}
-              {/* <Pressable
-                onPress={() => handleSubmit()}
-                accessibilityRole="button"
-                accessibilityLabel="confirmez le virement"
-                accessibilityHint="Appuyer pour confirmer le virement"
-                style={({ pressed }) => [
-                  {
-                    backgroundColor: pressed ? 'rgba(0,0,0,0.1)' : colors.accents[500],
-                  },
-                  styles.btnContainer,
-                ]}
-              >
+              <TouchableOpacity
+              onPress={() => {
+                handleSubmit();
+              }}
+            >
+              <View style={styles.btnContainer}>
                 <Text
                   style={{
                     color: colors.main.fontColor,
@@ -217,21 +244,34 @@ const Transfer = () => {
                     textAlign: 'center',
                   }}
                 >
-                  Confirmer Virement
+                  Envoyer
                 </Text>
-              </Pressable> */}
-              <Button
-                accessibilityLabel="confirmez le virement"
-                title="Confirmer Virement"
-                color={colors.accent[500]}
-                onPress={() => {
-                  console.log('values', values);
-                  console.log('values', values.rib, values.motif, values.montant);
-                  
-                  handleSubmit();
-                }}
-              />
+              </View>
+            </TouchableOpacity>
             </View>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <View style={styles.modalOverlay}>
+                <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                    <Text style={styles.modalText}>{modalMessage}</Text>
+
+                    <TouchableOpacity
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => setModalVisible(!modalVisible)}
+                    >
+                      <Text style={styles.textStyle}>Fermer</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Modal>
           </>
         ); 
       }}
