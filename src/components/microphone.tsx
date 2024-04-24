@@ -9,6 +9,7 @@
   import {useLazyGetIntentQuery} from '../API/ClientApi';
   import {tokens} from '../assets/palette';
 import axios from 'axios';
+import {API_BASE_URL} from '@env';
 
   const FloatingButton = () => {
     const dispatch = useDispatch();
@@ -33,7 +34,7 @@ import axios from 'axios';
 
     //user?.clientId
     const handleVocalCommand = (prompts: string[]) => {
-      axios.post('http://192.168.1.7:5001/api/v1/client/getIntent', {prompts: prompts, clientId: 1})
+      axios.post(`${API_BASE_URL}/api/v1/client/getIntent`, {prompts: prompts, clientId: user?.clientId})
       .then((response) => {
         console.log("handleVocal", response.data);
         setResponse(response.data.assistantResponse);
