@@ -40,6 +40,10 @@ const getApi = async (): Promise<AxiosInstance | undefined> => {
         // isExpired true then token has expired if false then token is still valid
         console.log('🚀 ~ getApi ~ isExpired:', isExpired);
         
+        console.log('====================================');
+        console.log(API_BASE_URL);
+        console.log('====================================');
+
         // if token is not expired then return the request and move on to the actual request
         if (!isExpired) return req;
 
@@ -47,7 +51,7 @@ const getApi = async (): Promise<AxiosInstance | undefined> => {
         const response = await axios.post(`${API_BASE_URL}/api/v1/auth/refresh-token`, {}, {
           headers: {Authorization: `Bearer ${refreshToken.password}`},
         });
-
+        
         // save new access token
         await Keychain.setGenericPassword('accessToken', response.data.access_token, {service: 'accessService'});
         // i might delete cause no need, but let's keep it for now

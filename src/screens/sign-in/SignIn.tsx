@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import React, {useState} from 'react';
+import {API_BASE_URL} from '@env';
 
 // components
 import TextInput from '../../components/TextInput';
@@ -70,10 +71,13 @@ const SignIn = ({navigation}: SignInProps) => {
   };
 
   const authenticate = async (values: FormValues) => {
+    console.log('====================================');
+    console.log(API_BASE_URL);
+    console.log('====================================');
     try {
       const response = await axios({
         method: 'post',
-        url: `${process.env.API_BASE_URL}/api/v1/auth/authenticate`,
+        url: `${API_BASE_URL}/api/v1/auth/authenticate`,
         withCredentials: true,
         responseType: 'json',
         data: {

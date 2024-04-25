@@ -26,6 +26,7 @@ import ColorPreferences from '../screens/ColorPreferences/ColorPreferences';
 import Operations from '../screens/operations/Operations';
 import Transfers from '../screens/transfers/Transfers';
 import Transfer from '../screens/transfer-money/Transfer';
+import VerifiedTransfer from '../screens/transfer-money/VerifiedTransfer';
 import Beneficiaire from '../screens/beneficiaire/Beneficiaire';
 import Reclamation from '../screens/reclamation/Reclamation';
 import Notification from '../screens/notification/Notification';
@@ -64,6 +65,7 @@ export type RootStackParamList = {
   Reclamation: undefined;
   Notification: undefined;
   ChangePassword: undefined;
+  VerifiedTransfer: undefined;
   // Profile: { userId: string };
 };
 
@@ -326,6 +328,15 @@ const MainStack = () => {
                 title: 'Card',
               }}
             />
+            <stack.Screen
+              name="VerifiedTransfer"
+              component={VerifiedTransfer}
+              // options={{
+              //   headerShown: true,
+              //   title: 'VerifiedTransfer',
+              // }}
+            />
+            
           </>
         ) : (
           <>
@@ -337,6 +348,7 @@ const MainStack = () => {
               component={AccountActivation}
             />
             <stack.Screen name="NewPassword" component={NewPassword} />
+            
           </>
         )}
       </stack.Navigator>

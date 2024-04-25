@@ -12,9 +12,19 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+
+
+// components
+import ConfirmationModel from '../../components/ConfirmationTransferModel';
+
 const Transfer = () => {
   const { mode, user } = useSelector((state: RootState) => state.global);
   const colors: any = tokens(mode);
+
+  // confirmation model related stuff
+  const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
   const { data } = useGetBeneficiairesQuery(user?.clientId);
   const [beneficiaires, setBeneficiaires] = useState([] as any[]);
@@ -108,6 +118,10 @@ const Transfer = () => {
 
   );
 
+  function hideDialog(): void {
+    setVisible(false);
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.libelle}>Effectuer un virement</Text>
@@ -117,16 +131,24 @@ const Transfer = () => {
         onSubmit={(values,errors) => {
           console.log(values);
           console.log('errors', errors);
+          setLoading(true);
+          setVisible(true);
           sendTransfer({
             id: initialValues.id,
             rib: values.rib,
             motif: values.motif,
             montant: values.montant
-          }).then(response => {
+          }).then((response:any) => {
             console.log('API response:', response);
+            setLoading(false);
+            setMessage(response.data);
+            setVisible(true);
+            
           })
           .catch(error => {
             console.log('API error:', error);
+            setMessage(error.message);
+            setLoading(false);
           });
           ;
         }}>
@@ -236,6 +258,13 @@ const Transfer = () => {
         ); 
       }}
       </Formik>
+
+      <ConfirmationModel
+        visible={visible}
+        hideDialog={hideDialog}
+        message={message}
+        loading={loading}
+      />
 
     </View>
   );

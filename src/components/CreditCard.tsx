@@ -20,7 +20,7 @@ const CreditCard: React.FC<CreditCardProps> = ({ name, lastName, cardNumber, exp
   const formattedExpirationDate = `${month}/${year}`;
   return (
     //C:\\Users\\GAMER\\Desktop\\PFE\\PFE-AssistiveBanking-RN\\src\\assets\\Card\\006.png
-    <ImageBackground source={require('C:\\Users\\GAMER\\Desktop\\PFE\\PFE-AssistiveBanking-RN\\src\\assets\\Card\\006.png')} resizeMode="contain" style={styles.card}>
+    <ImageBackground source={require('C:\\Users\\nbenm\\PFE-frontend\\WeBankAssistive\\src\\assets\\Card\\006.png')} resizeMode="contain" style={styles.card}>
       <Text style={styles.number}>{formattedCardNumber}</Text>
         <Text style={styles.date}>MONTH/YEAR</Text>
         <Text style={styles.name}>{formattedExpirationDate}</Text>

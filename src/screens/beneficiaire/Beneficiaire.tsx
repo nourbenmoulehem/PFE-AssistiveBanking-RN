@@ -22,7 +22,7 @@ import {RootState} from '../../context/store';
 import {tokens} from '../../assets/palette';
 
 // components
-import Confirmation from '../../components/ConfirmationModel';
+import Confirmation from '../../components/BeneficiaireModel';
 import ConfirmationV2 from '../../components/ConfirmationModelV2';
 import AddBeneficiaire from '../../components/AddBeneficiareModel';
 

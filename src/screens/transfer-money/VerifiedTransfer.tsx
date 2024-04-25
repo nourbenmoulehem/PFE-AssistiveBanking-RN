@@ -2,6 +2,9 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 const VerifiedTransfer = () => {
+    console.log('====================================');
+    console.log('VerifiedTransfer');
+    console.log('====================================');
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Virement veerifiee</Text>

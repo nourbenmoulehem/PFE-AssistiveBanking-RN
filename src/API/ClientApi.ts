@@ -18,7 +18,14 @@ export const clientApi = createApi({
   // creating a new API instance with the createApi function, takes object as argument
   reducerPath: 'clientApi',
   baseQuery: baseQuery, //  fetchBaseQuery({baseUrl: `${API_BASE_URL}`})
-  tagTypes: ['Client', 'Operation', 'Virement', 'beneficiaire', 'Transferer', 'Notification'],
+  tagTypes: [
+    'Client',
+    'Operation',
+    'Virement',
+    'beneficiaire',
+    'Transferer',
+    'Notification',
+  ],
   refetchOnFocus: true,
   refetchOnReconnect: true,
   endpoints: builder => ({
@@ -63,6 +70,7 @@ export const clientApi = createApi({
       }),
       providesTags: ['Virement'],
     }),
+    
     getNotifications: builder.query({
       query: id => ({
         url: `api/v1/client/${id}/notifications`,
@@ -70,24 +78,26 @@ export const clientApi = createApi({
       }),
       providesTags: ['Notification'],
     }),
+
     sendTransfer: builder.mutation({
-      query: ({ id, rib, motif, montant }) => ({
+      query: ({id, rib, motif, montant}) => ({
         url: `/api/v1/operation/virement/initiation-virement`,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: { clientId: id, rib: rib, motif: motif, montant: montant },
+        body: {clientId: id, rib: rib, motif: motif, montant: montant},
       }),
     }),
+
     sendReclamation: builder.mutation({
-      query: ({ id, objet, description}) => ({
+      query: ({id, objet, description}) => ({
         url: `/api/v1/client/reclamation/add/${id}`,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: { clientId: id, objet: objet, descriptionClient: description},
+        body: {clientId: id, objet: objet, descriptionClient: description},
       }),
     }),
 
@@ -178,7 +188,6 @@ export const clientApi = createApi({
 });
 
 export const {
-  
   useGetClientsQuery,
   useLazyGetIntentQuery,
   useGetOperationsQuery,
