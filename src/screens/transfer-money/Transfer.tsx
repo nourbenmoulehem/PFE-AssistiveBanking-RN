@@ -20,27 +20,6 @@ import ConfirmationModel from '../../components/ConfirmationTransferModel';
 const Transfer = () => {
   const { mode, user } = useSelector((state: RootState) => state.global);
   const colors: any = tokens(mode);
-
-  // confirmation model related stuff
-  const [visible, setVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
-
-  const { data } = useGetBeneficiairesQuery(user?.clientId);
-  const [beneficiaires, setBeneficiaires] = useState([] as any[]);
-
-  useEffect(() => {
-    if (data && data[0]?.client?.beneficiairesList) {
-      setBeneficiaires(data[0].client.beneficiairesList);
-    }
-  }, [data]);
-
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
-  const [sendTransfer,{ error }] = useSendTransferMutation();
-  const transformedData = beneficiaires.map(item => ({ label: item.nom, value: item.rib, itemAccessibilityLabelField: `Beneficiary ${item.nom} with RIB ${item.rib}`, }));
-  const initialValues = { id: user?.clientId, rib: '', montant: '', motif: '', };
-  
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -146,6 +125,27 @@ const Transfer = () => {
   }
 
   );
+  // confirmation model related stuff
+  const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const { data } = useGetBeneficiairesQuery(user?.clientId);
+  const [beneficiaires, setBeneficiaires] = useState([] as any[]);
+
+  useEffect(() => {
+    if (data && data[0]?.client?.beneficiairesList) {
+      setBeneficiaires(data[0].client.beneficiairesList);
+    }
+  }, [data]);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [sendTransfer,{ error }] = useSendTransferMutation();
+  const transformedData = beneficiaires.map(item => ({ label: item.nom, value: item.rib, itemAccessibilityLabelField: `Beneficiary ${item.nom} with RIB ${item.rib}`, }));
+  const initialValues = { id: user?.clientId, rib: '', montant: '', motif: '', };
+  
+  
 
   function hideDialog(): void {
     setVisible(false);
@@ -169,15 +169,40 @@ const Transfer = () => {
             montant: values.montant
           }).then((response:any) => {
             console.log('API response:', response);
+            console.log('====================================');
+            console.log(response);
+            console.log('====================================');
             setLoading(false);
             setMessage(response.data);
             setVisible(true);
             
           })
           .catch(error => {
-            console.log('API error:', error);
-            setMessage(error.message);
+            console.log('====================================');
+            console.log('error');
+            console.log('====================================');
+            console.log('API error:', error.response.data.error.message);
+            // setMessage(error.body);
             setLoading(false);
+            setMessage(error.response.data);
+            // if(error.status) {
+            //   console.log('====================================');
+            //   console.log(error.status);
+            //   console.log('====================================');
+            // }
+            console.log('====================================');
+            console.log(error.response);
+            console.log('====================================');
+            // Check if error.response exists
+            // if (error.response) {
+            //   // Access the error message from the server's response
+            //   const serverErrorMessage = error.response.data;
+            //   console.log("🚀 ~ Transfer ~ serverErrorMessage:", serverErrorMessage)
+            //   setMessage(serverErrorMessage);
+            // } else {
+            //   // If error.response doesn't exist, use error.message
+            //   setMessage(error.message);
+            // }
           });
           ;
           // }).then((response: any) => {
