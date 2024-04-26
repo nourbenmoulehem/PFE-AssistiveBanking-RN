@@ -14,8 +14,8 @@ import MainStack from './src/Navigation/MainStack';
 
 // Redux
 import {RootState, store, persistor} from './src/context/store';
-import { PersistGate } from 'redux-persist/integration/react';
-import { Provider } from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
+import {Provider} from 'react-redux';
 
 // screens
 import SignIn from './src/screens/sign-in/SignIn';
@@ -34,6 +34,7 @@ export type RootStackParamList = {
   MultiStepForm: undefined;
   AccountActivation: undefined;
   NewPassword: undefined;
+  VerifiedTransfer: undefined;
 };
 
 export type RootStackParamListSignedIn = {
@@ -53,7 +54,6 @@ export type RootStackParamListSignedIn = {
 
 const stack = createNativeStackNavigator<RootStackParamList>();
 
-
 // Linking is used to handle deep linking, it's a way to navigate to a specific screen in the app from a link
 const linking: LinkingOptions<RootStackParamList> = {
   prefixes: ['webankassistive://'],
@@ -61,31 +61,31 @@ const linking: LinkingOptions<RootStackParamList> = {
     initialRouteName: 'SignIn',
     screens: {
       SignIn: {
-        path: 'home'
+        path: 'home',
       },
       AccountActivation: {
-        path: 'account-activation/:activationtoken' // it worked like this and it didnt work with the token in the query account-activation?token
+        path: 'account-activation/:activationtoken', // it worked like this and it didnt work with the token in the query account-activation?token
       },
       NewPassword: {
-        path: 'create-new-password/:token' 
+        path: 'create-new-password/:token',
       },
-      // VerifiedTransfer: {
-      //           path: 'create-new-password/:token' 
-      //          },
-    }
-  }
+      VerifiedTransfer: { 
+        path: 'VerifiedTransfer/:virId'
+      },
+      
+    },
+  },
 };
-
 
 const App = () => {
   return (
-    <Provider store={store} >
+    <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-      <PaperProvider>
-        <NavigationContainer linking={linking}>
-          <MainStack />
-        </NavigationContainer>
-      </PaperProvider>
+        <PaperProvider>
+          <NavigationContainer linking={linking}>
+            <MainStack />
+          </NavigationContainer>
+        </PaperProvider>
       </PersistGate>
     </Provider>
   );

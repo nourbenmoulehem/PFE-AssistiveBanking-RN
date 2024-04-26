@@ -29,13 +29,18 @@ const Operations = () => {
   const colors: any = tokens(mode);
 
   const {data, isLoading, error} = useGetOperationsQuery(user?.clientId);
-  const [operations, setOperations] = useState([]);
+  const [operations, setOperations] = useState<string | any[]>([]);
   const [resetFlag, setResetFlag] = useState(false);
 
   useEffect(() => {
     if (data) {
+      console.log(data);
+      console.log(operations.length);
+      
+      
       setOperations(data);
     }
+    
   }, [data, resetFlag]);
 
   const styles = StyleSheet.create({
@@ -100,7 +105,32 @@ const Operations = () => {
     },
   });
 
+  if (operations === "Aucune opération trouvée") {
+    return (
+      <View style={styles.container}>
+        <Text
+          style={[
+            styles.libelle,
+            {textAlign: 'left', fontSize: wp(6), marginBottom: wp(3)},
+          ]}>
+          Historique de Mouvements
+        </Text>
+        <View style={styles.reset}>
+          <TouchableRipple onPress={() => reset()}>
+            <Icon source="autorenew" size={hp(5)} color="#A45704" />
+          </TouchableRipple>
+          <Text style={[styles.libelle, {fontSize: wp(4)}]}>
+            Aucun mouvement disponible
+          </Text>
+        </View>
+      </View>
+    );
+  }
+
+  
+
   const renderItem = ({item}: {item: any}) => (
+    
     <TouchableWithoutFeedback
       accessibilityLabel={`operation ${
         item.op_id
@@ -167,6 +197,15 @@ const Operations = () => {
     </TouchableWithoutFeedback>
   );
 
+
+//   const renderItem = ({item}: {item: any}) => {
+//     console.log(item);
+    
+//     return (
+//     <Text>Hello</Text>
+//     )
+// };
+
   const fetchData = async (
     startDate: string,
     endDate: string,
@@ -187,27 +226,7 @@ const Operations = () => {
     setResetFlag(prev => !prev);
   };
 
-  if (operations.length === 0) {
-    return (
-      <View style={styles.container}>
-        <Text
-          style={[
-            styles.libelle,
-            {textAlign: 'left', fontSize: wp(6), marginBottom: wp(3)},
-          ]}>
-          Historique de Mouvements
-        </Text>
-        <View style={styles.reset}>
-          <TouchableRipple onPress={() => reset()}>
-            <Icon source="autorenew" size={hp(5)} color="#A45704" />
-          </TouchableRipple>
-          <Text style={[styles.libelle, {fontSize: wp(4)}]}>
-            Aucun mouvement disponible
-          </Text>
-        </View>
-      </View>
-    );
-  }
+  
 
   return (
     <View style={styles.container}>
@@ -226,7 +245,7 @@ const Operations = () => {
         <FlatList
           data={operations}
           renderItem={renderItem}
-          keyExtractor={item => item.op_id.toString()}
+          keyExtractor={item => item.op_id}
           // accessibilityRole='list'
           // accessibilityLabel='historiques de vos mouvements'
         />

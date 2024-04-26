@@ -190,7 +190,7 @@ export const tokens = (mode: string) => {
             warning: '#A45704',
           danger: '#F6A68D',
           pass: '#ADC7FA',
-          warningText: '#A45704',
+          warningText: '#FEE6B9',
           dangerText: '#C92E13',
           passText: '#0F2BA9',
           old:'#EE8A58',

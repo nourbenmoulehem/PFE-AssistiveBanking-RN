@@ -12,7 +12,7 @@ import * as Progress from 'react-native-progress';
 import * as Keychain from 'react-native-keychain';
 
 // api manage (custom hook)
-import getApi from '../../API/APIManager';
+import getApi from '../../API/Interceptor';
 
 // navigation
 import {RootStackParamListSignedIn} from '../../../App';
@@ -169,13 +169,15 @@ const Card = () => {
         {data &&
           data.firstName &&
           data.lastName &&
-          data.compteBancaire.carte.numero_carte && (
-            /*  data.compteBancaire.carte.date_expiration && */ <CreditCard
+          data.compteBancaire.carte.numero_carte && 
+          data.compteBancaire.carte.date_expiration &&(
+            <CreditCard
               name={data.firstName}
               lastName={data.lastName}
               cardNumber={
                 data.compteBancaire.carte.numero_carte
-              } /* expirationDate={data.compteBancaire.carte.date_expiration} */
+              }  
+              expirationDate={data.compteBancaire.carte.date_expiration} 
             />
           )}
       </View>

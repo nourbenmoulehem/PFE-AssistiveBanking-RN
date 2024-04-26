@@ -10,7 +10,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { Divider, List, Icon } from 'react-native-paper';
+import { Divider,  Icon } from 'react-native-paper';
 
 // redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,7 +21,7 @@ import { tokens } from '../../assets/palette';
 import * as Keychain from 'react-native-keychain';
 
 // api manage (custom hook)
-import getApi from '../../API/APIManager';
+import getApi from '../../API/Interceptor';
 
 // navigation
 import { RootStackParamListSignedIn } from '../../../App';
@@ -96,6 +96,7 @@ const Home = ({ navigation }: HomeProps) => {
     },
     devider: {
       width: wp('100%'),
+      height: hp(0.2),
       backgroundColor: colors.background[400],
     },
     icon: {
@@ -106,21 +107,66 @@ const Home = ({ navigation }: HomeProps) => {
       justifyContent: 'center',
       alignItems: 'center',
     },
+    notifBg: {
+      position: 'absolute',
+      left: wp(3),
+      top: hp(1.5),
+      backgroundColor: colors.background[300],
+      borderRadius: wp(6),
+      width: wp(12),
+      height: wp(12),
+      justifyContent: 'center',
+      alignItems: 'center',
+      shadowColor: 'black',
+      shadowOffset: {
+        width: wp(2),
+        height: hp(2),
+      },
+      shadowRadius: 5,
+      elevation: 5,
+    },
+    notifBadge: {
+      position: 'absolute',
+      right: -wp(2),
+      top: hp(4.5),
+      backgroundColor: colors.main.danger,
+      borderRadius: wp(3),
+      width: wp(6),
+      height: wp(6),
+      justifyContent: 'center',
+      alignItems: 'center',
+      elevation: 5,
+    },
   });
   return (
     <View style={styles.container}>
       <View style={styles.rectangle}>
         <Text style={styles.welcome}>Bienvenu, {data?.firstName} </Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Notification')}
+          style={styles.notifBg}
+          accessibilityRole="button"
+          accessibilityLabel='Notifications'
+        >
+
+          <Icon source="bell" size={wp(9)} color={colors.accent[300]} />
+          {/* {unreadCount > 0 && (
+                <View style={styles.notifBadge}>
+                  <Text style={{ color: 'white', fontWeight:'bold'}}>2</Text>
+                </View>
+            )} 
+           */}
+        </TouchableOpacity>
         <Text style={styles.prompt}>Votre solde disponible </Text>
         <Text style={styles.solde}>{data?.compteBancaire.solde}DT</Text>
         <Divider style={styles.devider} />
 
-        <View style={styles.miniContainer}>
+        {/* <View style={styles.miniContainer}>
           <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' }}>Numéro de carte</Text>
           <Text style={{ color: colors.secondary[100], fontWeight: 'bold' }}>{data?.compteBancaire.carte.numero_carte}</Text>
         </View>
 
-        <Divider style={styles.devider} />
+        <Divider style={styles.devider} /> */}
 
         <View style={styles.miniContainer}>
 

@@ -872,10 +872,10 @@ const SignUp = ({navigation}: Props) => {
                     errors={errors}
                     getFieldName={getFieldName}
                     step={step}
-                    // disabled={getFieldName(step).some(
-                    //   fieldName =>
-                    //     values[fieldName] === '' || !!errors[fieldName],
-                    // )}
+                    disabled={getFieldName(step).some(
+                      fieldName =>
+                        values[fieldName] === '' || !!errors[fieldName],
+                    )}
                   />
                 ) : (
                   <CustomButton

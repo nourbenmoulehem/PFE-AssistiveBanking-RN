@@ -7,23 +7,23 @@ interface CreditCardProps {
   name: string;
   lastName:string;
   cardNumber: string;
-//   expirationDate: string;
+  expirationDate: string;
 }
 
-const CreditCard: React.FC<CreditCardProps> = ({ name, lastName, cardNumber }) => {
+const CreditCard: React.FC<CreditCardProps> = ({ name, lastName, cardNumber, expirationDate }) => {
   // Hide all but the last four digits of the card number
   const hiddenCardNumber = cardNumber.replace(/\d(?=\d{4})/g, "*");
   const formattedCardNumber = hiddenCardNumber.replace(/(.{4})/g, "$1 ");
-//   const expDate = new Date(expirationDate);
-//   const month = String(expDate.getMonth() + 1).padStart(2, '0'); // padStart ensures the month is always 2 digits
-//   const year = String(expDate.getFullYear()).slice(-2); // slice(-2) gets the last 2 digits of the year
-//   const formattedExpirationDate = `${month}/${year}`;
+  const expDate = new Date(expirationDate);
+  const month = String(expDate.getMonth() + 1).padStart(2, '0'); // padStart ensures the month is always 2 digits
+  const year = String(expDate.getFullYear()).slice(-2); // slice(-2) gets the last 2 digits of the year
+  const formattedExpirationDate = `${month}/${year}`;
   return (
     //C:\\Users\\GAMER\\Desktop\\PFE\\PFE-AssistiveBanking-RN\\src\\assets\\Card\\006.png
     <ImageBackground source={require('C:\\Users\\nbenm\\PFE-frontend\\WeBankAssistive\\src\\assets\\Card\\006.png')} resizeMode="contain" style={styles.card}>
       <Text style={styles.number}>{formattedCardNumber}</Text>
         <Text style={styles.date}>MONTH/YEAR</Text>
-        <Text style={styles.name}>06/29</Text>
+        <Text style={styles.name}>{formattedExpirationDate}</Text>
       <Text style={styles.name}>{name.toUpperCase()} {lastName.toUpperCase()}</Text>
     </ImageBackground>
   );
