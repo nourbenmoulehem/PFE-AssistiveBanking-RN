@@ -52,7 +52,7 @@ const Reclamation = () => {
     inputStyle: {
       alignSelf: 'center',
       width: wp(89),
-      height: hp(9),
+      height: hp(30),
       fontSize: wp(5),
       fontWeight: 'bold',
       marginVertical: wp(0),
@@ -196,6 +196,8 @@ const Reclamation = () => {
               onChangeText={handleChange('description')}
               onBlur={handleBlur('description')}
               value={values.description}
+              multiline={true}
+              numberOfLines={10}
             />
             {errors.description && <Text>{errors.description}</Text>}
             <TouchableOpacity

@@ -129,82 +129,82 @@ const Operations = () => {
 
   
 
-  // const renderItem = ({item}: {item: any}) => (
+  const renderItem = ({item}: {item: any}) => (
     
-  //   <TouchableWithoutFeedback
-  //     accessibilityLabel={`operation ${
-  //       item.op_id
-  //     }, operation ${item.op_canal.replace(/_/g, ' ')}, operation effectuee a ${
-  //       item.op_marchant
-  //     }, ${item.op_emplacement}, la date de l'operation est ${
-  //       item.date_operation
-  //     }, son montant est de ${item.op_type === 'Credit' ? '' : '-'}${
-  //       item.montant
-  //     } dinars`}
-  //     onPress={() => {
-  //       // Handle item click
-  //     }}>
-  //     <View style={styles.item} accessibilityHint={`operation ${item.op_id}`}>
-  //       {/* <View style={styles.icon} accessibilityLabel='icone'>
-  //         <Icon source={item.op_type === 'Credit' ? 'download-outline' : 'upload-outline'} size={hp(5)} color={item.op_type === 'Credit' ? colors.main.passText : colors.main.dangerText}  />
+    <TouchableWithoutFeedback
+      accessibilityLabel={`operation ${
+        item.op_id
+      }, operation ${item.op_canal.replace(/_/g, ' ')}, operation effectuee a ${
+        item.op_marchant
+      }, ${item.op_emplacement}, la date de l'operation est ${
+        item.date_operation
+      }, son montant est de ${item.op_type === 'Credit' ? '' : '-'}${
+        item.montant
+      } dinars`}
+      onPress={() => {
+        // Handle item click
+      }}>
+      <View style={styles.item} accessibilityHint={`operation ${item.op_id}`}>
+        {/* <View style={styles.icon} accessibilityLabel='icone'>
+          <Icon source={item.op_type === 'Credit' ? 'download-outline' : 'upload-outline'} size={hp(5)} color={item.op_type === 'Credit' ? colors.main.passText : colors.main.dangerText}  />
 
-  //       </View> */}
+        </View> */}
 
-  //       <View style={styles.left}>
-  //         <Text
-  //           style={styles.libelle}
-  //           accessibilityRole="text"
-  //           accessibilityLabel={`operation ${item.op_canal.replace(
-  //             /_/g,
-  //             ' ',
-  //           )}`}>
-  //           {item.op_canal.replace(/_/g, ' ')}
-  //         </Text>
-  //         <Text
-  //           style={styles.text}
-  //           accessibilityRole="text"
-  //           accessibilityLabel={`operation effectuee a ${item.op_marchant}`}>
-  //           {item.op_marchant}
-  //         </Text>
-  //         <Text
-  //           style={styles.text}
-  //           accessibilityRole="text"
-  //           accessibilityLabel={`emplacement de l'operation est ${item.op_emplacement}`}>
-  //           {item.op_emplacement}
-  //         </Text>
-  //       </View>
+        <View style={styles.left}>
+          <Text
+            style={styles.libelle}
+            accessibilityRole="text"
+            accessibilityLabel={`operation ${item.op_canal.replace(
+              /_/g,
+              ' ',
+            )}`}>
+            {item.op_canal.replace(/_/g, ' ')}
+          </Text>
+          <Text
+            style={styles.text}
+            accessibilityRole="text"
+            accessibilityLabel={`operation effectuee a ${item.op_marchant}`}>
+            {item.op_marchant}
+          </Text>
+          <Text
+            style={styles.text}
+            accessibilityRole="text"
+            accessibilityLabel={`emplacement de l'operation est ${item.op_emplacement}`}>
+            {item.op_emplacement}
+          </Text>
+        </View>
 
-  //       <Text
-  //         style={[styles.text, {width: wp(12)}]}
-  //         accessibilityRole="text"
-  //         accessibilityLabel={`la date de l'operation est ${item.date_operation}`}>
-  //         {item.date_operation}
-  //       </Text>
-  //       <View style={styles.icon}>
-  //         <Text
-  //           style={
-  //             item.op_type === 'Credit' ? styles.montant : styles.montantCredit
-  //           }
-  //           accessibilityRole="text"
-  //           accessibilityLabel={`le montant de l'operation est ${
-  //             item.op_type === 'Credit' ? '' : '-'
-  //           }${item.montant} dinars`}>
-  //           {item.op_type === 'Credit' ? '' : '-'}
-  //           {item.montant}DT
-  //         </Text>
-  //       </View>
-  //     </View>
-  //   </TouchableWithoutFeedback>
-  // );
+        <Text
+          style={[styles.text, {width: wp(12)}]}
+          accessibilityRole="text"
+          accessibilityLabel={`la date de l'operation est ${item.date_operation}`}>
+          {item.date_operation}
+        </Text>
+        <View style={styles.icon}>
+          <Text
+            style={
+              item.op_type === 'Credit' ? styles.montant : styles.montantCredit
+            }
+            accessibilityRole="text"
+            accessibilityLabel={`le montant de l'operation est ${
+              item.op_type === 'Credit' ? '' : '-'
+            }${item.montant} dinars`}>
+            {item.op_type === 'Credit' ? '' : '-'}
+            {item.montant}DT
+          </Text>
+        </View>
+      </View>
+    </TouchableWithoutFeedback>
+  );
 
 
-  const renderItem = ({item}: {item: any}) => {
-    console.log(item);
+//   const renderItem = ({item}: {item: any}) => {
+//     console.log(item);
     
-    return (
-    <Text>Hello</Text>
-    )
-};
+//     return (
+//     <Text>Hello</Text>
+//     )
+// };
 
   const fetchData = async (
     startDate: string,

@@ -55,13 +55,18 @@ const Notification = () => {
       marginBottom: wp(2),
     },
     notif: {
-      fontSize: wp(4),
+      fontSize: wp(5),
       fontWeight: 'bold',
       marginVertical: wp(1),
       color: colors.main.fontColor,
+      textTransform: 'capitalize',
     },
     date: {
       fontSize: wp(3),
+      color: colors.main.fontColor,
+    },
+    desc: {
+      fontSize: wp(4),
       color: colors.main.fontColor,
     },
     icon: {
@@ -97,8 +102,8 @@ const Notification = () => {
           )}
           <View style={{ flexDirection: 'row', alignItems: 'flex-start', width: wp(78), justifyContent: 'space-between' }}>
             <View style={styles.itemDesc}>
-              <Text style={styles.notif}>{item.notif}</Text>
-              <Text style={styles.date}>Description</Text>
+              <Text style={styles.notif}>{item.type}</Text>
+              <Text style={styles.desc}>{item.notif}</Text>
             </View>
             <Text style={[styles.date, { margin: wp(2) }]}>{item.notifDate}</Text>
           </View>

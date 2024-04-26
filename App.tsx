@@ -70,7 +70,7 @@ const linking: LinkingOptions<RootStackParamList> = {
         path: 'create-new-password/:token',
       },
       VerifiedTransfer: { 
-        path: 'VerifiedTransfer'
+        path: 'VerifiedTransfer/:virId'
       },
       
     },

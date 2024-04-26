@@ -50,6 +50,15 @@ export const clientApi = createApi({
       providesTags: ['Operation'],
     }),
 
+    getVirementById: builder.query({
+      // <GetClientsResponse, number>
+      query: id => ({
+        url: `/api/v1/operation/virement/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ['Virement'],
+    }),
+
     getOperationsBetweenDates: builder.query<
       GetClientsResponse,
       {startDate: string; endDate: string; clientId: number}
@@ -191,6 +200,7 @@ export const {
   useGetClientsQuery,
   useLazyGetIntentQuery,
   useGetOperationsQuery,
+  useGetVirementByIdQuery,
   useGetTransfersQuery,
   useGetNotificationsQuery,
   useGetBeneficiairesQuery,

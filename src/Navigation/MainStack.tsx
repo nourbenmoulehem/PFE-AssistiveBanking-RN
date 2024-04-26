@@ -124,6 +124,9 @@ const MainStack = () => {
               setIsTokenValid(false);
               // Handle the error here
             } else {
+              console.log('====================================');
+              console.log(error);
+              console.log('====================================');
               console.log('Token expired');
               dispatch(setInitialLogin({isLoggedIn: false, user: null}));
               dispatch(setLogout());
