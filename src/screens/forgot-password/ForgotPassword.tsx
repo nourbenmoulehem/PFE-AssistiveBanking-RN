@@ -32,8 +32,6 @@ import axios from 'axios';
 import {API_BASE_URL} from '@env';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-
-
 const initialValues = {
   email: '',
   cin: '',
@@ -53,13 +51,12 @@ type FormValues = {
 const ForgotPassword = () => {
   const {mode} = useSelector((state: RootState) => state.global);
 
-  const colors = tokens(mode);
+  const colors: any = tokens(mode);
 
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
-  
   const onClose = () => setVisible(false);
 
   const ForgotPasswordApi = async (values: FormValues) => {
@@ -74,16 +71,14 @@ const ForgotPassword = () => {
         data: values,
       });
 
-      if(response.status === 200) {
+      if (response.status === 200) {
         setLoading(false);
         setMessage(response.data);
       }
-
     } catch (error: any) {
       // console.log("🚀 ~ ForgotPasswordApi ~ error:", error.response.data)
       setLoading(false);
       setMessage(error.response.data);
-      
     }
   };
 
@@ -121,7 +116,6 @@ const ForgotPassword = () => {
           validateOnChange={true}
           style={styles.container}
           onSubmit={values => {
-            console.log(values);
             ForgotPasswordApi(values);
           }}>
           {({
@@ -189,7 +183,12 @@ const ForgotPassword = () => {
           )}
         </Formik>
       </KeyboardAwareScrollView>
-      <Modal visible={visible} isLoading={loading} error={message} onClose={onClose}/>
+      <Modal
+        visible={visible}
+        isLoading={loading}
+        error={message}
+        onClose={onClose}
+      />
     </View>
   );
 };
@@ -197,7 +196,3 @@ const ForgotPassword = () => {
 export default ForgotPassword;
 
 // yup validation schema
-
-
-
-

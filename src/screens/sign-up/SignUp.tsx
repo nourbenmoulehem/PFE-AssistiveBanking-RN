@@ -11,7 +11,11 @@ import {
   Linking,
   ActivityIndicator,
 } from 'react-native';
-import {Switch} from 'react-native-paper';
+import {Switch, ProgressBar, MD3Colors } from 'react-native-paper';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 // import ProgressBar from 'react-native-progress/Bar';
 
@@ -37,7 +41,7 @@ import {
   gouvernoratsOptions,
   nature_activite,
   nationalite,
-  agenceItems
+  agenceItems,
 } from '../../constants/items';
 
 import {signUpSchema} from '../../constants/yupValidations';
@@ -47,7 +51,7 @@ import {Formik} from 'formik';
 
 // navigation
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../../App';
+import {RootStackParamList} from '../../../App';
 
 // redux
 import {useSelector} from 'react-redux';
@@ -59,11 +63,11 @@ import axios from 'axios';
 import PickerInput from '../../components/PickerInput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
 
-const SignUp: React.FC<Props> = ({ navigation }) => {
+const SignUp = ({navigation}: Props) => {
   const {mode} = useSelector((state: RootState) => state.global);
-  const colors = tokens(mode);
+  const colors: any = tokens(mode);
 
   const [step, setStep] = useState(1);
 
@@ -165,7 +169,6 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
           gouvernorat: values.gouvernorat,
           adresse: values.adresse,
           agence: values.agence,
-      
         },
         {
           headers: {
@@ -175,7 +178,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
       )
       .catch(err => {
         setVisible(true);
-        setIsRedirectSignIn(false)
+        setIsRedirectSignIn(false);
         setLoading(false);
         setMessage(err.response.data);
       });
@@ -325,7 +328,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
     confirmationText: {
       fontSize: 16,
       fontWeight: 'bold',
-      color: mode === 'dark' ? colors.secondary[900] : colors.secondary[100],
+      color: mode === 'dark' ? colors.secondary[600] : colors.secondary[100],
     },
     linkText: {
       color: colors.main.buttonColor,
@@ -373,7 +376,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
         }) => (
           <>
             <View style={styles.container}>
-              {/* <ProgressBar progress={(step / 24)} width={300} color={colors.orange[200]} /> */}
+              <ProgressBar animatedValue={(step / 25)} style={{ height: hp(0.7), width: wp(80) }} color={MD3Colors.primary50} />
 
               {step === 1 && ( // offre
                 <>
@@ -502,17 +505,17 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
               )}
               {step === 7 && ( // AGENCE
                 <>
-                <PickerInput
-                  title="Sélectionnez l'agence la plus proche de vous"
-                  name="Agence"
-                  items={agenceItems}
-                  value={values.agence}
-                  onValueChange={value => handleChange('agence')(value)}
-                />
-                {errors.agence && (
-                  <Text style={styles.error}>{errors.agence}</Text>
-                )}
-              </>
+                  <PickerInput
+                    title="Sélectionnez l'agence la plus proche de vous"
+                    name="Agence"
+                    items={agenceItems}
+                    value={values.agence}
+                    onValueChange={value => handleChange('agence')(value)}
+                  />
+                  {errors.agence && (
+                    <Text style={styles.error}>{errors.agence}</Text>
+                  )}
+                </>
               )}
               {step === 8 && ( // birthday
                 <>
@@ -710,7 +713,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
                     title="Sélectionnez la date de délivrance de votre CIN"
                     name="date de délivration CIN"
                     field="dateDelivrationCin"
-                    placeholder="date de délivrance de votre CINe"
+                    placeholder="date de délivrance de votre CIN"
                     value={values.dateDelivrationCin}
                     handleChange={field => value => {
                       const event = {
@@ -844,16 +847,15 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
                     </Text>
                   </View>
                   {errors.hasAmericanityIndex && (
-                      <Text style={styles.error}>
-                        <Text>{errors.hasAmericanityIndex}</Text>
-                      </Text>
-                    )}
-                  {
-                    errors.hasConfirmedForPersonalData && (
-                      <Text style={styles.error}>
-                        {errors.hasConfirmedForPersonalData}
-                      </Text>
-                    )}
+                    <Text style={styles.error}>
+                      <Text>{errors.hasAmericanityIndex}</Text>
+                    </Text>
+                  )}
+                  {errors.hasConfirmedForPersonalData && (
+                    <Text style={styles.error}>
+                      {errors.hasConfirmedForPersonalData}
+                    </Text>
+                  )}
                 </>
               )}
               <View style={styles.prevNextButtonsContainer}>
@@ -878,8 +880,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
                 ) : (
                   <CustomButton
                     onPress={() => {
-                      console.log('VALUES:', values);
-                      console.log('ERRORS', errors);
+                      // console.log('ERRORS', errors);
                       handleSubmit();
                     }}
                     text="Valider"

@@ -1069,6 +1069,37 @@ const agenceItems = [
       value: "AVENUE HABIB BOURGUIBA"
   },
 ]
+
+const objet_reclamation = [
+   {
+    label: "Cartes ,TPEs et GABs",
+    value: "Cartes ,TPEs et GABs"
+   },
+   {
+    label: "Crédits",
+    value: "Crédits"
+   },
+    {
+     label: "Fonctionnement Compte",
+     value: "Fonctionnement Compte"
+    },
+    {
+     label: "Moyens de paiements (chèque,effet,Virement…)",
+     value: "Moyens de paiements"
+    },
+    {
+     label: "Produits Assurance",
+     value: "Produits Assurance"
+    },
+    {
+     label: "Qualité de service",
+     value: "Qualité de services"
+    },
+    {
+     label: "Autres",
+     value: "Autres"
+    },
+]
 export {
   status_civil,
   nombre_enfant,
@@ -1078,5 +1109,6 @@ export {
   gouvernoratsOptions,
   nature_activite,
   nationalite,
-  agenceItems
+  agenceItems,
+    objet_reclamation
 };

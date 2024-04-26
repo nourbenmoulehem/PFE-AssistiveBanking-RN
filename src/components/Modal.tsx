@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
 } from 'react-native-paper';
 import {StyleSheet, TouchableOpacity} from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 // navigation
 import {RootStackParamList} from '../../App';
@@ -25,7 +26,7 @@ interface ErrorModalProps {
   onClose: () => void;
   navigation?: NativeStackScreenProps<
     RootStackParamList,
-    'SignIn'
+    'SignUp'
   >['navigation'];
 }
 
@@ -38,14 +39,15 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
   onClose,
 }) => {
   const {mode} = useSelector((state: RootState) => state.global);
-  const colors = tokens(mode);
+  const colors:any = tokens(mode);
 
   const styles = StyleSheet.create({
     modalContainer: {
       backgroundColor: 'white',
-      padding: 20,
-      margin: 20,
+      padding: hp(2),
+      margin: hp(2),
       borderRadius: 8,
+      alignItems: 'center',
     },
     errorText: {
       color: 'black',
@@ -57,8 +59,8 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
       backgroundColor: colors.main.buttonColor,
       padding: 10,
       margin: 30,
-      height: 60,
-      width: 275,
+      height: hp(10),
+      width: wp(50),
       alignItems: 'center',
       justifyContent: 'center',
       borderRadius: 12,

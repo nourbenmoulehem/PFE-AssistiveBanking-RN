@@ -22,11 +22,11 @@ const OfferButton: React.FC<OfferButtonProps> = ({
   setOffreChanged,
 }) => {
   const {mode} = useSelector((state: RootState) => state.global);
-  const colors = tokens(mode);
+  const colors:any = tokens(mode);
 
   const styles = StyleSheet.create({
     checkedButton: {
-      backgroundColor: colors.orange[300],
+      backgroundColor: colors.secondaryAccent[300],
       padding: 20,
       borderRadius: 8,
       marginRight: 10,
@@ -35,7 +35,7 @@ const OfferButton: React.FC<OfferButtonProps> = ({
       alignItems: 'center',
     },
     uncheckedButton: {
-      backgroundColor: colors.yellow[300],
+      backgroundColor: colors.secondary[300],
       padding: 20,
       borderRadius: 8,
       marginRight: 10,
@@ -57,7 +57,6 @@ const OfferButton: React.FC<OfferButtonProps> = ({
         handleChange('offer')(offer);
         setCheckedOffer(offer);
         setOffreChanged(true);
-        console.log('🚀 ~ offer:', offer);
       }}
       style={
         checkedGender === offer ? styles.checkedButton : styles.uncheckedButton

@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import React, {useState} from 'react';
+import {API_BASE_URL} from '@env';
 
 // components
 import TextInput from '../../components/TextInput';
@@ -61,7 +62,7 @@ const SignIn = ({navigation}: SignInProps) => {
   getCredentials();
   // testing purposes, need to be deleted later
 
-  const colors = tokens(mode); // get the color palette based on the mode
+  const colors: any = tokens(mode); // get the color palette based on the mode
   const dispatch = useDispatch();
 
   type FormValues = {
@@ -70,10 +71,13 @@ const SignIn = ({navigation}: SignInProps) => {
   };
 
   const authenticate = async (values: FormValues) => {
+    console.log('====================================');
+    console.log(API_BASE_URL);
+    console.log('====================================');
     try {
       const response = await axios({
         method: 'post',
-        url: `${process.env.API_BASE_URL}/api/v1/auth/authenticate`,
+        url: `${API_BASE_URL}/api/v1/auth/authenticate`,
         withCredentials: true,
         responseType: 'json',
         data: {
@@ -81,11 +85,13 @@ const SignIn = ({navigation}: SignInProps) => {
           password: values.password,
         },
       });
+
       await Keychain.setGenericPassword(
         'accessToken',
         response.data.access_token,
         {service: 'accessService'},
       );
+      const clientId = response.data.clientId; // hardcoded for now
 
       await Keychain.setGenericPassword(
         'refreshToken',
@@ -100,7 +106,7 @@ const SignIn = ({navigation}: SignInProps) => {
       });
 
       if (accessCredentials && refreshCredentials) {
-        dispatch(setLogin({name: 'mohamed'}));
+        dispatch(setLogin({clientId: response.data.client_id}));
       }
     } catch (error: any) {
       setVisible(true);

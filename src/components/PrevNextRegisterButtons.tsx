@@ -26,7 +26,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({
   step,
 }) => {
   const {mode} = useSelector((state: RootState) => state.global);
-  const colors = tokens(mode);
+  const colors:any = tokens(mode);
   const styles = StyleSheet.create({
     textButton: {
       color: 'white',
@@ -36,7 +36,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({
     },
     button: {
       backgroundColor:
-        text === 'Valider' ? colors.yellow[300] : colors.orange[300],
+        text === 'Valider' ? colors.secondary[300] : colors.secondaryAccent[300],
       padding: 10,
       alignItems: 'center',
       justifyContent: 'center',
