@@ -226,7 +226,7 @@ const MainStack = () => {
                       onPressIn={handleLogout}
                       accessible={true}
                       accessibilityRole="button"
-                      accessibilityLabel="Logout">
+                      accessibilityLabel="Se déconnecter">
                       <Icon
                         name="logout"
                         size={30}

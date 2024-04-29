@@ -29,11 +29,18 @@ const SettingsList = () => {
       flex: 1,
       width: wp(100),
     },
+    header:{
+      color: colors.secondary[400],
+      fontWeight: 'bold',
+      fontSize: wp(6),
+      marginHorizontal: hp(2), 
+      marginBottom: hp(2),
+    }
   });
 
   return (
     <List.Section style={styles.container}>
-      <List.Subheader><Text>Votre preferences</Text></List.Subheader>
+      <Text style={styles.header} >Votre preferences</Text>
 
       
       <ListItemComponent title="Modifier les préférences de couleur" iconName="theme-light-dark" onPressIn={() => navigation.navigate('ColorPreferences')} />

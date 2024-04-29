@@ -30,10 +30,10 @@ const ListItemComponent = ({title, iconName, onPressIn}: Props) => {
     },
     listItem: {
       padding: hp(2),
-      margin: hp(1),
+      marginVertical: hp(1),
+      marginHorizontal: hp(3),
       borderRadius: hp(2),
-      backgroundColor:
-        mode === 'dark' ? colors.background[300] : colors.background[500],
+      backgroundColor: colors.main.rectangleColor,
     },
   });
 

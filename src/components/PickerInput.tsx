@@ -64,6 +64,7 @@ const PickerInput: React.FC<PickerInputProps> = ({
     <InputTitle title={title} />
     <View style={styles.inputWrapper}> 
       <RNPickerSelect
+      placeholder={'Sélectionner...'}
       useNativeAndroidPickerStyle={false}
         onValueChange={onValueChange}
         items={items}

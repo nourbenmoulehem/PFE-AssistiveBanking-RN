@@ -144,7 +144,7 @@ const CustomDropdownComponent : React.FC<CustomDropdownProps> = ( {
       maxHeight={hp(50)}
       labelField="label"
       valueField="value"
-      placeholder={placeholder || 'Sélectionner'}
+      placeholder={placeholder || 'Sélectionner...'}
       searchPlaceholder="Rechercher..."
       value={value}
       onChange={item => {

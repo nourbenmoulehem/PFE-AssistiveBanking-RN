@@ -43,7 +43,7 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
 
   const styles = StyleSheet.create({
     modalContainer: {
-      backgroundColor: colors.main.fontColor,
+      backgroundColor: colors.main.backgroundColor,
       padding: hp(3),
       margin: hp(2),
       borderRadius: wp(4),

@@ -123,7 +123,7 @@ const Card = () => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       backgroundColor:
-        mode === 'dark' ? colors.background[300] : colors.background[300],
+        colors.background[300],
       borderRadius: wp(4),
     },
     plafond: {
@@ -133,7 +133,7 @@ const Card = () => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       backgroundColor:
-        mode === 'dark' ? colors.background[300] : colors.background[300],
+      colors.background[300],
       borderRadius: wp(5),
     },
     text: {
