@@ -48,9 +48,11 @@ const Confirmation: React.FC<Props> = ({visible, hideDialog, item, type}) => {
 
   const styles = StyleSheet.create({
     container: {
+      width: wp(95),
       //flex: 1,
-      //alignItems: 'center',
-      padding: 20,
+      alignSelf: 'center',
+      alignItems: 'center',
+      justifyContent: 'center',
       backgroundColor: colors.main.backgroundColor,
     },
     title: {
@@ -59,40 +61,18 @@ const Confirmation: React.FC<Props> = ({visible, hideDialog, item, type}) => {
       textTransform: 'capitalize',
       textAlign: 'left',
     },
-    dialogContent: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: wp('9'),
-    },
     inputFieldsWrapper: {
+      
       alignItems: 'center',
       justifyContent: 'center',
-      padding: 30,
-    },
-    actionButton: {
-      //padding: 10,
-      backgroundColor: colors.main.new,
-      borderRadius: 5,
-      width: wp('50'),
-      height: hp('7'),
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    textSupprimer: {
-      color: colors.main.fontColor,
-      fontWeight: 'bold',
-      fontSize: 20,
-    },
-    info: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: wp('3'),
+      
     },
     fermerButton: {
       backgroundColor: colors.main.gaugeBG,
-      borderRadius: 5,
-      width: wp('25'),
+      borderRadius: wp(4),
+      width: wp(80),
       height: hp('7'),
+      
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -100,6 +80,36 @@ const Confirmation: React.FC<Props> = ({visible, hideDialog, item, type}) => {
       color: colors.main.fontColor,
       fontWeight: 'bold',
       fontSize: wp(4),
+    },
+    errorText: {
+      color: colors.primary[500], 
+      fontWeight: 'bold', 
+      fontSize:wp(3.5), 
+      textAlign:'center'
+    },
+    dialogContent: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: wp('9'),
+    },
+    actionButton: {
+      //padding: 10,
+      backgroundColor: colors.main.new,
+      borderRadius: wp(4),
+      width: wp(80),
+      height: hp('7'),
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    textSupprimer: {
+      color: colors.main.fontColor,
+      fontWeight: 'bold',
+      fontSize: wp(4),
+    },
+    info: {
+      alignItems: 'flex-start',
+      justifyContent: 'center',
+      gap: wp('3'),
     },
   });
 
@@ -155,7 +165,7 @@ const Confirmation: React.FC<Props> = ({visible, hideDialog, item, type}) => {
               <View style={styles.info}>
                 <Text
                   style={{
-                    fontSize: 20,
+                    fontSize: wp(4),
                     fontWeight: 'bold',
                     color: colors.main.fontColor,
                   }}>
@@ -163,7 +173,7 @@ const Confirmation: React.FC<Props> = ({visible, hideDialog, item, type}) => {
                 </Text>
                 <Text
                   style={{
-                    fontSize: 15,
+                    fontSize: wp(4),
                     fontWeight: 'bold',
                     color: colors.main.fontColor,
                   }}>

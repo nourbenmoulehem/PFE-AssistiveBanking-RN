@@ -17,6 +17,11 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
+// redux
+import { useSelector } from 'react-redux';
+import {RootState} from '../context/store';
+import { tokens } from '../assets/palette';
+
 const initialValues = {
   startDate: '',
   endDate: '',
@@ -50,6 +55,65 @@ const FilterByDate: React.FC<FilterByDateProps> = ({
   const reset = () => {
     resetOperations();
   };
+  const {mode} = useSelector((state: RootState) => state.global);
+  const colors:any = tokens(mode);
+
+  const styles = StyleSheet.create({
+    inputField: {
+      alignSelf: 'center',
+      width: wp(89),
+      height: hp(7),
+      fontSize: wp(4.5),
+      fontWeight: 'bold',
+      marginBottom: hp(2),
+      paddingTop: wp(1),
+      paddingHorizontal: wp(5),
+      backgroundColor: colors.main.rectangleColor,
+    },
+    buttonsContainer: {
+      marginTop: hp(0.5),
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+
+    },
+    submitButton: {
+      flex: 1,
+      height: hp(7),
+      backgroundColor: colors.secondary[500],
+      marginBottom: hp(2),
+      borderRadius: wp(4),
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    resetButton: {
+      flex: 1,
+      height: hp(7),
+      backgroundColor: colors.background[500],
+      marginBottom: hp(2),
+      borderRadius: wp(4),
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginRight: wp(2),
+    },
+    errorText: {
+      color: colors.primary[500],
+      fontSize: wp(3.5),
+      fontWeight: 'bold',
+      marginBottom: hp(1),
+      textAlign: 'center',
+    },
+    textButton: {
+      fontSize: wp(4.5),
+      fontWeight: 'bold',
+      color: colors.main.fontColor,
+    },
+    filterByDate: {
+      fontSize: wp(5.5),
+      fontWeight: 'bold',
+      color: colors.accent[500],
+      marginBottom: hp(2),
+    },
+  });
 
   return (
     <View>
@@ -73,7 +137,14 @@ const FilterByDate: React.FC<FilterByDateProps> = ({
               onPress={() => showDatePicker('startDate')}>
               <View>
                 <TextInput
-                  style={styles.inputField}
+                  mode='outlined'
+                  placeholderTextColor={colors.background[700]}
+                style={styles.inputField}
+                outlineColor={colors.primary[200]}
+                activeOutlineColor={colors.secondary[200]}
+                textColor={colors.main.fontColor}
+                outlineStyle={{ borderRadius: wp(4), borderColor: 'transparent' }}
+                contentStyle={{ backgroundColor: colors.main.rectangleColor }}
                   value={values.startDate}
                   placeholder="Date de début"
                   editable={false}
@@ -90,7 +161,14 @@ const FilterByDate: React.FC<FilterByDateProps> = ({
             <TouchableWithoutFeedback onPress={() => showDatePicker('endDate')}>
               <View>
                 <TextInput
-                  style={styles.inputField}
+                   mode='outlined'
+                   placeholderTextColor={colors.background[700]}
+                 style={styles.inputField}
+                 outlineColor={colors.primary[200]}
+                 activeOutlineColor={colors.secondary[200]}
+                 textColor={colors.main.fontColor}
+                 outlineStyle={{ borderRadius: wp(4), borderColor: 'transparent' }}
+                 contentStyle={{ backgroundColor: colors.main.rectangleColor }}
                   value={values.endDate}
                   placeholder="Date de fin"
                   editable={false}
@@ -154,54 +232,4 @@ const validationSchema = Yup.object().shape({
     .max(new Date(), 'La date de fin ne peut pas être dans le futur'),
 });
 
-const styles = StyleSheet.create({
-  inputField: {
-    width: wp(80),
-    height: hp(7),
-    backgroundColor: 'white',
-    marginBottom: hp(2),
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: 'black',
-  },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  submitButton: {
-    width: wp(40),
-    height: hp(7),
-    backgroundColor: '#A45704',
-    marginBottom: hp(2),
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: 'black',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  resetButton: {
-    width: wp(40),
-    height: hp(7),
-    backgroundColor: '#999999',
-    marginBottom: hp(2),
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: 'black',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: wp(2),
-  },
-  errorText: {
-    color: 'red',
-  },
-  textButton: {
-    fontSize: 18,
-    color: 'black',
-  },
-  filterByDate: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#A45704',
-    marginBottom: hp(2),
-  },
-});
+

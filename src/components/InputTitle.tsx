@@ -6,6 +6,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../context/store';
 
 import { tokens } from '../assets/palette';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 
 type InputTitleProps = {
@@ -19,14 +20,14 @@ const InputTitle = (props: InputTitleProps) => {
 
   const styles = StyleSheet.create({
     container: {
-      margin: 20,
+      // margin: 20,
       alignItems: 'center',
     },
     title: {
-      fontSize: 20,
+      fontSize: wp(5) ,
       fontWeight: 'bold',
-      color: mode === 'dark' ? 'white' : 'black',
-      marginBottom: 20,
+      color: colors.main.fontColor,
+      //marginBottom: 20,
     },
   });
 

@@ -71,9 +71,11 @@ const SignIn = ({navigation}: SignInProps) => {
   };
 
   const authenticate = async (values: FormValues) => {
+    
     console.log('====================================');
     console.log(API_BASE_URL);
     console.log('====================================');
+
     try {
       const response = await axios({
         method: 'post',
@@ -184,7 +186,7 @@ const SignIn = ({navigation}: SignInProps) => {
                   />
 
                   <TextInput
-                    mode="flat"
+                    modeI="flat"
                     name="password"
                     placeholder="Choisissez un mot de passe"
                     showLabel

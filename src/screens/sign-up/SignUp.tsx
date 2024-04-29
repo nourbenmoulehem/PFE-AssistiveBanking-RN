@@ -305,42 +305,46 @@ const SignUp = ({navigation}: Props) => {
   const styles = StyleSheet.create({
     container: {
       backgroundColor: colors.main.backgroundColor,
-      flex: 1,
+      // flex: 1,
+      height: '100%',
       justifyContent: 'space-around',
       alignItems: 'center',
     },
 
     inputWrapper: {
-      width: 340,
+      width: wp(89),
       justifyContent: 'center',
     },
     prevNextButtonsContainer: {
       flexDirection: 'row',
       justifyContent: 'space-around',
-      width: '100%',
+      width: wp(91),
     },
     switchContainer: {
       flexDirection: 'row',
-      width: '100%',
-      padding: 30,
+      width: wp(89),
+      padding: wp(5),
       alignItems: 'center',
+      alignSelf: 'center',
+      // alignSelf: 'flex-end',
     },
     confirmationText: {
-      fontSize: 16,
+      fontSize: wp(4),
       fontWeight: 'bold',
-      color: mode === 'dark' ? colors.secondary[600] : colors.secondary[100],
+      color: colors.main.fontColor,
     },
     linkText: {
-      color: colors.main.buttonColor,
-      fontSize: 16,
+      color: colors.accent[400],
+      fontSize: wp(4),
       fontWeight: 'bold',
     },
     error: {
-      fontSize: 15,
-      color: 'red',
-      marginTop: 10,
-      marginRight: 30,
-      textAlign: 'center',
+      fontSize: wp(4.5),
+      color: colors.tertiary[400],
+      marginTop: hp(1),
+      // marginRight: 30,
+      // textAlign: 'center',
+      alignSelf: 'center',
       fontWeight: 'bold',
     },
   });
@@ -376,7 +380,7 @@ const SignUp = ({navigation}: Props) => {
         }) => (
           <>
             <View style={styles.container}>
-              <ProgressBar animatedValue={(step / 25)} style={{ height: hp(0.7), width: wp(80) }} color={MD3Colors.primary50} />
+              <ProgressBar animatedValue={(step / 25)} style={{ height: hp(0.7), width: wp(89), borderRadius: wp(1) }} color={colors.accent[600]} />
 
               {step === 1 && ( // offre
                 <>
@@ -452,7 +456,7 @@ const SignUp = ({navigation}: Props) => {
                 <>
                   <InputTitle title="Sélectionnez votre prénom" />
                   <CustomTextInput
-                    mode="flat"
+                    modeI="flat"
                     name="firstName"
                     placeholder="Votre prénom"
                   />
@@ -462,7 +466,7 @@ const SignUp = ({navigation}: Props) => {
                 <>
                   <InputTitle title="Sélectionnez votre nom" />
                   <CustomTextInput
-                    mode="flat"
+                    modeI="flat"
                     name="lastName"
                     placeholder="Votre nom de famille"
                   />
@@ -472,14 +476,14 @@ const SignUp = ({navigation}: Props) => {
                 <>
                   <InputTitle title="Sélectionnez votre adresse e-mail et confirmez-la, s'il vous plaît." />
                   <CustomTextInput
-                    mode="flat"
+                    modeI="flat"
                     name="email"
                     placeholder="Votre adresse e-mail"
                     keyboardType="email-address"
                   />
 
                   <CustomTextInput
-                    mode="flat"
+                    modeI="flat"
                     name="emailConfirm"
                     placeholder="Confirmez votre adresse email"
                     keyboardType="email-address"
@@ -490,13 +494,13 @@ const SignUp = ({navigation}: Props) => {
                 <>
                   <InputTitle title="Sélectionnez votre numéro de téléphone et confirmez-le, s'il vous plaît." />
                   <CustomTextInput
-                    mode="flat"
+                    modeI="flat"
                     name="phoneNumber"
                     placeholder="Votre numéro de téléphone"
                     keyboardType="phone-pad"
                   />
                   <CustomTextInput
-                    mode="flat"
+                    modeI="flat"
                     name="phoneNumberConfirm"
                     placeholder="Confirmez votre numéro de téléphone"
                     keyboardType="phone-pad"
@@ -546,7 +550,7 @@ const SignUp = ({navigation}: Props) => {
                 <>
                   <InputTitle title="Sélectionnez votre adresse" />
                   <CustomTextInput
-                    mode="flat"
+                    modeI="flat"
                     name="adresse"
                     placeholder="Adresse"
                   />
@@ -571,7 +575,7 @@ const SignUp = ({navigation}: Props) => {
                   <InputTitle title="Sélectionnez votre code postal" />
 
                   <CustomTextInput
-                    mode="flat"
+                    modeI="flat"
                     name="codePostal"
                     placeholder="code postal"
                     keyboardType="phone-pad"
@@ -700,7 +704,7 @@ const SignUp = ({navigation}: Props) => {
                   <InputTitle title="Saisissez votre numéro Carte d'Identité Nationale" />
 
                   <CustomTextInput
-                    mode="flat"
+                    modeI="flat"
                     name="cin"
                     placeholder="Votre numéro Carte d'Identité Nationale"
                     keyboardType="phone-pad"
@@ -787,13 +791,13 @@ const SignUp = ({navigation}: Props) => {
                 <>
                   <InputTitle title="Choisissez un mot de passe et confirmez-le, s'il vous plaît." />
                   <CustomTextInput
-                    mode="flat"
+                    modeI="flat"
                     name="password"
                     placeholder="Choisissez un mot de passe"
                     secureTextEntry={true}
                   />
                   <CustomTextInput
-                    mode="flat"
+                    modeI="flat"
                     name="passwordConfirm"
                     placeholder="Confirmez votre mot de passe"
                     secureTextEntry={true}

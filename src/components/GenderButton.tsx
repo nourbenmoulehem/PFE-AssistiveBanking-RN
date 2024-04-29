@@ -6,6 +6,8 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../context/store';
 import {tokens} from '../assets/palette';
 
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
 interface GenderButtonProps {
   gender: 'male' | 'female' | undefined;
   checkedGender: 'male' | 'female' | undefined;
@@ -26,26 +28,27 @@ const GenderButton: React.FC<GenderButtonProps> = ({
 
   const styles = StyleSheet.create({
     checkedButton: {
-      backgroundColor: colors.secondaryAccent[300],
-      padding: 20,
-      borderRadius: 8,
-      marginRight: 10,
-      marginBottom: 40,
+      backgroundColor: colors.accent[500],
+      padding: wp(5),
+      borderRadius: wp(6),
+      marginVertical: wp(3),
+      marginBottom: wp(6),
       justifyContent: 'center',
       alignItems: 'center',
     },
     uncheckedButton: {
-      backgroundColor: colors.secondary[300],
-      padding: 20,
-      borderRadius: 8,
-      marginRight: 10,
-      marginBottom: 40,
+      
+      backgroundColor: colors.secondary[500],
+      padding: wp(5),
+      borderRadius: wp(6),
+      marginVertical: wp(3),
+      marginBottom: wp(6),
       justifyContent: 'center',
       alignItems: 'center',
     },
     TextButton: {
-      color: 'white',
-      fontSize: 20,
+      color: colors.main.fontColor,
+      fontSize: wp(7),
       fontWeight: 'bold',
       letterSpacing: 1,
     },

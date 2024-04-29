@@ -2,6 +2,10 @@ import React from 'react';
 import {View, TouchableOpacity, Text, Image, StyleSheet} from 'react-native';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 interface ImagePickerProps {
   handleChange: (imageUri: string | undefined) => void;
@@ -31,8 +35,8 @@ type Options = {
 const options: Options = {
   mediaType: 'photo',
   includeBase64: false,
-  maxHeight: 2000,
-  maxWidth: 2000,
+  maxHeight: wp(30),
+  maxWidth: wp(30),
 };
 
 const ImagePicker: React.FC<ImagePickerProps> = ({
@@ -54,32 +58,33 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
 
   const styles = StyleSheet.create({
     openGaleryButton: {
-      height: 150,
-      width: 120,
-      borderRadius: 8,
+      height: wp(35),
+      flex: 1,
+      borderRadius: wp(4),
       backgroundColor: colors.secondary[400],
       alignItems: 'center',
       justifyContent: 'center',
       gap: 20,
     },
     openCameraButton: {
-      height: 150,
-      width: 120,
-      borderRadius: 8,
+      height: wp(35),
+      flex: 1,
+      borderRadius: wp(4),
       backgroundColor: colors.secondary[200],
       alignItems: 'center',
       justifyContent: 'center',
       gap: 20,
     },
     TextButtonNextPrev: {
-      color: 'white',
-      fontSize: 20,
+      color: colors.main.fontColor,
+      fontSize: wp(5),
       fontWeight: 'bold',
       letterSpacing: 1,
+      textAlign: 'center',
     },
     linkText: {
-      color: 'blue',
-      fontSize: 20,
+      color: colors.secondaryAccent[700],
+      fontSize: wp(5),
       fontWeight: 'bold',
       letterSpacing: 1,
     },
@@ -90,7 +95,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
       <View
         style={{
           flexDirection: 'row',
-          width: '100%',
+          width: wp(89),
           justifyContent: 'space-around',
           gap: 20,
           alignItems: 'center',
@@ -119,7 +124,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
           accessibilityLabel={`Ouvrir la galerie pour choisir une photo de votre ${name}`}
           // accessibilityHint="Double-tap pour ouvrir la galerie."
           >
-          <Icon name="image-search-outline" size={40} />
+          <Icon name="image-search-outline" size={wp(10)} color={colors.background[300]} />
           <Text style={styles.TextButtonNextPrev}>ouvrir la galerie</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -144,7 +149,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
           accessibilityLabel={`Ouvrir la caméra pour prendre une photo de votre ${name}`}
           // accessibilityHint="Double-tap pour ouvrir la caméra."
           >
-          <Icon name="camera-enhance-outline" size={40} />
+          <Icon name="camera-enhance-outline" size={wp(10)} color={colors.background[300]} />
           <Text style={styles.TextButtonNextPrev}>ouvrir la caméra</Text>
         </TouchableOpacity>
       </View>
@@ -153,7 +158,7 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
         {selectedImage ? (
           <Image
             source={{uri: selectedImage}}
-            style={{width: 250, height: 250}}
+            style={{width: wp(50), height: wp(50)}}
             alt={`votre ${field} `}
             accessible={true}
             accessibilityLabel={`Votre ${field}`}

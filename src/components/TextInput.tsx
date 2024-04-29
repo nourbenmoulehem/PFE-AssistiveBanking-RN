@@ -6,6 +6,11 @@ import {
 } from 'react-native-paper';
 import {useField} from 'formik';
 import {View, StyleSheet} from 'react-native';
+// redux
+import {useSelector} from 'react-redux';
+import {RootState} from '../context/store';
+import {tokens} from '../assets/palette';
+
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -14,7 +19,7 @@ import {
 interface TextInputProps {
   name: string;
   placeholder: string;
-  mode?: 'flat' | 'outlined';
+  modeI?: 'flat' | 'outlined';
   keyboardType?:
     | 'default'
     | 'number-pad'
@@ -29,27 +34,65 @@ interface TextInputProps {
 const TextInput: React.FC<TextInputProps> = ({
   name,
   placeholder,
-  mode = 'flat',
+  modeI = 'flat',
   keyboardType = 'default',
   showLabel = false,
   secureTextEntry = false,
 }) => {
   const [field, meta] = useField(name);
 
+
+  const {mode} = useSelector((state: RootState) => state.global);
+  const colors:any = tokens(mode);
+  const styles = StyleSheet.create({
+    error: {
+      fontSize: wp(4.5),
+      color: colors.tertiary[400],
+      marginTop: hp(1),
+      // marginRight: 30,
+      // textAlign: 'center',
+      alignSelf: 'center',
+      fontWeight: 'bold',
+    },
+    label: {
+      fontSize: wp(4),
+      color: colors.primary[300],
+      fontWeight: 'bold',
+      paddingVertical: hp(2),
+    },
+    inputStyle: {
+      
+      alignSelf: 'center',
+      width: wp(89),
+      // height: hp(8),
+      fontSize: wp(5),
+      fontWeight: 'bold',
+      marginVertical: wp(0),
+      //  borderRadius: wp(4),
+      padding: wp(1),
+      paddingHorizontal: wp(5),
+      backgroundColor: colors.main.rectangleColor,
+    },
+  });
   return (
-    <View style={styles.inputWrapper}>
+    <View >
       {showLabel && <Text style={styles.label}>{placeholder}</Text>}
       <PaperTextInput
-        placeholder={placeholder}
-        textColor="black"
-        mode={mode}
+         mode='outlined'
+         placeholder={placeholder}
+         placeholderTextColor={colors.background[700]}
+         style={styles.inputStyle}
+         outlineColor={colors.primary[200]}
+         activeOutlineColor={colors.secondary[200]}
+         textColor={colors.main.fontColor}
+         outlineStyle={{ borderRadius: wp(4), borderColor: 'transparent' }}
+         contentStyle={{ backgroundColor: colors.main.rectangleColor }}
         value={field.value}
         onChangeText={field.onChange(name)}
         onBlur={field.onBlur(name)}
         error={!!(meta.touched && meta.error)}
         keyboardType={keyboardType}
         secureTextEntry={secureTextEntry}
-        contentStyle={styles.contentStyle}
         accessible={true}
         accessibilityLabel={`Champ de saisie ${placeholder}`}
         accessibilityRole="text"
@@ -63,28 +106,6 @@ const TextInput: React.FC<TextInputProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  inputWrapper: {
-    width: wp('80%'),
-    marginBottom: 20,
-  },
-  error: {
-    fontSize: 16,
-    color: 'red',
-    marginTop: 10,
-    marginRight: 30,
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  contentStyle: {
-    backgroundColor: 'white',
-  },
-  label: {
-    fontSize: 15,
-    color: 'orange',
-    fontWeight: 'bold',
-    paddingBottom: 10,
-  },
-});
+
 
 export default TextInput;

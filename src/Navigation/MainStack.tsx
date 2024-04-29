@@ -160,7 +160,7 @@ const MainStack = () => {
           headerStyle: {
             backgroundColor: colors.main.backgroundColor,
           },
-          headerTintColor: mode === 'dark' ? 'white' : 'black',
+          headerTintColor: colors.main.fontColor,
           // headerBackTitleVisible: false,
           headerShadowVisible: false, // to remove shadow from the header
           headerTitle: () => (

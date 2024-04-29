@@ -44,9 +44,11 @@ const AddBeneficiaire: React.FC<Props> = ({visible, hideDialog}) => {
 
   const styles = StyleSheet.create({
     container: {
+      width: wp(95),
       //flex: 1,
-      //alignItems: 'center',
-      padding: 20,
+      alignSelf: 'center',
+      alignItems: 'center',
+      justifyContent: 'center',
       backgroundColor: colors.main.backgroundColor,
     },
     title: {
@@ -56,15 +58,17 @@ const AddBeneficiaire: React.FC<Props> = ({visible, hideDialog}) => {
       textAlign: 'left',
     },
     inputFieldsWrapper: {
+      
       alignItems: 'center',
       justifyContent: 'center',
-      padding: 30,
+      
     },
     fermerButton: {
       backgroundColor: colors.main.gaugeBG,
-      borderRadius: 5,
-      width: wp('25'),
+      borderRadius: wp(4),
+      width: wp(28),
       height: hp('7'),
+      
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -74,9 +78,10 @@ const AddBeneficiaire: React.FC<Props> = ({visible, hideDialog}) => {
       fontSize: wp(4),
     },
     errorText: {
-      color: 'red',
-      fontSize: wp(4),
-      fontWeight: 'bold',
+      color: colors.primary[500], 
+      fontWeight: 'bold', 
+      fontSize:wp(3.5), 
+      textAlign:'center'
     },
   });
 
@@ -156,7 +161,7 @@ const AddBeneficiaire: React.FC<Props> = ({visible, hideDialog}) => {
             )}
           </Formik>
           {isSuccess && (
-            <Text style={{color: 'green', fontWeight: 'bold'}}>{success}</Text>
+            <Text style={{color: colors.main.passText, fontWeight: 'bold', fontSize:wp(3.5), textAlign:'center'}}>{success}</Text>
           )}
           {isError && <Text style={styles.errorText}>{errorText}</Text>}
         </Dialog.Content>

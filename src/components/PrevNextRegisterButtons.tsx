@@ -5,6 +5,11 @@ import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {RootState} from '../context/store';
 import {tokens} from '../assets/palette';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+
 
 interface ButtonProps {
   onPress: () => void;
@@ -29,25 +34,27 @@ const ButtonComponent: React.FC<ButtonProps> = ({
   const colors:any = tokens(mode);
   const styles = StyleSheet.create({
     textButton: {
-      color: 'white',
-      fontSize: 18,
+      color: colors.main.fontColor,
+      fontSize: wp(5),
       fontWeight: 'bold',
       letterSpacing: 1,
     },
     button: {
+      flex: 1,
       backgroundColor:
-        text === 'Valider' ? colors.secondary[300] : colors.secondaryAccent[300],
-      padding: 10,
+        // text === 'Valider' ? colors.secondary[300] : colors.secondaryAccent[300],
+        colors.secondaryAccent[700],
+      padding: wp(3),
+      marginHorizontal: hp(1), 
       alignItems: 'center',
       justifyContent: 'center',
-      width: 120,
-      height: 70,
-      borderRadius: 30,
-      elevation: 3,
-      shadowColor: '#000',
-      shadowOffset: {width: 0, height: 2},
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
+      height: hp(8),
+      borderRadius: wp(6),
+      // elevation: 3,
+      // shadowColor: '#000',
+      // shadowOffset: {width: 0, height: 2},
+      // shadowOpacity: 0.25,
+      // shadowRadius: 3.84,
       opacity:
         getFieldName &&
         step !== undefined &&

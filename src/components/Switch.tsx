@@ -7,6 +7,11 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../context/store';
 import {tokens} from '../assets/palette';
 
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+
 interface CustomSwitchProps {
   value: boolean;
   onValueChange: (value: boolean) => void;
@@ -19,20 +24,17 @@ const CustomSwitch: FC<CustomSwitchProps> = ({value, onValueChange, text}) => {
   const styles = StyleSheet.create({
     switchContainer: {
       flexDirection: 'row',
-      width: '100%',
-      padding: 30,
+      width: wp(89),
+      padding: wp(5),
       alignItems: 'center',
+      alignSelf: 'center',
     },
     confirmationText: {
-      fontSize: 16,
+      fontSize: wp(4),
       fontWeight: 'bold',
-      color: mode === 'dark' ? colors.secondary[900] : colors.secondary[100],
+      color: colors.main.fontColor,
     },
-    linkText: {
-      color: colors.main.buttonColor,
-      fontSize: 16,
-      fontWeight: 'bold',
-    },
+  
   });
 
   return (

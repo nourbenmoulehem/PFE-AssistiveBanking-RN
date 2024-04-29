@@ -118,7 +118,7 @@ const Beneficiaire = () => {
               setVisible(true);
               setConfirmationItem(item);
             }}>
-            <Icon source="update" color={colors.main.fontColor} size={wp(8)} />
+            <Icon source="update" color={colors.accent[400]} size={wp(8)} />
           </TouchableRipple>
 
           <TouchableRipple
@@ -130,7 +130,7 @@ const Beneficiaire = () => {
               setVisible(true);
               setConfirmationItem(item);
             }}>
-            <Icon source="delete" color={colors.main.dangerText} size={wp(8)} />
+            <Icon source="delete" color={colors.primary[600]} size={wp(8)} />
           </TouchableRipple>
         </View>
       </View>

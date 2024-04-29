@@ -43,31 +43,31 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
 
   const styles = StyleSheet.create({
     modalContainer: {
-      backgroundColor: 'white',
-      padding: hp(2),
+      backgroundColor: colors.main.fontColor,
+      padding: hp(3),
       margin: hp(2),
-      borderRadius: 8,
+      borderRadius: wp(4),
       alignItems: 'center',
     },
     errorText: {
       color: 'black',
-      fontSize: 17,
+      fontSize: wp(4.5),
       fontWeight: 'bold',
-      marginBottom: 10,
+      marginBottom: wp(3),
     },
     Button: {
       backgroundColor: colors.main.buttonColor,
-      padding: 10,
-      margin: 30,
-      height: hp(10),
-      width: wp(50),
+      padding: wp(4),
+      margin: hp(4),
+      
+      width: wp(78),
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: 12,
+      borderRadius: wp(4),
     },
     TextButton: {
-      color: mode === 'dark' ? 'white' : 'black',
-      fontSize: 20,
+      color: colors.main.fontColor,
+      fontSize: wp(5),
       fontWeight: 'bold',
     },
   });

@@ -6,6 +6,11 @@ import { useSelector } from 'react-redux';
 import {RootState} from '../context/store';
 import { tokens } from '../assets/palette';
 
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+
 interface SubmitButtonProps {
   handleSubmit: () => void;
   label: string;
@@ -18,17 +23,17 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({ handleSubmit, label, access
   const styles = StyleSheet.create({
     submitButton: {
       backgroundColor: colors.main.buttonColor,
-      padding: 10,
-      margin: 30,
-      height: 60,
-      width: 275,
+      padding: wp(3),
+      margin: hp(4),
+      height: hp(8),
+      width: wp(89),
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: 12,
+      borderRadius: wp(4),
     },
     textButton: {
-      color: colors.main.backgroundColor,
-      fontSize: 20,
+      color: colors.main.fontColor,
+      fontSize: wp(6),
       fontWeight: 'bold',
     },
   });
