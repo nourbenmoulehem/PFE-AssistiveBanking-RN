@@ -26,7 +26,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({ handleSubmit, label, access
       padding: wp(3),
       margin: hp(4),
       height: hp(8),
-      width: wp(89),
+      width: wp(86),
       alignItems: 'center',
       justifyContent: 'center',
       borderRadius: wp(4),

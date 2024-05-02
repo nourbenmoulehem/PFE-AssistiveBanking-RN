@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Modal, Switch, Button} from 'react-native';
+import {StyleSheet, Text, View, Modal, Switch,TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
   widthPercentageToDP as wp,
@@ -18,7 +18,7 @@ import getApi from '../../API/Interceptor';
 import {RootStackParamListSignedIn} from '../../../App';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {DarkTheme} from '@react-navigation/native';
-import {useGetClientsQuery} from '../../API/ClientApi';
+import {useChangeCardStatusMutation, useGetClientsQuery} from '../../API/ClientApi';
 
 //component
 import CreditCard from '../../components/CreditCard';
@@ -29,8 +29,10 @@ const Card = () => {
   const {isLoggedIn, mode, user} = useSelector(
     (state: RootState) => state.global,
   ); 
-  const {data, isLoading, error} = useGetClientsQuery(user?.clientId);
-
+  const {data} = useGetClientsQuery(user?.clientId);
+  const productID = data?.compteBancaire?.carte?.id_produit;
+  const status = data?.compteBancaire?.carte?.status;
+  const [changeCardStatus, { isLoading, isError, error }] = useChangeCardStatusMutation();
   const dispatch = useDispatch();
   
   const colors = tokens(mode);
@@ -153,6 +155,18 @@ const Card = () => {
       fontWeight: 'bold',
       color: colors.main.passText,
     },
+    ConfirmButton: { 
+      borderRadius: wp(4),
+      margin: wp(1),
+      padding: wp(2),
+      backgroundColor: colors.main.buttonColor,
+    },
+    CancelButton: { 
+      borderRadius: wp(4),
+      margin: wp(1),
+      padding: wp(2),
+      backgroundColor: colors.main.gaugeBG,
+     },
   });
   interface StatusStyles {
     [key: string]: any;
@@ -292,6 +306,7 @@ const Card = () => {
               ? 'Activer carte'
               : 'Désactiver carte'}
           </Text>
+          
           {data?.compteBancaire?.carte?.status !==
             'encours de personnalisation' && (
             <Switch
@@ -308,12 +323,13 @@ const Card = () => {
                   ? colors.secondary[500]
                   : 'gray'
               }
-              value={data?.compteBancaire?.carte?.status === 'Activee'}
+              value={data?.compteBancaire?.carte?.status}
               onValueChange={value => {
-                const newStatus = value ? 'Activee' : 'desactivee';
+                // const newStatus = value ? 'Activee' : 'desactivee';
                 setModalVisible(true);
               }}
             />
+            
           )}
           <Modal
             animationType="slide"
@@ -326,29 +342,66 @@ const Card = () => {
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
               <View
                 style={{
-                  backgroundColor: 'white',
-                  padding: 20,
-                  borderRadius: 10,
+                  backgroundColor: colors.main.backgroundColor,
+                  padding: wp(3),
+                  borderRadius: wp(4),
+                  elevation: 5,
+                  shadowColor: '#000',
+                  shadowOffset: {
+                    width: 0,
+                    height: 2,
+                  },
+                  shadowOpacity: 0.25,
                 }}>
                 <Text
+                style={styles.text}
                   accessibilityRole="text"
-                  accessibilityLabel="changer le statut?">
+                  accessibilityLabel="changer le statut de votre carte?">
                   Êtes-vous sûr de vouloir changer le statut?
                 </Text>
-                <Button
+                <TouchableOpacity
+                style={styles.ConfirmButton}
                   accessibilityLabel="Oui"
-                  title="Oui"
                   onPress={() => {
-                    console.log('Oui Pressed');
-                    // Update logic of the carte status to be inserted here
+                    
+                    if (status === 'Activee') {
+                      changeCardStatus({ idProduit: productID, status: 'desactivee' })
+                          .unwrap()
+                          .then((payload) => {
+                            console.log('payload', payload);
+                            status === payload.status;
+                            console.log('status', status);
+                          })
+                          .catch((error) => {
+                            console.log('error', error);
+                            // Handle the error
+                          });
+                    } 
+                    else {
+                      changeCardStatus({ idProduit: productID, status: 'Activee' })
+                          .unwrap()
+                          .then((payload) => {
+                            console.log('payload', payload);
+                            status === payload.status;
+                            console.log('status', status);
+                          })
+                          .catch((error) => {
+                            console.log('error', error);
+                            // Handle the error
+                          });
+                    }
                     setModalVisible(false);
                   }}
-                />
-                <Button
-                  accessibilityLabel="Annuler"
-                  title="Annuler"
-                  onPress={() => setModalVisible(false)}
-                />
+                >
+                  <Text style={{fontWeight: 'bold',color:colors.main.fontColor, textAlign:'center'}}>Oui</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.CancelButton}
+              accessibilityLabel="Annuler"
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={{fontWeight: 'bold',color:colors.main.fontColor, textAlign:'center'}}>Annuler</Text>
+            </TouchableOpacity>
               </View>
             </View>
           </Modal>

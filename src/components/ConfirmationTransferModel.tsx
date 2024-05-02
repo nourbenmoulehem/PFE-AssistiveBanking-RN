@@ -62,7 +62,7 @@ const Confirmation: React.FC<Props> = ({
     actionButton: {
       //padding: 10,
       backgroundColor: colors.main.new,
-      borderRadius: 5,
+      borderRadius: wp(4),
       width: wp('50'),
       height: hp('7'),
       alignItems: 'center',
@@ -71,7 +71,7 @@ const Confirmation: React.FC<Props> = ({
     textSupprimer: {
       color: colors.main.fontColor,
       fontWeight: 'bold',
-      fontSize: 20,
+      fontSize: wp(4),
     },
     info: {
       alignItems: 'center',
@@ -105,13 +105,13 @@ const Confirmation: React.FC<Props> = ({
           <>
             <View style={styles.info}>
               <Text
-                style={{color: 'pink', fontWeight: 'bold', fontSize: wp(6)}}>
+                style={{color: colors.main.fontColor, fontWeight: 'bold', fontSize: wp(6)}}>
                 {message}
               </Text>
             </View>
 
             {isSuccess && (
-              <Text style={{color: 'green', fontWeight: 'bold'}}>
+              <Text style={{color: colors.primary[500], fontWeight: 'bold'}}>
                 {message}
               </Text>
             )}

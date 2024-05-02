@@ -42,6 +42,12 @@ import Modal from '../../components/Modal';
 import axios from 'axios';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
+
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+
 axios.defaults.withCredentials = true;
 
 //type safety
@@ -144,6 +150,14 @@ const SignIn = ({navigation}: SignInProps) => {
       marginTop: 20,
       gap: 20,
     },
+    title: {
+      fontSize: wp(7),
+      fontWeight: 'bold',
+      color: colors.main.fontColor,
+      alignSelf: 'flex-start',
+      marginBottom: wp(4),
+      marginHorizontal: wp(2),
+    }
   });
 
   return (
@@ -157,7 +171,7 @@ const SignIn = ({navigation}: SignInProps) => {
           backgroundColor: colors.main.backgroundColor,
         }}>
         <View style={styles.container}>
-          <InputTitle title="S'authentifier" />
+          <Text style={styles.title}>S'authentifier</Text>
           <Formik
             initialValues={initialValuesLogin}
             validationSchema={loginSchema} // we're using yup
@@ -188,7 +202,7 @@ const SignIn = ({navigation}: SignInProps) => {
                   <TextInput
                     modeI="flat"
                     name="password"
-                    placeholder="Choisissez un mot de passe"
+                    placeholder="Choisir un mot de passe"
                     showLabel
                     secureTextEntry={true}
                   />

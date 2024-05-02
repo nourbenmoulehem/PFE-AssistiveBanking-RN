@@ -56,14 +56,14 @@ const TextInput: React.FC<TextInputProps> = ({
     },
     label: {
       fontSize: wp(4),
-      color: colors.primary[300],
+      color: colors.primary[500],
       fontWeight: 'bold',
       paddingVertical: hp(2),
     },
     inputStyle: {
       
       alignSelf: 'center',
-      width: wp(89),
+      width: wp(86),
       // height: hp(8),
       fontSize: wp(5),
       fontWeight: 'bold',

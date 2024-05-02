@@ -109,6 +109,28 @@ export const clientApi = createApi({
         body: {clientId: id, objet: objet, descriptionClient: description},
       }),
     }),
+    changeCardStatus: builder.mutation({
+      query: ({idProduit, status}) => ({
+        url: `/api/v1/carte/status/${idProduit}`,
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: {status: status},
+      }),
+    }),
+    getLastMonthExpenses: builder.query({
+      query: id => ({
+        url: `/api/v1/operation/mouvement/getLastMonthExpenses/1/${id}`,
+        method: 'GET',
+      }),
+    }), 
+    getCurrentMonthExpenses: builder.query({
+      query: id => ({
+        url: `/api/v1/operation/mouvement/getCurrentMonthExpenses/${id}`,
+        method: 'GET',
+      }),
+    }),
 
     getIntent: builder.query<{assistantResponse: string}, {prompt: string}>({
       // not used
@@ -205,6 +227,7 @@ export const {
   useGetNotificationsQuery,
   useGetBeneficiairesQuery,
   useAddBeneficiaireMutation,
+  useChangeCardStatusMutation,
   useUpdateBeneficiaireMutation,
   useDeleteBeneficiaireMutation,
   useSendTransferMutation,
