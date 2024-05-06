@@ -46,6 +46,8 @@ import * as Keychain from 'react-native-keychain';
 // import FloatingButton from '../components/FloatingButton';
 import Microphone from '../components/microphone';
 import axios from 'axios';
+import { useGetClientsQuery } from '../API/ClientApi';
+
 
 export type RootStackParamList = {
   Home: undefined;
@@ -72,6 +74,11 @@ export type RootStackParamList = {
 const stack = createNativeStackNavigator<RootStackParamList>();
 const MainStack = () => {
   const dispatch = useDispatch();
+  const {user} = useSelector(
+    (state: RootState) => state.global,
+  ); 
+  const {data} = useGetClientsQuery(user?.clientId);
+  const gender = data.gender;
   const [loading, setLoading] = useState(false);
   const {mode, isLoggedIn} = useSelector((state: RootState) => state.global);
   const [isTokenValid, setIsTokenValid] = useState(false);
@@ -221,7 +228,13 @@ const MainStack = () => {
                       alignItems: 'center',
                       gap: 15,
                     }}>
-                    <Avatar.Text size={30} label="XD" />
+                    {/* <Avatar.Text size={30} label="XD" /> */}
+                    {
+                    gender === 'female' ? ( <Avatar.Icon size={30} icon="human-female" color='white'
+                    style= {{backgroundColor: colors.accent[500]}}/> ) : ( <Avatar.Icon size={30} icon="human-male" color='white'
+                    style= {{backgroundColor: colors.accent[500]}}/> )
+
+                    }
                     <TouchableOpacity
                       onPressIn={handleLogout}
                       accessible={true}

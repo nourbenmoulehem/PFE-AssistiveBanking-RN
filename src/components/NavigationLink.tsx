@@ -43,7 +43,7 @@ const NavigationLink: React.FC<NavigationLinkProps> = ({
       gap: 20,
     },
     textNotLinked: {
-      color: mode == 'dark' ? 'white' : 'black',
+      color: colors.main.fontColor,
       fontSize: 15,
       fontWeight: 'bold',
     },

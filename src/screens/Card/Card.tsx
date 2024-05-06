@@ -18,7 +18,7 @@ import getApi from '../../API/Interceptor';
 import {RootStackParamListSignedIn} from '../../../App';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {DarkTheme} from '@react-navigation/native';
-import {useChangeCardStatusMutation, useGetClientsQuery} from '../../API/ClientApi';
+import {useChangeCardStatusMutation, useGetClientsQuery, useGetCurrentMonthExpensesQuery, useGetLastMonthExpensesQuery} from '../../API/ClientApi';
 
 //component
 import CreditCard from '../../components/CreditCard';
@@ -30,15 +30,29 @@ const Card = () => {
     (state: RootState) => state.global,
   ); 
   const {data} = useGetClientsQuery(user?.clientId);
-  const productID = data?.compteBancaire?.carte?.id_produit;
-  const status = data?.compteBancaire?.carte?.status;
-  const [changeCardStatus, { isLoading, isError, error }] = useChangeCardStatusMutation();
-  const dispatch = useDispatch();
-  
-  const colors = tokens(mode);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+    const [changeCardStatus, { isLoading, isError, error: changeCardStatusError }] = useChangeCardStatusMutation();
+    const dispatch = useDispatch();
+      let productID: string | undefined;
+    let plafond : number | undefined;
+    let status : string | undefined;
+    let cme  : number | undefined;
+    let lme  : number | undefined;
+      if (data && data.compteBancaire) {
+        productID = data.compteBancaire.carte?.id_produit;
+        plafond = data.compteBancaire.carte?.plafond;
+        status = data.compteBancaire.carte?.status;
+        const cmeResult = useGetCurrentMonthExpensesQuery(data.compteBancaire.id_compteBancaire);
+        cme = cmeResult.data; // Extract the 'data' property from the hook result
+        const lmeResult = useGetLastMonthExpensesQuery(data.compteBancaire.id_compteBancaire);
+        lme = lmeResult.data; // Extract the 'data' property from the hook result
+      }
+      console.log('currentMonthExpenses', cme);
+    console.log('lastMonthExpenses', lme);
+  const colors: any = tokens(mode);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [isEnabled, setIsEnabled] = useState(false);
+    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const styles = StyleSheet.create({
     container: {
@@ -247,9 +261,9 @@ const Card = () => {
         <View style={styles.spendings}>
           <View style={styles.last}>
             <Progress.Circle
-              accessibilityLabel={`vos dépenses totales de mois derniers sont ${20} dinars`}
+              accessibilityLabel={`vos dépenses totales de mois derniers sont ${lme} dinars`}
               size={wp(30)}
-              progress={0.02} // to be changed to real value which is (the total spendings during the previous months starting the last one)/plafond
+              progress={ (lme ?? 0) / (plafond ?? 0)} // to be changed to real value which is (the total spendings during the previous months starting the last one)/plafond
               thickness={wp(3)}
               showsText={true}
               strokeCap="round"
@@ -258,7 +272,7 @@ const Card = () => {
               unfilledColor={colors.main.gaugeBG}
               borderWidth={0}
               textStyle={{fontWeight: 'bold'}}
-              formatText={progress => `${20} DT`} //to be changed later to the real total spendings during the previous month
+              formatText={progress => `${lme} DT`} //to be changed later to the real total spendings during the previous month
             />
             <Text style={[styles.text, {textAlign: 'center', margin: wp(2)}]}>
               Dépenses totales de mois dernier
@@ -266,9 +280,9 @@ const Card = () => {
           </View>
           <View style={styles.current}>
             <Progress.Circle
-              accessibilityLabel={`vos dépenses totales de mois courant sont ${30} dinars`}
+              accessibilityLabel={`vos dépenses totales de mois courant sont ${cme} dinars`}
               size={wp(30)}
-              progress={0.05} // to be changed to real value which is (the total spendings of all time)/plafond
+              progress={ (cme ?? 0) / (plafond ?? 0)} // to be changed to real value which is (the total spendings of all time)/plafond
               thickness={wp(3)}
               showsText={true}
               strokeCap="round"
@@ -277,7 +291,7 @@ const Card = () => {
               unfilledColor={colors.main.gaugeBG}
               borderWidth={0}
               textStyle={{fontWeight: 'bold'}}
-              formatText={progress => `${30} DT`} //to be changed later to the real total spendings during the current month
+              formatText={progress => `${cme} DT`} //to be changed later to the real total spendings during the current month
             />
             <Text style={[styles.text, {textAlign: 'center', margin: wp(2)}]}>
               Dépenses totales de ce mois

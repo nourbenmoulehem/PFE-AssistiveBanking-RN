@@ -76,8 +76,8 @@ const Operations = () => {
       flexDirection: 'column',
     },
     libelle: {
-      marginBottom: wp(2),
-      fontSize: wp(4),
+      marginVertical: wp(2),
+      fontSize: wp(4.75),
       color: colors.main.fontColor,
       fontWeight: 'bold',
       textTransform: 'capitalize',
@@ -108,13 +108,13 @@ const Operations = () => {
   if (operations === "Aucune opération trouvée") {
     return (
       <View style={styles.container}>
-        <Text
-          style={[
-            styles.libelle,
-            {textAlign: 'left', fontSize: wp(6), marginBottom: wp(3)},
-          ]}>
+       <Text
+          style={
+            {alignSelf:'flex-start',textAlign: 'left', fontSize: wp(7),fontWeight:'bold', margin: wp(5.5), color: colors.main.fontColor}
+          }>
           Historique de Mouvements
         </Text>
+        
         <View style={styles.reset}>
           <TouchableRipple onPress={() => reset()}>
             <Icon source="autorenew" size={hp(5)} color="#A45704" />
@@ -230,13 +230,14 @@ const Operations = () => {
 
   return (
     <View style={styles.container}>
-      <Text
-        style={[
-          styles.libelle,
-          {textAlign: 'left', fontSize: wp(6), marginBottom: wp(3)},
-        ]}>
-        Historique de Mouvements
-      </Text>
+     
+        <Text
+          style={
+            {alignSelf:'flex-start',textAlign: 'left', fontSize: wp(7),fontWeight:'bold', margin: wp(5.5), color: colors.main.fontColor}
+          }>
+          Historique de Mouvements
+        </Text>
+        
       <FilterByDate onDatesSelected={fetchData} resetOperations={reset} />
 
       {isLoading ? (

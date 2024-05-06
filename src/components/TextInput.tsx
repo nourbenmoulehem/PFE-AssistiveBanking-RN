@@ -56,7 +56,7 @@ const TextInput: React.FC<TextInputProps> = ({
     },
     label: {
       fontSize: wp(4),
-      color: colors.primary[500],
+      color: colors.secondary[500],
       fontWeight: 'bold',
       paddingVertical: hp(2),
     },

@@ -99,10 +99,10 @@ export const tokens = (mode: string) => {
         rectangleColor: '#2C3344',
         warning: '#FCCC78',
         danger: '#F6A68D',
-        pass: '#C9DCFC',
+        pass: '#7698F4',
         warningText: '#824003',
-        dangerText: '#7B1509',
-        passText: '#5F84F1',
+        dangerText: '#E93E1C',
+        passText: '#C9DCFC',
         old:'#F8C2A0',
       new:'#EE8A58',
       gaugeBG:'#999999',
@@ -276,8 +276,8 @@ export const tokens = (mode: string) => {
         danger: '#D3D293',
         pass: '#D1D1F4',
         warningText: '#656411',
-        dangerText: '#4E4D0B',
-        passText: '#6F6FD6',
+        dangerText: '#cece30',
+        passText: '#9e9ee5',
         old:'#E0E0A8',
         new:'#C2C164',
         gaugeBG:'#999999',
@@ -285,59 +285,59 @@ export const tokens = (mode: string) => {
     },
     deuteranopia: {
       primary: {
-        100: '#bac44e', /* citron */
-        200: '#bac44e', /* citron */
-        300: '#bac44e', /* citron */
-        400: '#bac44e', /* citron */
-        500: '#bac44e', /* citron */
-        600: '#bac44e', /* citron */
-        700: '#bac44e', /* citron */
-        800: '#bac44e', /* citron */
-        900: '#bac44e', /* citron */
+        100: "#E7EBC2",
+        200: "#DBE0A3",
+        300: "#CFD685",
+        400: "#C4CC66",
+        500: "#BAC44E",
+        600: "#ADB83D",
+        700: "#919933",
+        800: "#747A29",
+        900: "#585C1F"
       },
       secondary: {
-        100: '#eaed91', /* mindaro */
-        200: '#eaed91', /* mindaro */
-        300: '#eaed91', /* mindaro */
-        400: '#eaed91', /* mindaro */
-        500: '#eaed91', /* mindaro */
-        600: '#eaed91', /* mindaro */
-        700: '#eaed91', /* mindaro */
-        800: '#eaed91', /* mindaro */
-        900: '#eaed91', /* mindaro */
+        100: "#E6EA9A",
+        200: "#E1E689",
+        300: "#D9DF68",
+        400: "#D0D846",
+        500: "#BFC62A",
+        600: "#A89618",
+        700: "#8F8114",
+        800: "#6B600F",
+        900: "#47400A"
       },
       tertiary: {
-        100: '#e3e7aa', /* vanilla */
-        200: '#e3e7aa', /* vanilla */
-        300: '#e3e7aa', /* vanilla */
-        400: '#e3e7aa', /* vanilla */
-        500: '#e3e7aa', /* vanilla */
-        600: '#e3e7aa', /* vanilla */
-        700: '#e3e7aa', /* vanilla */
-        800: '#e3e7aa', /* vanilla */
-        900: '#e3e7aa', /* vanilla */
+        100: "#FAFBEF",
+        200: "#F4F6DF",
+        300: "#EFF2CF",
+        400: "#EAEDBF",
+        500: "#E3E7AA",
+        600: "#DAE090",
+        700: "#CED770",
+        800: "#C3CE50",
+        900: "#B4BF36"
       },
       accent: {
-        100: '#8280d8', /* tropical_indigo */
-        200: '#8280d8', /* tropical_indigo */
-        300: '#8280d8', /* tropical_indigo */
-        400: '#8280d8', /* tropical_indigo */
-        500: '#8280d8', /* tropical_indigo */
-        600: '#8280d8', /* tropical_indigo */
-        700: '#8280d8', /* tropical_indigo */
-        800: '#8280d8', /* tropical_indigo */
-        900: '#8280d8', /* tropical_indigo */
+        100: "#C1C1EC",
+        200: "#B2B1E7",
+        300: "#A3A2E2",
+        400: "#9392DD",
+        500: "#8280D8",
+        600: "#6563CF",
+        700: "#4644C5",
+        800: "#3735AC",
+        900: "#2D2B8C"
       },
       secondaryAccent: {
-        100: '#5f53df', /* majorelle_blue */
-        200: '#5f53df', /* majorelle_blue */
-        300: '#5f53df', /* majorelle_blue */
-        400: '#5f53df', /* majorelle_blue */
-        500: '#5f53df', /* majorelle_blue */
-        600: '#5f53df', /* majorelle_blue */
-        700: '#5f53df', /* majorelle_blue */
-        800: '#5f53df', /* majorelle_blue */
-        900: '#5f53df', /* majorelle_blue */
+        100: "#d6dc95",
+        200: "#dde379",
+        300: "#eef1cd",
+        400: "#b3b2e7",
+        500: "#9f98ec",
+        600: "#DC5318",
+        700: "#71E0F4",
+        800: "#adc7fa",
+        900: "#ccccef"
       },
       background: {
         
@@ -353,17 +353,17 @@ export const tokens = (mode: string) => {
       },
       main: {
         backgroundColor: '#171721',
-        buttonColor: '#007bff',
+        buttonColor: '#CED727',
         fontColor: 'white',
         rectangleColor: '#2E2E3E',
-        warning: '#fccc78',
-        danger: '#f6a68d',
-        pass: '#20c997',
-        warningText: '#dc3545',
-        dangerText: '#dc3545',
-        passText: '#6C6AD0',
-        old:'#fccc78',
-        new:'#f6a68d',
+        warning: '#EAED91',
+        danger: '#D8DE94',
+        pass: '#8280D8',
+        warningText: '#696E15',
+        dangerText: '#A8B526',
+        passText: '#D0CEF2',
+        old:'#E3E7AA',
+        new:'#C8D067',
         gaugeBG:'#999999',
       },
     },
@@ -441,10 +441,10 @@ export const tokens = (mode: string) => {
         rectangleColor: '#2C3C3B',
         warning: '#F99C9F',
         danger: '#F29798',
-        pass: '#C9EEEC',
+        pass: '#77CCC8',
         warningText: '#7E1D1F',
-        dangerText: '#750E0E',
-        passText: '#60C1BD',
+        dangerText: '#E02A2C',
+        passText: '#C9EEEC',
         old: '#F5AEB0',
         new: '#E96D6F',
         gaugeBG: '#999999',

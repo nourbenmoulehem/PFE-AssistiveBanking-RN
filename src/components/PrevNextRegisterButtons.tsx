@@ -43,7 +43,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({
       flex: 1,
       backgroundColor:
         // text === 'Valider' ? colors.secondary[300] : colors.secondaryAccent[300],
-        colors.secondaryAccent[700],
+        colors.accent[600],
       padding: wp(3),
       marginHorizontal: hp(1), 
       alignItems: 'center',

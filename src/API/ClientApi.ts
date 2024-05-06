@@ -25,6 +25,7 @@ export const clientApi = createApi({
     'beneficiaire',
     'Transferer',
     'Notification',
+    'Expenses'
   ],
   refetchOnFocus: true,
   refetchOnReconnect: true,
@@ -121,15 +122,17 @@ export const clientApi = createApi({
     }),
     getLastMonthExpenses: builder.query({
       query: id => ({
-        url: `/api/v1/operation/mouvement/getLastMonthExpenses/1/${id}`,
+        url: `/api/v1/operation/mouvement/getLastMonthExpenses/${id}`,
         method: 'GET',
       }),
-    }), 
+      providesTags: ['Expenses'],
+    }),
     getCurrentMonthExpenses: builder.query({
       query: id => ({
         url: `/api/v1/operation/mouvement/getCurrentMonthExpenses/${id}`,
         method: 'GET',
       }),
+      providesTags: ['Expenses'],
     }),
 
     getIntent: builder.query<{assistantResponse: string}, {prompt: string}>({
@@ -225,6 +228,8 @@ export const {
   useGetVirementByIdQuery,
   useGetTransfersQuery,
   useGetNotificationsQuery,
+  useGetCurrentMonthExpensesQuery,
+  useGetLastMonthExpensesQuery,
   useGetBeneficiairesQuery,
   useAddBeneficiaireMutation,
   useChangeCardStatusMutation,

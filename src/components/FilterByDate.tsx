@@ -110,7 +110,7 @@ const FilterByDate: React.FC<FilterByDateProps> = ({
     filterByDate: {
       fontSize: wp(5.5),
       fontWeight: 'bold',
-      color: colors.accent[500],
+      color: colors.secondary[500],
       marginBottom: hp(2),
     },
   });

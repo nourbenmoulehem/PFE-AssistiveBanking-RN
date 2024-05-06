@@ -89,10 +89,10 @@ const Home = ({ navigation }: HomeProps) => {
       color: colors.main.fontColor,
     },
     solde: {
-      fontSize: hp('10%'),
+      fontSize: wp(14),
       fontWeight: 'bold',
       textAlign: 'center',
-      color: colors.secondaryAccent[400],
+      color: colors.accent[300],
     },
     devider: {
       width: wp('100%'),
@@ -171,7 +171,7 @@ const Home = ({ navigation }: HomeProps) => {
         <View style={styles.miniContainer}>
 
           <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' }}>Solde de compte</Text>
-          <Text style={{ color: colors.secondary[100], fontWeight: 'bold' }}>{data?.compteBancaire.solde}DT</Text>
+          <Text style={{ color: colors.secondary[600], fontWeight: 'bold' }}>{data?.compteBancaire.solde}DT</Text>
 
         </View>
       </View>

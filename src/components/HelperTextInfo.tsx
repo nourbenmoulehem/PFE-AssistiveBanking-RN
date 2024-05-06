@@ -19,7 +19,7 @@ const HelperTextInfo = (props : HelperTextInfoProps) => {
     helperText: {
       fontSize: wp(4.5), 
       fontWeight: 'bold',
-      color: colors.secondaryAccent[400], 
+      color: colors.accent[400], 
       textAlign: 'center',
       // padding: 10, 
     },

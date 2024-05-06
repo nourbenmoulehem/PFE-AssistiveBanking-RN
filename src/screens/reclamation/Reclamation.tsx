@@ -47,7 +47,7 @@ const Reclamation = () => {
       textTransform: 'capitalize',
       textAlign: 'left',
       fontSize: wp(6),
-      marginBottom: wp(3)
+      margin: wp(5.3)
     },
     inputStyle: {
       alignSelf: 'center',
@@ -64,9 +64,9 @@ const Reclamation = () => {
     title: {
       fontSize: wp(6),
       fontWeight: 'bold',
-      color: colors.accent[500],
+      color: colors.secondary[400],
       marginVertical: wp(2),
-      paddingHorizontal: wp(5),
+      paddingHorizontal: wp(3),
     },
     btnContainer: {
       marginTop: hp(4),
@@ -79,7 +79,7 @@ const Reclamation = () => {
       justifyContent: 'center',
       alignItems: 'center',
       alignSelf: 'center',
-      backgroundColor: colors.accent[500],
+      backgroundColor: colors.secondary[400],
       borderRadius: wp(4),
     },
     centeredView: {
@@ -168,7 +168,7 @@ const Reclamation = () => {
             <CustomDropdownComponent
               data={objet_reclamation}
               bgColor={colors.main.rectangleColor}
-              iconColor={colors.primary[200]}
+              iconColor={colors.accent[400]}
               textColor={colors.main.fontColor}
               searchColor={colors.background[300]}
               iconSource='alert-box-outline'

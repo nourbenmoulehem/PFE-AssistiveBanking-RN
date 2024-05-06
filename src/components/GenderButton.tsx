@@ -28,7 +28,7 @@ const GenderButton: React.FC<GenderButtonProps> = ({
 
   const styles = StyleSheet.create({
     checkedButton: {
-      backgroundColor: colors.accent[500],
+      backgroundColor: colors.secondary[400],
       padding: wp(5),
       borderRadius: wp(6),
       marginVertical: wp(3),
@@ -37,8 +37,9 @@ const GenderButton: React.FC<GenderButtonProps> = ({
       alignItems: 'center',
     },
     uncheckedButton: {
-      
-      backgroundColor: colors.secondary[500],
+      backgroundColor: 'transparent',
+      borderWidth: wp(1),
+      borderColor: colors.secondary[500],
       padding: wp(5),
       borderRadius: wp(6),
       marginVertical: wp(3),
@@ -46,8 +47,14 @@ const GenderButton: React.FC<GenderButtonProps> = ({
       justifyContent: 'center',
       alignItems: 'center',
     },
-    TextButton: {
+    checkedTextButton: {
       color: colors.main.fontColor,
+      fontSize: wp(7),
+      fontWeight: 'bold',
+      letterSpacing: 1,
+    },
+    uncheckedTextButton: {
+      color: colors.secondary[500],
       fontSize: wp(7),
       fontWeight: 'bold',
       letterSpacing: 1,
@@ -76,9 +83,9 @@ const GenderButton: React.FC<GenderButtonProps> = ({
       <Icon
         name={gender === 'female' ? 'gender-female' : 'gender-male'}
         size={35}
-        color="white"
+        color={checkedGender === gender ? "white" : colors.secondary[500]}
       />
-      <Text style={styles.TextButton}>
+      <Text style={checkedGender === gender ? styles.checkedTextButton : styles.uncheckedTextButton}>
         {gender === 'male' ? 'Homme' : 'Femme'}
       </Text>
     </TouchableOpacity>

@@ -84,9 +84,9 @@ const Transfer = () => {
       fontWeight: 'bold',
       textTransform: 'capitalize',
       textAlign: 'left',
-      fontSize: wp(8),
-      marginBottom: wp(3),
-      marginTop: wp(3),
+      alignSelf: 'flex-start',
+      fontSize: wp(6),
+      margin: wp(5.3)
     },
     inputStyle: {
       alignSelf: 'center',
@@ -104,9 +104,9 @@ const Transfer = () => {
     title: {
       fontSize: wp(6),
       fontWeight: 'bold',
-      color: colors.accent[500],
+      color: colors.secondary[400],
       marginVertical: wp(2),
-      paddingHorizontal: wp(5),
+      paddingHorizontal: wp(3),
     },
     btnContainer: {
       marginTop: hp(4),
@@ -119,8 +119,17 @@ const Transfer = () => {
       justifyContent: 'center',
       alignItems: 'center',
       alignSelf: 'center',
-      backgroundColor: colors.accent[500],
+      backgroundColor: colors.secondary[400],
       borderRadius: wp(4),
+    },
+    error: {
+      fontSize: wp(4.5),
+      color: colors.tertiary[400],
+      marginTop: hp(1),
+      // marginRight: 30,
+      // textAlign: 'center',
+      alignSelf: 'center',
+      fontWeight: 'bold',
     },
   }
 
@@ -239,7 +248,7 @@ const Transfer = () => {
                 data={transformedData}
                 bgColor={colors.main.rectangleColor}
                 iconSource='account-circle'
-                iconColor={colors.primary[200]}
+                iconColor={colors.accent[400]}
                 textColor={colors.main.fontColor}
                 searchColor={colors.background[300]}
                 placeholder='Selectionnez le beneficiaire'
@@ -266,7 +275,7 @@ const Transfer = () => {
                 onBlur={handleBlur('montant')}
                 value={values.montant}
               />
-              {errors.montant && <Text>{errors.montant}</Text>}
+              {errors.montant && <Text style={styles.error}>{errors.montant}</Text>}
               <Text style={styles.title}>Motif</Text >
               <TextInput
                 mode='outlined'
@@ -283,7 +292,7 @@ const Transfer = () => {
                 onBlur={handleBlur('motif')}
                 value={values.motif}
               />
-              {errors.motif && <Text>{errors.motif}</Text>}
+              {errors.motif && <Text style={styles.error}>{errors.motif}</Text>}
               <TouchableOpacity
               onPress={() => {
                 handleSubmit();

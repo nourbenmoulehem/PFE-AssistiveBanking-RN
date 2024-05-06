@@ -1,3 +1,5 @@
+import { Float } from "react-native/Libraries/Types/CodegenTypes";
+
 interface Operation {
   op_id: number;
   date_valeur: string;
@@ -43,6 +45,12 @@ interface CompteBancaire {
   rib: string;
 }
 
+interface getLastMonthExpenses{
+  lme: Float;
+}
+interface getCurrentMonthExpenses{
+  cme: Float;
+}
 interface GetClientsResponse {
   clientId: number;
   cin: string;
@@ -75,4 +83,4 @@ interface GetIntentResponse {
   feedback: string;
 }
 
-export type {GetClientsResponse, CompteBancaire, Carte, Operation, Virement, GetIntentResponse};
+export type {GetClientsResponse, CompteBancaire, Carte, Operation, Virement, GetIntentResponse, getLastMonthExpenses, getCurrentMonthExpenses};
