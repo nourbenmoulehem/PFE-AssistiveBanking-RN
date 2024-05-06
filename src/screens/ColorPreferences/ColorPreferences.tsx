@@ -47,11 +47,11 @@ const ColorPreferences = () => {
     <ScrollView style={styles.container}>
       <List.Section>
         <List.Subheader><Text style={styles.text}>Choisissez la couleur appropriée qui vous convient</Text></List.Subheader>
-        <ListItemComponent title="Dark" iconName="moon-waning-crescent" onPressIn={() => toggleMode("dark")} />
-        <ListItemComponent title="Light" iconName="white-balance-sunny" onPressIn={() => toggleMode("light")}/>
-        <ListItemComponent title="Protanopia" iconName="creation" onPressIn={() => toggleMode("protanopia")}/>
-        <ListItemComponent title="Deuteranopia" iconName="eye-check" onPressIn={() => toggleMode("deuteranopia")}/>
-        <ListItemComponent title="Tritanopia" iconName="eye-circle-outline" onPressIn={() => toggleMode("tritanopia")}/>
+        <ListItemComponent title="Sombre" iconName="moon-waning-crescent" onPressIn={() => toggleMode("dark")} />
+        <ListItemComponent title="Clair" iconName="white-balance-sunny" onPressIn={() => toggleMode("light")}/>
+        <ListItemComponent title="Protanopie" iconName="creation" onPressIn={() => toggleMode("protanopia")}/>
+        <ListItemComponent title="Deuteranopie" iconName="eye-check" onPressIn={() => toggleMode("deuteranopia")}/>
+        <ListItemComponent title="Tritanopie" iconName="eye-circle-outline" onPressIn={() => toggleMode("tritanopia")}/>
       </List.Section>
     </ScrollView>
   );

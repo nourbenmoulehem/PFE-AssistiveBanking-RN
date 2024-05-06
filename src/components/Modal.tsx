@@ -50,7 +50,7 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
       alignItems: 'center',
     },
     errorText: {
-      color: 'black',
+      color: colors.main.fontColor,
       fontSize: wp(4.5),
       fontWeight: 'bold',
       marginBottom: wp(3),

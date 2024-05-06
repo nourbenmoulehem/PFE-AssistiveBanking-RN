@@ -93,6 +93,7 @@ const Notification = () => {
         onPress={() => {}}
         style={{ width: wp(89), alignSelf: 'flex-start', paddingHorizontal: wp(4) }}
         accessibilityRole="button"
+        accessibilityHint={`notification de type ${item.type}. Date de notification est le ${item.notifDate}. ${item.notif}.`}
       >
         <View style={styles.icon}>
           {item.type === 'virement' ? (
@@ -100,7 +101,7 @@ const Notification = () => {
           ) : (
             <Icon source="reply-outline" size={wp(6)} color={colors.main.warning} />
           )}
-          <View style={{ flexDirection: 'row', alignItems: 'flex-start', width: wp(78), justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start', width: wp(65), justifyContent: 'space-between' }}>
             <View style={styles.itemDesc}>
               <Text style={styles.notif}>{item.type}</Text>
               <Text style={styles.desc}>{item.notif}</Text>
