@@ -78,7 +78,7 @@ const MainStack = () => {
     (state: RootState) => state.global,
   ); 
   const {data} = useGetClientsQuery(user?.clientId);
-  const gender = data.gender;
+  const gender = data?.gender;
   const [loading, setLoading] = useState(false);
   const {mode, isLoggedIn} = useSelector((state: RootState) => state.global);
   const [isTokenValid, setIsTokenValid] = useState(false);
