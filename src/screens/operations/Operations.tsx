@@ -132,11 +132,11 @@ const Operations = () => {
   const renderItem = ({item}: {item: any}) => (
     
     <TouchableWithoutFeedback
-      accessibilityLabel={`operation ${
+      accessibilityLabel={`opération ${
         item.op_id
-      }, operation ${item.op_canal.replace(/_/g, ' ')}, operation effectuee a ${
+      }, opération ${item.op_canal.replace(/_/g, ' ')}, opération effectuee a ${
         item.op_marchant
-      }, ${item.op_emplacement}, la date de l'operation est ${
+      }, ${item.op_emplacement}, la date de l'opération est ${
         item.date_operation
       }, son montant est de ${item.op_type === 'Credit' ? '' : '-'}${
         item.montant
@@ -144,7 +144,7 @@ const Operations = () => {
       onPress={() => {
         // Handle item click
       }}>
-      <View style={styles.item} accessibilityHint={`operation ${item.op_id}`}>
+      <View style={styles.item} accessibilityHint={`opération ${item.op_id}`}>
         {/* <View style={styles.icon} accessibilityLabel='icone'>
           <Icon source={item.op_type === 'Credit' ? 'download-outline' : 'upload-outline'} size={hp(5)} color={item.op_type === 'Credit' ? colors.main.passText : colors.main.dangerText}  />
 
@@ -154,7 +154,7 @@ const Operations = () => {
           <Text
             style={styles.libelle}
             accessibilityRole="text"
-            accessibilityLabel={`operation ${item.op_canal.replace(
+            accessibilityLabel={`opération ${item.op_canal.replace(
               /_/g,
               ' ',
             )}`}>
@@ -163,13 +163,13 @@ const Operations = () => {
           <Text
             style={styles.text}
             accessibilityRole="text"
-            accessibilityLabel={`operation effectuee a ${item.op_marchant}`}>
+            accessibilityLabel={`opération effectuee a ${item.op_marchant}`}>
             {item.op_marchant}
           </Text>
           <Text
             style={styles.text}
             accessibilityRole="text"
-            accessibilityLabel={`emplacement de l'operation est ${item.op_emplacement}`}>
+            accessibilityLabel={`emplacement de l'opération est ${item.op_emplacement}`}>
             {item.op_emplacement}
           </Text>
         </View>
@@ -177,7 +177,7 @@ const Operations = () => {
         <Text
           style={[styles.text, {width: wp(12)}]}
           accessibilityRole="text"
-          accessibilityLabel={`la date de l'operation est ${item.date_operation}`}>
+          accessibilityLabel={`la date de l'opération est ${item.date_operation}`}>
           {item.date_operation}
         </Text>
         <View style={styles.icon}>
@@ -186,7 +186,7 @@ const Operations = () => {
               item.op_type === 'Credit' ? styles.montant : styles.montantCredit
             }
             accessibilityRole="text"
-            accessibilityLabel={`le montant de l'operation est ${
+            accessibilityLabel={`le montant de l'opération est ${
               item.op_type === 'Credit' ? '' : '-'
             }${item.montant} dinars`}>
             {item.op_type === 'Credit' ? '' : '-'}
@@ -247,8 +247,8 @@ const Operations = () => {
           data={operations}
           renderItem={renderItem}
           keyExtractor={item => item.op_id}
-          // accessibilityRole='list'
-          // accessibilityLabel='historiques de vos mouvements'
+          accessibilityRole='list'
+          accessibilityLabel='historiques de vos mouvements'
         />
       )}
     </View>

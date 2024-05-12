@@ -92,8 +92,7 @@ const Notification = () => {
       <TouchableOpacity
         onPress={() => {}}
         style={{ width: wp(89), alignSelf: 'flex-start', paddingHorizontal: wp(4) }}
-        accessibilityRole="button"
-        accessibilityHint={`notification de type ${item.type}. Date de notification est le ${item.notifDate}. ${item.notif}.`}
+        accessibilityLabel={`notification de type ${item.type}. Date de notification est le ${item.notifDate}. ${item.notif}.`}
       >
         <View style={styles.icon}>
           {item.type === 'virement' ? (

@@ -147,6 +147,7 @@ const Home = ({ navigation }: HomeProps) => {
           style={styles.notifBg}
           accessibilityRole="button"
           accessibilityLabel='Notifications'
+          accessibilityHint="Appuyer pour naviguer vers la page de vos notifications"
         >
 
           <Icon source="bell" size={wp(9)} color={colors.accent[300]} />
@@ -158,7 +159,7 @@ const Home = ({ navigation }: HomeProps) => {
            */}
         </TouchableOpacity>
         <Text style={styles.prompt}>Votre solde disponible </Text>
-        <Text style={styles.solde}>{data?.compteBancaire.solde}DT</Text>
+        <Text style={styles.solde} accessibilityLabel={`${data?.compteBancaire.solde} Dinars`}>{data?.compteBancaire.solde} DT</Text>
         <Divider style={styles.devider} />
 
         {/* <View style={styles.miniContainer}>
@@ -171,7 +172,7 @@ const Home = ({ navigation }: HomeProps) => {
         <View style={styles.miniContainer}>
 
           <Text style={{ color: colors.main.fontColor, fontWeight: 'bold' }}>Solde de compte</Text>
-          <Text style={{ color: colors.secondary[600], fontWeight: 'bold' }}>{data?.compteBancaire.solde}DT</Text>
+          <Text style={{ color: colors.secondary[600], fontWeight: 'bold' }} accessibilityLabel={`${data?.compteBancaire.solde} Dinars`}>{data?.compteBancaire.solde}DT</Text>
 
         </View>
       </View>
@@ -331,7 +332,11 @@ const Home = ({ navigation }: HomeProps) => {
               </Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Settings')
+          }
+          accessibilityRole="button"
+            accessibilityLabel="Paramètres"
+            accessibilityHint="Appuyer pour naviguer vers la page qui vous permet de changer vos paramètres.">
             <View style={styles.btnContainer}>
               <View style={styles.icon}>
                 <Icon source="cog" size={hp(5)} color={colors.accent[300]} />

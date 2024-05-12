@@ -162,6 +162,8 @@ import axios from 'axios';
         onPress={() => {
           isRecording ? stopVoiceRecognition() : startVoiceRecognition();
         }}
+        accessibilityLabel={isRecording ? 'Arrêter assistante' : 'Démarrer assistante'}
+        accessibilityRole="button"
       />
     );
   };

@@ -97,9 +97,8 @@ const Beneficiaire = () => {
       <View style={styles.infoContainer}>
         <TouchableWithoutFeedback
           style={{width: wp(90)}}
-          accessible={true}
-          accessibilityLabel={`Bénéficiaire ${item.id}`}
-          accessibilityHint={`Bénéficiaire avec le ${item.nom} et le rib ${item.rib}`}>
+          // accessible={true}
+          accessibilityLabel={`Bénéficiaire ${item.nom} avec le rib ${item.rib}`}>
           <View>
             <Icon source="account" color={colors.main.fontColor} size={wp(6)} />
             <View>
@@ -117,7 +116,9 @@ const Beneficiaire = () => {
               setActionType('edit');
               setVisible(true);
               setConfirmationItem(item);
-            }}>
+            }}
+            accessibilityRole='button'
+            accessibilityLabel={`modifier le nom du bénéficiaire ${item.nom}`}>
             <Icon source="update" color={colors.accent[400]} size={wp(8)} />
           </TouchableRipple>
 
@@ -129,7 +130,10 @@ const Beneficiaire = () => {
               setActionType('delete');
               setVisible(true);
               setConfirmationItem(item);
-            }}>
+            }}
+            accessibilityRole='button'
+            accessibilityLabel={`Supprimer le bénéficiaire ${item.nom}`}
+            >
             <Icon source="delete" color={colors.primary[600]} size={wp(8)} />
           </TouchableRipple>
         </View>
@@ -196,7 +200,10 @@ const Beneficiaire = () => {
               backgroundColor: colors.background[200],
               borderRadius: wp(6),
             }}
-            onPressIn={() => setAddBeneficiaire(true)}>
+            onPressIn={() => setAddBeneficiaire(true)}
+            accessibilityRole='button'
+            accessibilityLabel='Ajouter un bénéficiaire'
+            >
             <View
               style={{
                 flexDirection: 'row',
