@@ -19,6 +19,8 @@ import {
   useGetOperationsBetweenDatesQuery,
 } from '../../API/ClientApi';
 import {tokens} from '../../assets/palette';
+
+import {API_BASE_URL} from '@env';
 import axios from 'axios';
 
 // components
@@ -34,10 +36,6 @@ const Operations = () => {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
-      console.log(operations.length);
-      
-      
       setOperations(data);
     }
     
@@ -116,7 +114,7 @@ const Operations = () => {
           Historique de Mouvements
         </Text>
         <View style={styles.reset}>
-          <TouchableRipple onPress={() => reset()}>
+          <TouchableRipple onPress={() => reset}>
             <Icon source="autorenew" size={hp(5)} color="#A45704" />
           </TouchableRipple>
           <Text style={[styles.libelle, {fontSize: wp(4)}]}>
@@ -209,10 +207,10 @@ const Operations = () => {
   const fetchData = async (
     startDate: string,
     endDate: string,
-    clientId = 1,
+    clientId = user?.clientId,
   ) => {
     const data = await axios.get(
-      `${process.env.API_BASE_URL}/api/v1/operation/mouvement/byDate?startDate=${startDate}&endDate=${endDate}&clientId=${clientId}`,
+      `${API_BASE_URL}/api/v1/operation/mouvement/byDate?startDate=${startDate}&endDate=${endDate}&clientId=${clientId}`,
     );
 
     if (data.status === 200) {
@@ -222,7 +220,7 @@ const Operations = () => {
     }
   };
 
-  const reset = async () => {
+  const reset = () => {
     setResetFlag(prev => !prev);
   };
 

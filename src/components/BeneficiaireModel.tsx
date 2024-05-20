@@ -120,7 +120,7 @@ const Confirmation: React.FC<Props> = ({visible, hideDialog, item, type}) => {
   const onSubmitUpdate = async (values: {nom: string}) => {
     try {
       const result = await updateBeneficiaire({
-        clientId: 1,
+        clientId: user?.clientId ?? 0,
         beneficiaire: {id: item.id, nom: values.nom, rib: item.rib},
       }).unwrap();
       if (result) {
@@ -138,7 +138,7 @@ const Confirmation: React.FC<Props> = ({visible, hideDialog, item, type}) => {
   const handleDelete = async () => {
     try {
       const result = await deleteBeneficiaire({
-        clientId: 1,
+        clientId: user?.clientId ?? 0,
         beneficiaire: {id: item.id, nom: item.nom, rib: item.rib},
       }).unwrap();
       if (result) {
@@ -210,7 +210,7 @@ const Confirmation: React.FC<Props> = ({visible, hideDialog, item, type}) => {
             <Dialog.Title style={styles.title}>
               Modifier cette personne avec le RIB {item.rib} ?
             </Dialog.Title>
-            <Dialog.Content>
+            <Dialog.Content style={styles.dialogContent}>
               <Formik
                 initialValues={initialValues}
                 validationSchema={UpdateBeneficiaireSchema} // we're using yup
@@ -250,7 +250,7 @@ const Confirmation: React.FC<Props> = ({visible, hideDialog, item, type}) => {
                 )}
               </Formik>
               {isSuccess && (
-                <Text style={{color: 'green', fontWeight: 'bold'}}>
+                <Text style={{color: 'green', fontWeight: 'bold', justifyContent: 'center' }}>
                   {success}
                 </Text>
               )}

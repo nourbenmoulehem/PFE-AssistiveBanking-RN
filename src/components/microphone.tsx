@@ -33,7 +33,7 @@ import axios from 'axios';
 
     //user?.clientId
     const handleVocalCommand = (prompts: string[]) => {
-      axios.post('http://192.168.1.7:5001/api/v1/client/getIntent', {prompts: prompts, clientId: 1})
+      axios.post('http://192.168.1.11:5001/api/v1/client/getIntent', {prompts: prompts, clientId: user?.clientId})
       .then((response) => {
         console.log("handleVocal", response.data);
         setResponse(response.data.assistantResponse);

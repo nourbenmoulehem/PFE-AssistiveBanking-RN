@@ -26,7 +26,7 @@ const Transfers = () => {
   const colors: any = tokens(mode);
 
   const {data, isLoading, error} = useGetTransfersQuery(user?.clientId);
-  const [transfers, setTransfers] = useState([]);
+  const [transfers, setTransfers] = useState<string | any[]>([]);
   const [resetFlag, setResetFlag] = useState(false);
 
   useEffect(() => {
@@ -97,6 +97,31 @@ const Transfers = () => {
     },
   });
 
+  if (transfers === "Aucun virement trouvé") {
+    console.log('====================================');
+    console.log('transfers', transfers);
+    console.log('====================================');
+    return (
+      <View style={styles.container}>
+        <Text
+          style={[
+            styles.libelle,
+            {textAlign: 'left', fontSize: wp(6), marginBottom: wp(3)},
+          ]}>
+          Historique de virements
+        </Text>
+        <View style={styles.reset}>
+          <TouchableRipple onPress={() => reset}>
+            <Icon source="autorenew" size={hp(5)} color="#A45704" />
+          </TouchableRipple>
+          <Text style={[styles.libelle, {fontSize: wp(4)}]}>
+            Aucun virement trouvé
+          </Text>
+        </View>
+      </View>
+    );
+  }
+
   const renderItem = ({item}: {item: any}) => (
     <TouchableWithoutFeedback
       accessibilityLabel={`virement ${item.vir_id}, son montant est de ${item.montant} dinars`}
@@ -151,7 +176,7 @@ const Transfers = () => {
   const fetchData = async (
     startDate: string,
     endDate: string,
-    clientId = 1,
+    clientId = user?.clientId,
   ) => {
     const data = await axios.get(
       `${process.env.API_BASE_URL}/api/v1/operation/virement/byDate?startDate=${startDate}&endDate=${endDate}&clientId=${clientId}`,
@@ -167,28 +192,6 @@ const Transfers = () => {
   const reset = async () => {
     setResetFlag(prev => !prev);
   };
-
-  if (transfers.length === 0) {
-    return (
-      <View style={styles.container}>
-        <Text
-          style={[
-            styles.libelle,
-            {textAlign: 'left', fontSize: wp(6), marginBottom: wp(3)},
-          ]}>
-          Historique de virements
-        </Text>
-        <View style={styles.reset}>
-          <TouchableRipple onPress={() => reset()}>
-            <Icon source="autorenew" size={hp(5)} color="#A45704" />
-          </TouchableRipple>
-          <Text style={[styles.libelle, {fontSize: wp(4)}]}>
-            Aucun virement disponible
-          </Text>
-        </View>
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>

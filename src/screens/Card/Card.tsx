@@ -1,4 +1,13 @@
-import {StyleSheet, Text, View, Modal, Switch, Button} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  Switch,
+  Button,
+  Touchable,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
   widthPercentageToDP as wp,
@@ -8,9 +17,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../context/store';
 import {tokens} from '../../assets/palette';
 import * as Progress from 'react-native-progress';
-// storage
-import * as Keychain from 'react-native-keychain';
 
+import {API_BASE_URL} from '@env';
 // api manage (custom hook)
 import getApi from '../../API/Interceptor';
 
@@ -22,17 +30,22 @@ import {useGetClientsQuery} from '../../API/ClientApi';
 
 //component
 import CreditCard from '../../components/CreditCard';
+import axios from 'axios';
 
 // ...
 
 const Card = () => {
-  const {isLoggedIn, mode, user} = useSelector(
-    (state: RootState) => state.global,
-  ); 
+  const {mode, user} = useSelector((state: RootState) => state.global);
   const {data, isLoading, error} = useGetClientsQuery(user?.clientId);
 
-  const dispatch = useDispatch();
-  
+  const [status, setStatus] = useState<'active' | 'inactive'>(
+    data?.compteBancaire?.carte?.status,
+  );
+  const [serverFeedback, setServerFeedback] = useState<string>('');
+
+  useEffect(() => {
+  }, [status]);
+
   const colors = tokens(mode);
   const [modalVisible, setModalVisible] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
@@ -122,8 +135,7 @@ const Card = () => {
       alignItems: 'center',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      backgroundColor:
-        colors.background[300],
+      backgroundColor: colors.background[300],
       borderRadius: wp(4),
     },
     plafond: {
@@ -132,8 +144,7 @@ const Card = () => {
       alignItems: 'center',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      backgroundColor:
-      colors.background[300],
+      backgroundColor: colors.background[300],
       borderRadius: wp(5),
     },
     text: {
@@ -158,9 +169,36 @@ const Card = () => {
     [key: string]: any;
   }
   const statusStyles: StatusStyles = {
-    desactivee: [styles.statusDanger, styles.statusTextD],
-    Activee: [styles.statusPass, styles.statusTextP],
-    'encours de personnalisation': [styles.statusWarning, styles.statusTextW],
+    inactive: [styles.statusDanger, styles.statusTextD],
+    active: [styles.statusPass, styles.statusTextP],
+    'en cours de personnalisation': [styles.statusWarning, styles.statusTextW],
+  };
+
+  const updateStatus = async (status: string) => {
+    console.log('🚀 ~ updateStatus ~ status:', status);
+    try {
+      const response = await axios.put(
+        `${API_BASE_URL}/api/v1/carte/status/${user?.clientId}`,
+        {
+          status,
+        },
+      );
+
+      if (response.status === 200) {
+        console.log('status updated successfully');
+        setServerFeedback(
+          'Le statut de votre carte a été mis à jour avec succès',
+        );
+        console.log('====================================');
+        console.log(data?.compteBancaire?.carte?.status);
+        console.log('====================================');
+      }
+    } catch (error) {
+      console.log(error);
+      setServerFeedback(
+        "Une erreur s'est produite lors de la mise à jour du statut de votre carte",
+      );
+    }
   };
 
   return (
@@ -169,15 +207,13 @@ const Card = () => {
         {data &&
           data.firstName &&
           data.lastName &&
-          data.compteBancaire.carte.numero_carte && 
-          data.compteBancaire.carte.date_expiration &&(
+          data.compteBancaire.carte.numero_carte &&
+          data.compteBancaire.carte.date_expiration && (
             <CreditCard
               name={data.firstName}
               lastName={data.lastName}
-              cardNumber={
-                data.compteBancaire.carte.numero_carte
-              }  
-              expirationDate={data.compteBancaire.carte.date_expiration} 
+              cardNumber={data.compteBancaire.carte.numero_carte}
+              expirationDate={data.compteBancaire.carte.date_expiration}
             />
           )}
       </View>
@@ -188,13 +224,13 @@ const Card = () => {
             data &&
             data.compteBancaire &&
             data.compteBancaire.carte &&
-            statusStyles[data.compteBancaire.carte.status][0]
+            statusStyles[status][0]
           }>
           <Text
             accessibilityRole="header"
             style={
               data?.compteBancaire?.carte &&
-              statusStyles[data.compteBancaire.carte.status][1]
+              statusStyles[status][1]
             }>
             Statut Carte
           </Text>
@@ -203,7 +239,7 @@ const Card = () => {
             accessibilityLabel={`Votre carte est ${data?.compteBancaire?.carte?.status}`}
             style={
               data?.compteBancaire?.carte &&
-              statusStyles[data.compteBancaire.carte.status][1]
+              statusStyles[status][1]
             }>
             {data?.compteBancaire?.carte?.status}
           </Text>
@@ -276,19 +312,19 @@ const Card = () => {
             width: wp(89),
             padding: wp(3),
             paddingLeft: wp(1),
-            flexDirection: 'row',
-            justifyContent: 'space-between',
+            flexDirection: 'column',
+            justifyContent: 'center',
             alignItems: 'center',
           }}>
           <Text
             accessibilityRole="text"
             accessibilityLabel={
-              data?.compteBancaire?.carte?.status === 'desactivee'
+              data?.compteBancaire?.carte?.status === 'inactive'
                 ? 'Activer carte'
                 : 'Désactiver carte'
             }
             style={styles.text}>
-            {data?.compteBancaire?.carte?.status === 'desactivee'
+            {data?.compteBancaire?.carte?.status === 'inactive'
               ? 'Activer carte'
               : 'Désactiver carte'}
           </Text>
@@ -298,19 +334,18 @@ const Card = () => {
               style={{transform: [{scaleX: 1.5}, {scaleY: 1.5}]}}
               accessibilityRole="switch"
               accessibilityLabel={
-                data?.compteBancaire?.carte?.status === 'Activee'
+                data?.compteBancaire?.carte?.status === 'active'
                   ? 'Carte activée'
                   : 'Carte désactivée'
               }
               trackColor={{false: 'gray', true: colors.secondary[400]}}
               thumbColor={
-                data?.compteBancaire?.carte?.status === 'Activee'
+                data?.compteBancaire?.carte?.status === 'active'
                   ? colors.secondary[500]
                   : 'gray'
               }
-              value={data?.compteBancaire?.carte?.status === 'Activee'}
+              value={status === 'active'}
               onValueChange={value => {
-                const newStatus = value ? 'Activee' : 'desactivee';
                 setModalVisible(true);
               }}
             />
@@ -335,20 +370,30 @@ const Card = () => {
                   accessibilityLabel="changer le statut?">
                   Êtes-vous sûr de vouloir changer le statut?
                 </Text>
-                <Button
+                <TouchableOpacity
                   accessibilityLabel="Oui"
-                  title="Oui"
-                  onPress={() => {
-                    console.log('Oui Pressed');
-                    // Update logic of the carte status to be inserted here
-                    setModalVisible(false);
+                  style={{
+                    margin: 10,
+                    padding: 10,
+                    borderRadius: 10,
+                    backgroundColor: colors.main.pass,
                   }}
-                />
-                <Button
+                  onPress={() => {
+                    const newStatus = status == 'active' ? 'inactive' : 'active';
+                    setStatus(newStatus);
+                    updateStatus(newStatus);
+                    setModalVisible(false);
+                  }}>
+                  <Text>Oui</Text>
+                </TouchableOpacity>
+                {serverFeedback && (
+                  <Text style={styles.statusWarning}>{serverFeedback}</Text>
+                )}
+                <TouchableOpacity
                   accessibilityLabel="Annuler"
-                  title="Annuler"
-                  onPress={() => setModalVisible(false)}
-                />
+                  onPress={() => setModalVisible(false)}>
+                  <Text>Annuler</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </Modal>

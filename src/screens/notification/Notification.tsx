@@ -19,17 +19,10 @@ const Notification = () => {
   );
   const colors: any = tokens(mode);
   const { data: notifications, error, isLoading } = useGetNotificationsQuery(user?.clientId);
-  // const [notifications] = useState(data?.notifications);
-
-  // useEffect(() => {
-  //   // Placeholder notifications
-  //   const placeholderNotifications = [
-  //     { notifId: 1, notif: 'Virement exécuté', notifDate: '2022-01-01', type: 'virement' },
-  //     { notifId: 2, notif: 'Réponse réclamation', notifDate: '2022-01-02', type: 'assistant' },
-  //   ];
-
-  //   setNotifications(placeholderNotifications);
-  // }, []);
+  
+  console.log('====================================');
+  console.log(user?.clientId);
+  console.log('====================================');
 
   const styles = StyleSheet.create({
     container: {
